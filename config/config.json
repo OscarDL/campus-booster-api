@@ -1,0 +1,31 @@
+{
+    "development": {
+        "host": "dbbcampusbooster.postgres.database.azure.com",
+        "database": "postgres",
+        "username": "o6Q12pP3ag37ZkI@dbbcampusbooster",
+        "password": "(hap8(0Go%fgVxa~NqKf4{r2nu4$}k",
+        "port": 5432,
+        "dialect": "postgres",
+        "dialectOptions": {
+            "ssl": true
+        },
+        "define": {
+            "timestamps": false
+        }
+    },
+    "production": {
+        "host": "dbbcampusbooster.postgres.database.azure.com",
+        "database": "postgres",
+        "username": "o6Q12pP3ag37ZkI@dbbcampusbooster",
+        "password": "(hap8(0Go%fgVxa~NqKf4{r2nu4$}k",
+        "port": 5432,
+        "dialect": "postgres",
+        "dialectOptions": {
+            "ssl": true
+        },
+        "define": {
+            "timestamps": false
+        },
+        "logging": false
+    }
+}

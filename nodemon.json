@@ -1,0 +1,10 @@
+{
+    "watch": [ "*" ],
+    "ext": ".ts,.js,.csv,.json",
+    "ignore": [
+        "/tests",
+        "/node_modules"
+    ],
+    "exec": "ts-node -r tsconfig-paths/register ./app.ts",
+    "start:dev": "nodemon"
+}

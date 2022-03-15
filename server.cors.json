@@ -1,0 +1,25 @@
+{
+    "allowedHeaders": [
+        "Accept",
+        "Authorization", 
+        "Content-Type",
+        "X-Requested-With",
+        "Range",
+        "api_key"
+    ],
+    "origin": [
+        "*"
+    ],
+    "credentials": true,
+    "methods": [
+        "GET",
+        "POST",
+        "PATCH",
+        "DELETE",
+        "PUT",
+        "HEAD"
+    ],
+    "exposedHeaders": [
+        "Content-Length"
+    ]
+}
