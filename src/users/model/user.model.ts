@@ -6,7 +6,6 @@ import { EMAIL_REGEX, UserModel } from './user.interface';
 import UserScope from './user.scope';
 import { v4 as uuidv4 } from 'uuid';
 import config from '../../../config/env.config';
-import { isBoolean } from 'lodash';
 const { permissionLevel } = config;
 
 
@@ -56,6 +55,10 @@ export default class User extends S.Model implements UserModel {
 	@S.Default(true)
 	@S.Column(S.DataType.BOOLEAN)
 	public is_validate!: boolean;
+
+	@S.AllowNull(true)
+	@S.Column(S.DataType.TEXT)
+	public firebase_push_token!: string;
 
 	@S.AllowNull(true)
 	@S.Default(permissionLevel.Student)

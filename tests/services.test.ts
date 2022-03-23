@@ -1,8 +1,7 @@
-import { expect } from 'chai';
-
+"use strict"
+import { assert, expect } from 'chai';
 import EncryptionService from '../services/encryption';
 import Moderator from '../services/moderator';
-import FileReader from '../services/fileReader';
 
 describe('Services:', () => {
     describe('Encryption with crypto:', () => {   
@@ -17,27 +16,18 @@ describe('Services:', () => {
             expect(descr).to.be.equal(message);
         });
     });
-
     describe('Moderator service:', () => { 
         const message = 'Petit con!'; 
-        let moderator = new Moderator('french');
-        it('Detect insult:', async() => {
-            moderator = await moderator.ready();
-            expect(moderator.detect(message)).to.have.lengthOf.above(0);
+        const moderator = new Moderator('french');
+        it('Detect insult:', () => {
+            moderator.ready().then(_ => {
+                assert.notEqual(moderator.detect(message), [])
+            });
         });
-        it('Censor insult:', async() => {
-            moderator = await moderator.ready();
-            expect(moderator.censor(message)).to.not.be.equal(message);
-        });
-    });
-
-    describe('FileReader service:', () => { 
-        const fs = new FileReader('/Users/ulyssedupont/Desktop/ulysse/PERSO/PROMISE/api/server.cors.json');
-        it('Read JSON file Sync:', () => {
-            expect(fs.decodeSync()).to.not.be.null;
-        });
-        it('Read JSON file Async:', async() => {
-            expect(await fs.decodeAsync()).to.not.be.null;
+        it('Censor insult:', () => {
+            moderator.ready().then(_ => {
+                assert.notEqual(moderator.censor(message), message);
+            });
         });
     });
 });

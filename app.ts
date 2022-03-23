@@ -1,6 +1,5 @@
 import './config';
 import './config/models.config';
-import '@dulysse1/better-node';
 import express from 'express';
 import { Next, Req, Res, Resp } from './types/express';
 import bodyParser from 'body-parser';
@@ -27,6 +26,7 @@ import { authSocketMidddleware } from './services/socket';
 import socketConfig from './config/sockets.config';
 import routeConfig from './config/routes.config';
 import ExpressMiddleware from './services/express';
+import '@dulysse1/better-node';
 
 const app = express();
 const httpServer = createServer(app);

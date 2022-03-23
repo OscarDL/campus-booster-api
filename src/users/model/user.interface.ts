@@ -10,6 +10,7 @@ export interface UserAttributes {
 	lastname: string;
 	birthday: Date;
 	email: string;
+	firebase_push_token?: string;
 	is_validate?: boolean;
 	role?: typeof permissionLevel[keyof typeof permissionLevel];
 	readonly createdAt?: Date;

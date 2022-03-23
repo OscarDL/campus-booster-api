@@ -4,6 +4,7 @@ import boom from '@hapi/boom';
 import { ReqJWT } from '../../types/express';
 import { IServer, ISocket } from '../../types/socket';
 const { permissionLevel } = config;
+import * as UserService from '../../src/users/service/user.service';
 
 /**
  * This socket.io middleware enable security auth to client sockets. 
@@ -23,7 +24,7 @@ export function authSocketMidddleware (io: IServer): void {
                         config.jwtSecret,
                         config.jwtOptions as object
                     ) as ReqJWT;
-                    //socket.user = await UserService.findById(socket.jwt?.id, {}, 'all');
+                    socket.user = await UserService.findById(socket.jwt?.id, {}, 'all');
                     if(
                         socket.user && 
                         socket.user.is_validate &&

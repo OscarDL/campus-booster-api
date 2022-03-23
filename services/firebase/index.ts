@@ -1,13 +1,11 @@
 
 import Firebase from 'firebase-admin';
-import { UserAttributes, UserModel } from '../../src/users/model/user.interface';
+import { UserModel } from '../../src/users/model/user.interface';
 import { models } from '../../config/models.config'; 
 const { User } = models;
-import serviceAccount from '../../credentials.json';
+import serviceAccount from './credentials/firebase.json';
 import Logger from './logs/logger';
 const logger = new Logger('firebase.log');
-import config from '../../config/env.config';
-const { cloudinary: { Application: { default : APK_IMG } } } = config;
 
 Firebase.initializeApp({
   credential: Firebase.credential.cert(serviceAccount as Firebase.ServiceAccount),
@@ -18,7 +16,7 @@ module FirebaseService {
   /**
    * Default image added to notification
    */
-  export const DEFAULT_IMAGE_EMBED = APK_IMG;
+  export const DEFAULT_IMAGE_EMBED = "";
 
   /**
    * All types of custom notification for your application
@@ -74,7 +72,7 @@ module FirebaseService {
         title: `${title}`,
         body: `${message}`,
         sound: 'default',
-        color: '#F7B830',
+        color: '#FF00FF',
         icon: 'fcm_push_icon',
         image: `${image || ''}`
       },
@@ -259,7 +257,7 @@ module FirebaseService {
       }) as Promise<Firebase.messaging.MessagingDevicesResponse | null>;
   }
 
-  const replaceName = (string: string, user: UserAttributes) => {
+  const replaceName = (string: string, user: UserModel) => {
     return string.replace('%FIRSTNAME%', user.firstname as string).replace('%LASTNAME%', user.lastname as string);
   }
 
@@ -326,7 +324,7 @@ module FirebaseService {
             const notification = await sendToDevices(
               userReceiver.firebase_push_token, 
               informations!.title, 
-              replaceName(informations!.message, (userEmitter) ? userEmitter : new Object()),
+              replaceName(informations!.message, userEmitter),
               {
                 type: informations!.type, 
                 value: value?.toString() 
