@@ -13,7 +13,7 @@ export declare type ParameterTypes =
     'boolean' | 
     'email' | 
     'enum' | 
-'date';
+    'date';
 
 
 const checkType = (data: any, type: ParameterTypes, enumOptions?: Array<any>): boolean | never => {

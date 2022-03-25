@@ -1,49 +1,72 @@
 import './config';
 import './config/models.config';
-import express from 'express';
-import { Next, Req, Res, Resp } from './types/express';
-import bodyParser from 'body-parser';
+
+import fs from 'fs';
+import cors from 'cors';
+import path from 'path';
 import helmet from 'helmet';
-import useragent from 'express-useragent';
+import morgan from 'morgan';
+import express from 'express';
+import { theme } from 'colors.ts';
+import { Server } from 'socket.io';
+import { createServer } from 'http';
 import compression from 'compression';
+import { networkInterfaces } from 'os';
 import cookieParser from 'cookie-parser';
 import responseTime from 'response-time';
-import { createServer } from 'http';
-import config from './config/env.config';
-import Colors = require('colors.ts');
-import ejs from 'ejs';
-import morgan from 'morgan';
-import fs from 'fs';
-import path from 'path';
-import { networkInterfaces } from 'os';
 import rateLimit from 'express-rate-limit';
-import { verifyApiKey } from './src/authorization/middlewares/auth.validation.middleware';
-import serverCors from './server.cors.json';
-import cors from 'cors';
-import { Server } from 'socket.io';
+
 import { IServer } from './types/socket';
-import { authSocketMidddleware } from './services/socket';
-import socketConfig from './config/sockets.config';
+import config from './config/env.config';
 import routeConfig from './config/routes.config';
+import socketConfig from './config/sockets.config';
 import ExpressMiddleware from './services/express';
+import { Next, Req, Res, Resp } from './types/express';
+import { authSocketMidddleware } from './services/socket';
+
 import '@dulysse1/better-node';
 
+
+theme(config.colors);
 const app = express();
 const httpServer = createServer(app);
-Colors.theme(config.colors);
 
-const port = process.env.PORT;
 
+// app security config
+const corsOpts: cors.CorsOptions = {
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  allowedHeaders: [
+    'Accept', 'Authorization', 'Content-Type', 'X-Requested-With', 'Range'
+  ],
+  exposedHeaders: [
+    'Content-Length'
+  ],
+  origin: process.env.NODE_ENV === 'development' ? [
+    'http://localhost:3000', 'https://localhost:3000'
+  ] : [
+    // Add production domain when ready
+  ]
+};
+
+const contentSecurityPolicy = {
+  directives: {
+    defaultSrc: ["'self'"],
+    styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
+    scriptSrc: ["'self'", "'unsafe-inline'"],
+    fontSrc: ["'self'", 'fonts.gstatic.com'],
+    imgSrc: ["'self'"],
+    connectSrc: ["'self'"]
+  }
+};
+
+
+// Setup base config & models
 process.env.MODELS = `${__dirname}/config/models.config.ts`;
 process.env.CONFIG = `${__dirname}/config/env.config.ts`;
 
-// set the view engine to ejs
-app.engine('html', ejs.renderFile);
-app.set('view engine', 'ejs');
 
-app.use(express.static('public'));
-
-// LOGGER
+// Morgan Logger
 app.use(morgan('dev'));
 
 // custom token
@@ -52,97 +75,50 @@ morgan.token('localDate', function getDate(req) {
     return date.toLocaleString()
 });
 
-// custom format, which contains a custom token
+// custom format, which contains the custom token
 morgan.format(
     'combined', 
     ':remote-addr - :remote-user [:localDate]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'
 );
 
-// LOGS
 app.use(morgan('combined', {
     stream: fs.createWriteStream(path.join(process.cwd(), 'logs/express.log'), { flags: 'a' }),
     skip: (req, res) => res.statusCode < 500
 }));
 
 
-const nets = networkInterfaces();
+// Security middleware
+app.use(rateLimit({
+    windowMs: 30000, // 30 seconds
+    max: 100 // limit each IP to 100 requests per windowMs
+}));
 
-httpServer.on('error', onError);
+app.use(cors(corsOpts));
+app.use(helmet.contentSecurityPolicy(contentSecurityPolicy));
 
-// APP LISTEN
-httpServer.listen(port, () => {
-    console.log(`\n⮕  App listening on port ${port}`.info);
-    console.log(`\n⮕  Local server: http://localhost:${port}`.rgb(249, 218, 65));
-    if(nets.en1 && nets.en1.some(ip => ip.family === 'IPv4')) {
-        const IP_ADDRESS = nets.en1.find(ip => ip.family === 'IPv4')?.address;
-        console.log(`\n⮕  Network server: http://${IP_ADDRESS}:${port}`.rgb(249, 174, 65));
-    }
-});
-
-app.use((req: Req, res: Res, next: Next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");
-    res.header("Access-Control-Expose-Headers", "Content-Length");
-    res.header(
-        "Access-Control-Allow-Headers",
-        "Accept, Authorization, Content-Type, X-Requested-With, Range, API_KEY"
-    );
-    if (req.method === "OPTIONS") {
-        return res.sendStatus(200);
-    } else {
-        return next();
-    }
-});
-
-app.use(
-    rateLimit(
-        {
-            windowMs: .5 * 60 * 1000, // 30 seconds
-            max: 500 // limit each IP to 500 requests per windowMs
-        }
-    )
-);
-
-app.use(cookieParser());
-app.use(helmet({ contentSecurityPolicy: false }));
-app.use(useragent.express());
+// Miscellaneous middleware
 app.use(compression());
+app.use(cookieParser());
 app.use(responseTime());
-app.use(verifyApiKey);
-app.use(bodyParser.json({ limit: '100mb' }));
-app.use(
-    bodyParser.urlencoded(
-        {
-            limit: '100mb',
-            extended: true,
-            parameterLimit: 1000000
-        }
-    )
-);
-
-// SERVER CORS
-app.use(cors(serverCors));
+app.use(express.json({ limit: '100mb' }));
 
 
-// SOCKET.IO SERVER 
+// Socket.io instance
 const io = new Server(
     httpServer,
     {
-        cors: {
-            origin: '*'
-        }
+        cors: corsOpts
     }
 ) as IServer;
 
-// ADD SOCKET.IO SERVER TO EXPRESS REQUEST
+// Add socket.io instance to express requests
 app.use((req: Req, res: Res, next: Next): Resp => {
     res.io = io;
     return next();
 });
 
 
-// load all routes (express && socket.io)
+// load all routes (express & socket.io)
 authSocketMidddleware(io);
 socketConfig(io);
 routeConfig(app);
@@ -150,6 +126,22 @@ routeConfig(app);
 
 app.use(ExpressMiddleware.NotFound());
 app.use(ExpressMiddleware.ErrorHandler());
+
+
+// Start server instance
+const port = process.env.PORT;
+httpServer.on('error', onError);
+
+httpServer.listen(port, () => {
+    console.log(`\n⮕  App listening on port ${port}`.info);
+    console.log(`\n⮕  Local server: http://localhost:${port}`.rgb(249, 218, 65));
+
+    const nets = networkInterfaces();
+    if(nets.en1 && nets.en1.some(ip => ip.family === 'IPv4')) {
+        const IP_ADDRESS = nets.en1.find(ip => ip.family === 'IPv4')?.address;
+        console.log(`\n⮕  Network server: http://${IP_ADDRESS}:${port}`.rgb(249, 174, 65));
+    }
+});
 
 
 function onError(error: any): never {
@@ -167,6 +159,7 @@ function onError(error: any): never {
         default:
             throw error;
     }
-}
+};
+
 
 export default app;
