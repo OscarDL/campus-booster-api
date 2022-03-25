@@ -3,7 +3,7 @@ import { ExpressErrorHandler } from '../../../services/express';
 import bcrypt from 'bcrypt';
 import boom from '@hapi/boom';
 import * as Userservice from '../../users/service/user.service';
-import AzureService from '../../../services/azure/azure.service';
+import AzureService from '../../../services/azure';
 const Azure = new AzureService();
 Azure.OAuth();
 

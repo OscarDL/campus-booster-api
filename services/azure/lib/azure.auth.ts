@@ -7,7 +7,7 @@ import * as msal from '@azure/msal-node';
  */
 const msalConfig: msal.Configuration = {
     auth: {
-        clientId: process.env.AZURE_CLIENT_ID ?? '',
+        clientId: process.env.AZURE_CLIENT_ID ?? "",
         authority: process.env.AAD_ENDPOINT + '/' + process.env.AZURE_TENANT_ID,
         clientSecret: process.env.AZURE_CLIENT_SECRET
     }

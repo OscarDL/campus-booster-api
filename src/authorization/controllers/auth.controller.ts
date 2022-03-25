@@ -2,9 +2,6 @@ import { Req, Res, Next, Resp } from '../../../types/express';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import config from '../../../config/env.config';
-import { 
-  findOne
-} from '../../users/service/user.service';
 import { ExpressErrorHandler } from '../../../services/express';
 
 export async function login(req: Req, res: Res, next: Next): Promise<Resp> {

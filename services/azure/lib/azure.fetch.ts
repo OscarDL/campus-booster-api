@@ -20,10 +20,7 @@ async function callApi<T extends any>(method: Method, endpoint: string, accessTo
             }
         );
         return response.data;
-    } catch (error: any) {
-        if(error instanceof Error) {
-            throw new Error(error.message);
-        }
+    } catch (error) {
         throw error;
     }
 };

@@ -1,8 +1,16 @@
 import fetch from './azure.fetch';
 import auth from './azure.auth';
 import { AuthenticationResult } from '@azure/msal-node';
-import Az from '.';
-
+import Az from '../@types';
+/**
+ *  # Azure Ad service
+ *  ## Process env required:
+ *  @requires `AZURE_TENANT_ID="tenantID"`
+ *  @requires `AZURE_CLIENT_ID="clientID"`
+ *  @requires `AZURE_CLIENT_SECRET="clientSecret"`
+ *  @requires `AAD_ENDPOINT="loginURL"`
+ *  @requires `GRAPH_ENDPOINT="graphQLURL"`
+ */
 export default class AzureService {
   protected _TOKEN!: string | undefined;
   protected _SESSION_EXPIRE!: Date;
@@ -64,7 +72,7 @@ export default class AzureService {
       return await fetch.callApi('GET', `${auth.apiConfig.uri}/v1.0/users/${email}`, this._TOKEN);
     } catch (err: any) {
       if(err instanceof Error) {
-        console.log(err.message.error);
+        console.log(err.message.red);
       }
       return null;
     }
