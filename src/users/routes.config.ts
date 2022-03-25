@@ -7,14 +7,14 @@ import * as UserMiddleware from './middleware/user.middleware';
 import config from '../../config/env.config';
 const { 
 	customRegex: { regUuidv4 },
-    permissionLevel: { Student, Admin }
+    permissionLevel: { User, CampusManager }
 } = config;
 
 export default (app: App): void => {
     // GET ALL USERS
     app.get('/users', [
         ValidationMiddleware.validJWTNeeded,
-        PermissionMiddleware.minimumRoleRequired(Student),
+        PermissionMiddleware.minimumRoleRequired(User),
 		UserController.getAll
     ]);
     // GET USER BY ID
@@ -28,7 +28,7 @@ export default (app: App): void => {
     // CREATE A NEW USER
     app.post('/user', [
         ValidationMiddleware.validJWTNeeded,
-        PermissionMiddleware.minimumRoleRequired(Admin),
+        PermissionMiddleware.minimumRoleRequired(CampusManager),
 		RequestMiddleware.bodyParametersNeeded(['azure_id','firstname','lastname', 'birthday'], 'string'),
         RequestMiddleware.bodyParametersNeeded('email', 'email'),
 		UserController.create

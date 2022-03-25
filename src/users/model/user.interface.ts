@@ -6,15 +6,15 @@ export const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.
 export interface UserAttributes {
 	readonly id?: string;
 	azure_id: string;
-	firstname: string;
-	lastname: string;
+	first_name: string;
+	last_name: string;
 	birthday: Date;
 	email: string;
-	firebase_push_token?: string;
-	is_validate?: boolean;
+	active?: boolean;
+	is_validated?: boolean;
 	role?: typeof permissionLevel[keyof typeof permissionLevel];
-	readonly createdAt?: Date;
-	readonly updatedAt?: Date;
+	readonly created_at?: Date;
+	readonly updated_at?: Date;
 };
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 export interface UserModel extends Model<UserAttributes, UserCreationAttributes>, Partial<UserAttributes> {

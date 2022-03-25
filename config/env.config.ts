@@ -26,12 +26,13 @@ export default {
         success: 'green'
     },
     permissionLevel: {
-        Banned: 0,
-        Restricted: 1,
-        Student: 100,
-        Formateur: 500,
-        Admin: 4000,
-        Boss: 4096,
+        User: 1,
+        Professor: 2,
+        FullProfessor: 3,
+        Company: 4,
+        Assistant: 5,
+        CampusManager: 6,
+        CampusBoosterAdmin: 7
     },
     mailing: {
         config: {

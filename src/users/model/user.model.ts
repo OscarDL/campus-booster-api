@@ -12,16 +12,15 @@ const { permissionLevel } = config;
 @S.Scopes(UserScope)
 @S.Table({
   timestamps: true,
-  underscored: false,
+  underscored: true,
   tableName: 'users',
   schema: 'public'
 })
 export default class User extends S.Model implements UserModel {
   
 	@S.PrimaryKey
-	@S.AllowNull(false)
-	@S.Default(uuidv4())
-	@S.Column(S.DataType.STRING(36))
+  @S.AutoIncrement
+  @S.Column(S.DataType.INTEGER)
 	public id!: string;
 
 	@S.AllowNull(false)
@@ -29,12 +28,12 @@ export default class User extends S.Model implements UserModel {
 	public azure_id!: string;
 
 	@S.AllowNull(false)
-	@S.Column(S.DataType.TEXT)
-	public firstname!: string;
+	@S.Column(S.DataType.STRING(255))
+	public first_name!: string;
 
 	@S.AllowNull(false)
-	@S.Column(S.DataType.TEXT)
-	public lastname!: string;
+	@S.Column(S.DataType.STRING(255))
+	public last_name!: string;
 
 	@S.AllowNull(false)
 	@S.IsEmail
@@ -54,14 +53,15 @@ export default class User extends S.Model implements UserModel {
 	@S.AllowNull(true)
 	@S.Default(true)
 	@S.Column(S.DataType.BOOLEAN)
-	public is_validate!: boolean;
+	public active!: boolean;
 
 	@S.AllowNull(true)
-	@S.Column(S.DataType.TEXT)
-	public firebase_push_token!: string;
+	@S.Default(true)
+	@S.Column(S.DataType.BOOLEAN)
+	public is_validated!: boolean;
 
 	@S.AllowNull(true)
-	@S.Default(permissionLevel.Student)
+	@S.Default(permissionLevel.User)
 	@S.Column(S.DataType.INTEGER)
 	public role!: typeof permissionLevel[keyof typeof permissionLevel];
 }

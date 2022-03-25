@@ -7,10 +7,10 @@ import boom from '@hapi/boom';
 export function minimumRoleRequired(required_role: number = 0): Fn {
     return (req: Req, res: Res, next: Next): Resp => {
         try {
-            if(req.user?.is_validate) {
+            if(req.user?.active) {
                 const userRole = req.user?.role;
-                if (userRole && userRole >= required_role && userRole <= permissionLevel.Boss && Object.values(permissionLevel).includes(userRole)) {
-                    req.isAdmin = ([ permissionLevel.Admin, permissionLevel.Boss ].includes(userRole)) ? true : false;
+                if (userRole && userRole >= required_role && userRole <= permissionLevel.CampusBoosterAdmin && Object.values(permissionLevel).includes(userRole)) {
+                    req.isAdmin = ([ permissionLevel.CampusManager, permissionLevel.CampusBoosterAdmin ].includes(userRole)) ? true : false;
                     return next();
                 } else {
                     if(!userRole) {
@@ -31,16 +31,16 @@ export function minimumRoleRequired(required_role: number = 0): Fn {
 
 export function onlySameUserOrAdmin(req: Req, res: Res, next: Next): Resp {
     try {
-        if(req.user?.is_validate) {
+        if(req.user?.active) {
             const userRole = req.user?.role;
             const user_id = req.user?.id;
-            if (userRole && [ permissionLevel.Admin, permissionLevel.Boss ].includes(userRole)) {
+            if (userRole && [ permissionLevel.CampusManager, permissionLevel.CampusBoosterAdmin ].includes(userRole)) {
                 req.isAdmin = true;
                 return next();
             } else {
                 if(req.params && req.params.user_id) {
                     if(userRole && user_id === req.params.user_id) {
-                        req.isAdmin = ([ permissionLevel.Admin, permissionLevel.Boss ].includes(userRole)) ? true : false;
+                        req.isAdmin = ([ permissionLevel.CampusManager, permissionLevel.CampusBoosterAdmin ].includes(userRole)) ? true : false;
                         return next();
                     } else {
                         if(!userRole) {
@@ -64,16 +64,16 @@ export function onlySameUserOrAdmin(req: Req, res: Res, next: Next): Resp {
 
 export function onlySameUserOrSuperAdmin(req: Req, res: Res, next: Next): Resp {
     try {
-        if(req.user?.is_validate) {
+        if(req.user?.active) {
             const userRole = req.user?.role;
             const user_id = req.user?.id;
-            if (permissionLevel.Boss === userRole) {
+            if (permissionLevel.CampusBoosterAdmin === userRole) {
                 req.isAdmin = true;
                 return next();
             } else {
                 if(req.params && req.params.user_id) {
                     if(user_id === req.params.user_id) {
-                        req.isAdmin = (permissionLevel.Boss === userRole) ? true : false;
+                        req.isAdmin = (permissionLevel.CampusBoosterAdmin === userRole) ? true : false;
                         return next();
                     } else {
                         if(!userRole) {
@@ -97,9 +97,9 @@ export function onlySameUserOrSuperAdmin(req: Req, res: Res, next: Next): Resp {
 
 export function onlySuperAdmin(req: Req, res: Res, next: Next): Resp {
     try {
-        if(req.user?.is_validate) {
+        if(req.user?.active) {
             const userRole = req.user?.role;
-            if (userRole === permissionLevel.Boss) {
+            if (userRole === permissionLevel.CampusBoosterAdmin) {
                 req.isAdmin = true;
                 return next();
             } else {
@@ -121,10 +121,10 @@ export function onlySuperAdmin(req: Req, res: Res, next: Next): Resp {
 export function iMustBe(roles: number | number[]): Fn {
     return (req: Req, res: Res, next: Next): Resp => {
         try {
-            if(req.user?.is_validate) {
+            if(req.user?.active) {
                 const userRole = req.user?.role;
                 if (userRole && Array.isArray(roles) ? roles.includes(userRole) : userRole === roles) {
-                    req.isAdmin = ([ permissionLevel.Admin, permissionLevel.Boss ].includes(userRole!)) ? true : false;
+                    req.isAdmin = ([ permissionLevel.CampusManager, permissionLevel.CampusBoosterAdmin ].includes(userRole!)) ? true : false;
                     return next();
                 } else {
                     if(!userRole) {

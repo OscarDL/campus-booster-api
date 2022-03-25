@@ -27,12 +27,12 @@ export function authSocketMidddleware (io: IServer): void {
                     socket.user = await UserService.findById(socket.jwt?.id, {}, 'all');
                     if(
                         socket.user && 
-                        socket.user.is_validate &&
+                        socket.user.active &&
                         socket.user.role
                     ) {
                         socket.isAdmin = [
-                            permissionLevel.Admin,
-                            permissionLevel.Boss
+                            permissionLevel.CampusManager,
+                            permissionLevel.CampusBoosterAdmin
                         ].includes(socket.user.role);
                         socket.connected = true;
                         return next();

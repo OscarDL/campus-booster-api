@@ -19,7 +19,7 @@ export async function decryptToken(req: Req, res: Res, next: Next): Promise<Resp
       {
         where: {
           azure_id: id,
-          is_validate: true
+          active: true
         }
       },
       "all"

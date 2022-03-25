@@ -35,8 +35,8 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
         return res.status(201).json(
             await UserService.create(
                 {
-                    firstname: req.body.firstname,
-                    lastname: req.body.lastname,
+                    first_name: req.body.firstname,
+                    last_name: req.body.lastname,
                     email: req.body.email,
                     birthday: req.body.birthday,
                     azure_id: req.body.azure_id
