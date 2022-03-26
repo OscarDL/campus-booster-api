@@ -16,13 +16,14 @@ export async function login(req: Req, res: Res, next: Next): Promise<Resp> {
         .update(refreshId)
         .digest('base64'); 
       req.body.refreshKey = salt;
+
       return res.status(201).json(
-        { 
+        {
           accessToken: jwt.sign(
             req.body,
-            config.jwtSecret, 
+            config.jwtSecret,
             config.jwtOptions
-          ), 
+          ),
           refreshToken: Buffer.from(hash).toString('base64'), 
           user : req.user
         }
