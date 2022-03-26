@@ -46,6 +46,7 @@
     "@types/uglify-js": "^3.13.1",
     "@types/uuid": "^8.3.3",
     "@types/validator": "^13.6.3",
+    "https": "^1.0.0",
     "nodemon": "^2.0.13",
     "rimraf": "^3.0.2",
     "ts-mocha": "^9.0.2",
