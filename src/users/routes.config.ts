@@ -32,7 +32,7 @@ export default (app: App): void => {
     app.post(routePrefix, [
         ValidationMiddleware.validJWTNeeded,
         PermissionMiddleware.minimumRoleRequired(CampusManager),
-		    RequestMiddleware.bodyParametersNeeded(['azure_id','firstname','lastname', 'birthday'], 'string'),
+		    RequestMiddleware.bodyParametersNeeded(['azureId','firstName','lastName', 'birthday'], 'string'),
         RequestMiddleware.bodyParametersNeeded('email', 'email'),
 		    UserController.create
     ]);

@@ -24,16 +24,25 @@ export default class User extends S.Model implements UserModel {
 	public id!: number;
 
 	@S.AllowNull(true)
-	@S.Column(S.DataType.STRING(255))
-	public azure_id!: string;
+	@S.Column({
+    field: 'azure_id',
+    type: S.DataType.STRING(255)
+  })
+	public azureId!: string;
 
 	@S.AllowNull(false)
-	@S.Column(S.DataType.STRING(255))
-	public first_name!: string;
+	@S.Column({
+    field: 'first_name',
+    type: S.DataType.STRING(255)
+  })
+	public firstName!: string;
 
 	@S.AllowNull(false)
-	@S.Column(S.DataType.STRING(255))
-	public last_name!: string;
+	@S.Column({
+    field: 'last_name',
+    type: S.DataType.STRING(255)
+  })
+	public lastName!: string;
 
 	@S.AllowNull(false)
 	@S.IsEmail
@@ -59,7 +68,7 @@ export default class User extends S.Model implements UserModel {
 	@S.AllowNull(false)
 	@S.Default(true)
 	@S.Column(S.DataType.BOOLEAN)
-	public is_validated!: boolean;
+	public validated!: boolean;
 
 	@S.AllowNull(false)
 	@S.Default(permissionLevel.User)
@@ -74,6 +83,6 @@ export default class User extends S.Model implements UserModel {
 	@S.BeforeCreate
 	@S.BeforeUpdate
 	static async encryptAzureID(instance: User) {
-		if(instance?.azure_id) instance.azure_id = await bcrypt.hash(instance.azure_id, 12);
+		if(instance?.azureId) instance.azureId = await bcrypt.hash(instance.azureId, 12);
 	}
 }

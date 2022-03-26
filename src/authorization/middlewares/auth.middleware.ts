@@ -22,17 +22,17 @@ export async function decryptToken(req: Req, res: Res, next: Next): Promise<Resp
       "all"
     );
     if(!req.user) return next(boom.badRequest(`You hasn't access to Campus booster, please contact administrator.`));  
-    if(!req.user.azure_id) {
+    if(!req.user.azureId) {
       req.user = await Userservice.update(
         req.user.id,
         {
-          azure_id: req.body.azureId
+          azureId: req.body.azureId
         },
         'all'
       );
     }
     return(
-      await bcrypt.compare(req.body.azureId, req.user.azure_id!)
+      await bcrypt.compare(req.body.azureId, req.user.azureId!)
     ) ? next() : next(boom.badRequest(`Invalid hash please try again later.`));
   } catch (err) {
     return await ExpressErrorHandler(err)(req, res, next); 
