@@ -9,22 +9,31 @@ Azure.OAuth();
 
 export async function decryptToken(req: Req, res: Res, next: Next): Promise<Resp> {
   try {
-    const user = await Azure.getUser(req.body.email);
-    if(!user) return next(boom.badRequest(`Access denied for ${req.body.email}.`));
-    const { id } = user;
-    if(
-      !(await bcrypt.compare(id, req.body.hash))
-    ) return next(boom.badRequest(`Invalid hash please try again later.`));
+    const user = await Azure.getUser(req.body.azureId);
+    if(!user) return next(boom.badRequest(`Access denied to Azure AD.`));
+    const { userPrincipalName } = user;
     req.user = await Userservice.findOne(
       {
         where: {
-          azure_id: id,
+          email: userPrincipalName,
           active: true
         }
       },
       "all"
     );
-    return req.user ? next() : next(boom.badRequest(`${req.body.email} hasn't access to Campus booster, please contact administrator.`));  
+    if(!req.user) return next(boom.badRequest(`You hasn't access to Campus booster, please contact administrator.`));  
+    if(!req.user.azure_id) {
+      req.user = await Userservice.update(
+        req.user.id,
+        {
+          azure_id: req.body.azureId
+        },
+        'all'
+      );
+    }
+    return(
+      await bcrypt.compare(req.body.azureId, req.user.azure_id!)
+    ) ? next() : next(boom.badRequest(`Invalid hash please try again later.`));
   } catch (err) {
     return await ExpressErrorHandler(err)(req, res, next); 
   }

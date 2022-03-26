@@ -61,15 +61,15 @@ export default class AzureService {
   }
 
   /**
-   * ### Get Azure AD user by email
-   * @param email The email of user
+   * ### Get Azure AD user by email or ID
+   * @param id The email of user or ID
    * @returns {Promise<Az.GetUserResponse>} a promise of the user from Azure AD.
    */
-  public async getUser(email: string): Promise<Az.GetUserResponse> {
+  public async getUser(id: string): Promise<Az.GetUserResponse> {
     try {
       await this.refreshToken();
       if(!this._TOKEN) throw new Error('You should call OAuth method.');
-      return await fetch.callApi('GET', `${auth.apiConfig.uri}/v1.0/users/${email}`, this._TOKEN);
+      return await fetch.callApi('GET', `${auth.apiConfig.uri}/v1.0/users/${id}`, this._TOKEN);
     } catch (err: any) {
       if(err instanceof Error) {
         console.log(err.message.red);
