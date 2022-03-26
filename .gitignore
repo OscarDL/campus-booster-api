@@ -16,6 +16,7 @@ pids
 # Development
 .vscode/
 build/
+logs/express.log
 package-lock.json
 
 # Local HTTPS
