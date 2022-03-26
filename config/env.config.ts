@@ -1,15 +1,13 @@
 export default {
-    API_KEY: process.env.API_KEY || '957ba5e9-aa16-4ef7-ac3c-8daf1694c951',
     env: process.env.NODE_ENV || 'development',
-    app_name: process.env.APP_NAME || 'api',
-    android_version: process.env.ANDROID_VERSION || 1.0,
-    ios_version: process.env.IOS_VERSION || 1.0,
-    app_site: process.env.APP_SITE || 'http://localhost:8080',
-    app_uri: process.env.APP_URI || 'http://127.0.0.1:1337',
-    author: process.env.AUTHOR || 'Promise',
-    jwtSecret: process.env.JWT_SECRET || '?Nq>w#}cGz]7mI_(H.D:!0D54l',
+    app_name: process.env.APP_NAME || 'Campus Booster - API',
+    app_site: process.env.APP_SITE || 'http://localhost:3000',
+    app_uri: process.env.APP_URI || 'http://localhost:1337',
+    route_prefix: process.env.ROUTE_PREFIX || '/api/v1',
+    author: process.env.AUTHOR || 'Campus Booster',
+    jwtSecret: process.env.JWT_SECRET || '',
     jwtOptions: {
-        expiresIn: process.env.JWT_EXPIRES || '30m' // expires in 30 minutes
+        expiresIn: process.env.JWT_EXPIRES || '30m' // expires after 30 minutes
     },
     colors: {
         MLG: [ 'rainbow', 'bold' ],

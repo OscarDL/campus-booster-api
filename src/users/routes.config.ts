@@ -4,48 +4,51 @@ import * as RequestMiddleware from '../authorization/middlewares/request.validat
 import * as PermissionMiddleware from '../authorization/middlewares/auth.permission.middleware';
 import * as UserController from './controller/user.controller';
 import * as UserMiddleware from './middleware/user.middleware';
+
 import config from '../../config/env.config';
 const { 
-	customRegex: { regUuidv4 },
+	customRegex: { regInt },
     permissionLevel: { User, CampusManager }
 } = config;
 
+const routePrefix = config.route_prefix + '/users';
+
 export default (app: App): void => {
     // GET ALL USERS
-    app.get('/users', [
+    app.get(routePrefix, [
         ValidationMiddleware.validJWTNeeded,
         PermissionMiddleware.minimumRoleRequired(User),
-		UserController.getAll
+		    UserController.getAll
     ]);
     // GET USER BY ID
-    app.get(`/user/:user_id${regUuidv4}`, [
+    app.get(routePrefix + `/:user_id${regInt}`, [
         ValidationMiddleware.validJWTNeeded,
         PermissionMiddleware.onlySameUserOrAdmin,
-		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+		    RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
         UserController.getById
     ]);
     // CREATE A NEW USER
-    app.post('/user', [
+    app.post(routePrefix, [
         ValidationMiddleware.validJWTNeeded,
         PermissionMiddleware.minimumRoleRequired(CampusManager),
-		RequestMiddleware.bodyParametersNeeded(['azure_id','firstname','lastname', 'birthday'], 'string'),
+		    RequestMiddleware.bodyParametersNeeded(['azure_id','firstname','lastname', 'birthday'], 'string'),
         RequestMiddleware.bodyParametersNeeded('email', 'email'),
-		UserController.create
+		    UserController.create
     ]);
     // UPDATE USER
-    app.patch(`/user/:user_id${regUuidv4}`, [
+    app.patch(routePrefix + `/:user_id${regInt}`, [
         ValidationMiddleware.validJWTNeeded,
         PermissionMiddleware.onlySameUserOrAdmin,
-		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+		    RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
         UserController.update
     ]);
     // DELETE USER
-    app.delete(`/user/:user_id${regUuidv4}`, [
+    app.delete(routePrefix + `/:user_id${regInt}`, [
         ValidationMiddleware.validJWTNeeded,
         PermissionMiddleware.onlySameUserOrAdmin,
-		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+		    RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
         UserController.remove
     ]);

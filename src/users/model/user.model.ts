@@ -4,7 +4,6 @@
 import * as S from 'sequelize-typescript';
 import { EMAIL_REGEX, UserModel } from './user.interface';
 import UserScope from './user.scope';
-import { v4 as uuidv4 } from 'uuid';
 import config from '../../../config/env.config';
 const { permissionLevel } = config;
 
@@ -16,15 +15,15 @@ const { permissionLevel } = config;
   tableName: 'users',
   schema: 'public'
 })
+
 export default class User extends S.Model implements UserModel {
-  
 	@S.PrimaryKey
   @S.AutoIncrement
-  @S.Column(S.DataType.INTEGER)
-	public id!: string;
+  @S.Column(S.DataType.BIGINT)
+	public id!: number;
 
-	@S.AllowNull(false)
-	@S.Column(S.DataType.TEXT)
+	@S.AllowNull(true)
+	@S.Column(S.DataType.STRING(36))
 	public azure_id!: string;
 
 	@S.AllowNull(false)
@@ -50,18 +49,18 @@ export default class User extends S.Model implements UserModel {
 	@S.Column(S.DataType.DATE)
 	public birthday!: Date;
 
-	@S.AllowNull(true)
+	@S.AllowNull(false)
 	@S.Default(true)
 	@S.Column(S.DataType.BOOLEAN)
 	public active!: boolean;
 
-	@S.AllowNull(true)
+	@S.AllowNull(false)
 	@S.Default(true)
 	@S.Column(S.DataType.BOOLEAN)
 	public is_validated!: boolean;
 
-	@S.AllowNull(true)
+	@S.AllowNull(false)
 	@S.Default(permissionLevel.User)
-	@S.Column(S.DataType.INTEGER)
+	@S.Column(S.DataType.SMALLINT)
 	public role!: typeof permissionLevel[keyof typeof permissionLevel];
 }

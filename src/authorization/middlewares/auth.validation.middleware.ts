@@ -72,19 +72,3 @@ export async function JWTNeeded(req: Req, res: Res, next: Next): Promise<Resp> {
     next(boom.badRequest('Aucune autorisation En-tête fourni.'));
   }
 };
-
-
-export function verifyApiKey(req: Req, res: Res, next: Next): Resp {
-  // byepass API_KEY 
-  let exeptions: string[] = [
-    
-  ];
-
-  if(req.method === "OPTIONS") return res.sendStatus(200);
-  if(req.url && exeptions.includes(req.url.split('?')[0])) {
-    return next();
-  }
-  if(!req.headers.api_key) return next(boom.badRequest('API key is required!'));
-  if(req.headers.api_key !== config.API_KEY) return next(boom.badRequest('API key incorrect!'));
-  return next();
-}

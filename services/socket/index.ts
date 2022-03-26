@@ -51,38 +51,3 @@ export function authSocketMidddleware (io: IServer): void {
         }
     });
 }
-
-/**
- * Get socket ID by user ID
- * @param io - Socket.io server
- * @param userIDs - The id(s) of user(s)
- * @return string[]
- */
-export function getSocketIdByUserId (io: IServer, userIDs: (string | undefined)[]): (string[] | null) {
-    const sockets = Array.from(io.sockets.sockets.values()) as ISocket[];
-    const ids = sockets.filter(s => s?.connected && userIDs.includes(s?.user?.id!)).map(s => s.id);
-    return ids.length ? ids : null;
-}
-
-/**
- * Get all sockets connected except my socket(s).
- * @param io - Socket.io server
- * @param user_id - Your user ID
- * @return string[]
- */
-export function getAllSocketIdsExceptMe(io: IServer, user_id: string | undefined): (string[] | null) {
-    const sockets = Array.from(io.sockets.sockets.values()) as ISocket[];
-    const ids = sockets.filter(s => s.connected && s.user?.id !== user_id).map(s => s.id);
-    return user_id && ids.length ? ids : null;
-}
-
-/**
- * Get all sockets connected except my socket(s).
- * @param io - Socket.io server
- * @param socket - The socket.io client
- * @return number[]
- */
-export function getAllUserIdsExpectMe(io: IServer, socket: ISocket): (string | undefined)[] {
-    const sockets = Array.from(io.sockets.sockets.values()) as ISocket[];
-    return sockets.map(s => s.user?.id).filter(id => id !== socket.user?.id);
-}

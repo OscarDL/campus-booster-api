@@ -39,7 +39,7 @@ export function onlySameUserOrAdmin(req: Req, res: Res, next: Next): Resp {
                 return next();
             } else {
                 if(req.params && req.params.user_id) {
-                    if(userRole && user_id === req.params.user_id) {
+                    if(userRole && user_id === Number(req.params.user_id)) {
                         req.isAdmin = ([ permissionLevel.CampusManager, permissionLevel.CampusBoosterAdmin ].includes(userRole)) ? true : false;
                         return next();
                     } else {
@@ -72,7 +72,7 @@ export function onlySameUserOrSuperAdmin(req: Req, res: Res, next: Next): Resp {
                 return next();
             } else {
                 if(req.params && req.params.user_id) {
-                    if(user_id === req.params.user_id) {
+                    if(user_id === Number(req.params.user_id)) {
                         req.isAdmin = (permissionLevel.CampusBoosterAdmin === userRole) ? true : false;
                         return next();
                     } else {
