@@ -11,8 +11,7 @@ const routePrefix = config.route_prefix + '/auth';
 export default (app: App): void => {
     // LOGIN
     app.post(routePrefix + '/login', [
-        RequestMiddleware.bodyParametersNeeded('email', 'email'),
-        RequestMiddleware.bodyParametersNeeded('hash', 'string'),
+        RequestMiddleware.bodyParametersNeeded('azureId', 'string'),
         AuthMiddleware.decryptToken,
         AuthController.login
     ]);
