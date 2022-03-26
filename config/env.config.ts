@@ -9,6 +9,7 @@ export default {
     jwtOptions: {
         expiresIn: process.env.JWT_EXPIRES || '30m' // expires after 30 minutes
     },
+    cookieExpires: Number(process.env.COOKIE_EXPIRES) || 1800000, // 30 minutes in milliseconds
     colors: {
         MLG: [ 'rainbow', 'bold' ],
         input: 'magenta',
