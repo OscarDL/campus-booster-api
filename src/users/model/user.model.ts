@@ -6,6 +6,7 @@ import { EMAIL_REGEX, UserModel } from './user.interface';
 import UserScope from './user.scope';
 import config from '../../../config/env.config';
 const { permissionLevel } = config;
+import bcrypt from 'bcrypt';
 
 
 @S.Scopes(UserScope)
@@ -23,7 +24,7 @@ export default class User extends S.Model implements UserModel {
 	public id!: number;
 
 	@S.AllowNull(true)
-	@S.Column(S.DataType.STRING(36))
+	@S.Column(S.DataType.STRING(255))
 	public azure_id!: string;
 
 	@S.AllowNull(false)
@@ -36,6 +37,7 @@ export default class User extends S.Model implements UserModel {
 
 	@S.AllowNull(false)
 	@S.IsEmail
+	@S.Unique
 	@S.Is('emailFormat', (email) => {
 		if(!EMAIL_REGEX.test(email)) {
 			throw new Error(`'${email}' is not a correct email format.`)
@@ -63,4 +65,15 @@ export default class User extends S.Model implements UserModel {
 	@S.Default(permissionLevel.User)
 	@S.Column(S.DataType.SMALLINT)
 	public role!: typeof permissionLevel[keyof typeof permissionLevel];
+
+
+	// ---------------------
+	// @BEFORE CREATE/UPDATE
+	// ---------------------
+
+	@S.BeforeCreate
+	@S.BeforeUpdate
+	static async encryptAzureID(instance: User) {
+		if(instance?.azure_id) instance.azure_id = await bcrypt.hash(instance.azure_id, 12);
+	}
 }

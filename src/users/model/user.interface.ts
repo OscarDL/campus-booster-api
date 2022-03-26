@@ -9,7 +9,7 @@ export interface UserAttributes {
 	azure_id?: string;
 	first_name: string;
 	last_name: string;
-	birthday?: Date;
+	birthday: Date;
 	email: string;
 	active?: boolean;
 	is_validated?: boolean;
