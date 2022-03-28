@@ -9,6 +9,7 @@ export async function login(req: Req, res: Res, next: Next): Promise<Resp> {
       req.body = {
         id: req.user?.id
       };
+
       const refreshId = req.user?.id + config.jwtSecret;
       const salt = crypto.randomBytes(16).toString('base64'); 
       const hash = crypto
@@ -17,15 +18,21 @@ export async function login(req: Req, res: Res, next: Next): Promise<Resp> {
         .digest('base64'); 
       req.body.refreshKey = salt;
 
-      return res.status(201).json(
+      const accessToken = jwt.sign(
+        req.body,
+        config.jwtSecret,
+        config.jwtOptions
+      );
+
+      return res.cookie('accessToken', accessToken, {
+          maxAge: config.cookieExpires,
+          sameSite: 'strict',
+          httpOnly: true,
+          secure: true
+        }).status(200).json(
         {
-          accessToken: jwt.sign(
-            req.body,
-            config.jwtSecret,
-            config.jwtOptions
-          ),
-          refreshToken: Buffer.from(hash).toString('base64'), 
-          user : req.user
+          user : req.user,
+          refreshToken: Buffer.from(hash).toString('base64')
         }
       );
   } catch (err: any) {
@@ -33,9 +40,17 @@ export async function login(req: Req, res: Res, next: Next): Promise<Resp> {
   }
 };
 
+export async function logout(req: Req, res: Res, next: Next): Promise<Resp> {
+  try {
+      return res.clearCookie('accessToken').status(200).json();
+  } catch (err: any) {
+      return await ExpressErrorHandler(err)(req, res, next);
+  }
+};
+
 export async function refreshToken(req: Req, res: Res, next: Next): Promise<Resp> {
   try {
-      res.status(201).json(
+      res.status(200).json(
           { 
             accessToken: jwt.sign(
               req.body,
