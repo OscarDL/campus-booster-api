@@ -2,6 +2,7 @@ import fetch from './azure.fetch';
 import auth from './azure.auth';
 import { AuthenticationResult } from '@azure/msal-node';
 import Az from '../@types';
+import moment, { Moment } from 'moment-timezone';
 /**
  *  # Azure Ad service
  *  ## Process env required:
@@ -13,7 +14,19 @@ import Az from '../@types';
  */
 export default class AzureService {
   protected _TOKEN!: string | undefined;
-  protected _SESSION_EXPIRE!: Date;
+  protected _SESSION_EXPIRE!: Moment;
+  protected _REQUIRED_ENV = [ 
+    "AZURE_TENANT_ID", 
+    "AZURE_CLIENT_ID", 
+    "AZURE_CLIENT_SECRET", 
+    "AAD_ENDPOINT", 
+    "GRAPH_ENDPOINT"
+  ];
+  constructor() {
+    this._REQUIRED_ENV.forEach(ENV_KEY => {
+      if(!Object.keys(process.env).includes(ENV_KEY)) throw new Error(`Env Missing: 'process.env' missing prop ${ENV_KEY}.`);
+    });
+  }
   /**
  * ### Auth to Azure AD
  * @returns {Promise<AuthenticationResult>} a promise of object for oauth response.
@@ -21,13 +34,13 @@ export default class AzureService {
   public async OAuth(): Promise<AuthenticationResult> {
     const authResponse = await auth.getToken(auth.tokenRequest);
     this._TOKEN = authResponse?.accessToken;
-    this._SESSION_EXPIRE = new Date(authResponse?.extExpiresOn!);
+    this._SESSION_EXPIRE = moment(authResponse?.expiresOn!).tz("Europe/Paris");
     return authResponse ?? Promise.reject('Auth failed.');
   }
   private async refreshToken(): Promise<void> {
     if (
       !this._SESSION_EXPIRE ||
-      new Date().getTime() > this._SESSION_EXPIRE.getTime()
+      Math.sign(moment().diff(this._SESSION_EXPIRE, "minutes")) !== -1
     ) await this.OAuth();
   }
   /**
@@ -61,15 +74,15 @@ export default class AzureService {
   }
 
   /**
-   * ### Get Azure AD user by email or ID
-   * @param id The email of user or ID
+   * ### Get Azure AD user by email
+   * @param email The email of user
    * @returns {Promise<Az.GetUserResponse>} a promise of the user from Azure AD.
    */
-  public async getUser(id: string): Promise<Az.GetUserResponse> {
-    try {
+  public async getUser(email: string): Promise<Az.GetUserResponse> {
+    try {      
       await this.refreshToken();
       if(!this._TOKEN) throw new Error('You should call OAuth method.');
-      return await fetch.callApi('GET', `${auth.apiConfig.uri}/v1.0/users/${id}`, this._TOKEN);
+      return await fetch.callApi('GET', `${auth.apiConfig.uri}/v1.0/users/${email}`, this._TOKEN);
     } catch (err: any) {
       if(err instanceof Error) {
         console.log(err.message.red);
