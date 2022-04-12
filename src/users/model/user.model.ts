@@ -7,6 +7,10 @@ import UserScope from './user.scope';
 import config from '../../../config/env.config';
 const { permissionLevel } = config;
 import bcrypt from 'bcrypt';
+import Campus from './../../campus/model/campus.model';
+import { BelongsToOptions } from 'sequelize/types';
+import Speciality from './../../specialities/model/speciality.model';
+import Class from './../../classes/model/classe.model';
 
 
 @S.Scopes(UserScope)
@@ -85,4 +89,46 @@ export default class User extends S.Model implements UserModel {
 	static async encryptAzureID(instance: User) {
 		if(instance?.azureId) instance.azureId = await bcrypt.hash(instance.azureId, 12);
 	}
+
+	@S.ForeignKey(() => Campus)
+	@S.Column(
+		{
+			field: 'campus_id',
+		}
+	)
+	public campusId!: number;
+
+	@S.BelongsTo(() => Campus, { 
+		foreignKey: 'campus_id', 
+		onDelete: 'CASCADE'
+	} as BelongsToOptions)
+	public Campus!: Campus;
+
+	@S.ForeignKey(() => Speciality)
+	@S.Column(
+		{
+			field: 'speciality_id',
+		}
+	)
+	public specialityId!: number;
+
+	@S.BelongsTo(() => Speciality, { 
+		foreignKey: 'speciality_id', 
+		onDelete: 'CASCADE'
+	} as BelongsToOptions)
+	public Speciality!: Speciality;
+
+	@S.ForeignKey(() => Class)
+	@S.Column(
+		{
+			field: 'class_id',
+		}
+	)
+	public classId!: number;
+
+	@S.BelongsTo(() => Class, { 
+		foreignKey: 'class_id', 
+		onDelete: 'CASCADE'
+	} as BelongsToOptions)
+	public Class!: Class;
 }

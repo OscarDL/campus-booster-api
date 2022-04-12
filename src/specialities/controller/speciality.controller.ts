@@ -1,12 +1,12 @@
 import { Req, Res, Next, Resp } from '../../../types/express';
-import * as UserService from '../service/user.service';
+import * as SpecialityService from '../service/speciality.service';
 import boom from '@hapi/boom';
 
 export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         return res.status(200).json(
-            await UserService.findById(
-                req.params.user_id
+            await SpecialityService.findById(
+                req.params.speciality_id
             )
         );
     } catch (err: any) {
@@ -18,7 +18,7 @@ export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
 export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         return res.status(200).json(
-            await UserService.findAll(
+            await SpecialityService.findAll(
                 {
                     limit: req.query?.limit
                 }
@@ -33,16 +33,8 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
 export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
         return res.status(201).json(
-            await UserService.create(
-                {
-                    azureId: req.body.azureId,
-                    firstName: req.body.firstName,
-                    lastName: req.body.lastName,
-                    email: req.body.email,
-                    birthday: req.body.birthday,
-                    campusId: req.body.campusId,
-                    classId: req.body.classId
-                }
+            await SpecialityService.create(
+                req.body as any
             )
         );
     } catch (err: any) {
@@ -54,8 +46,8 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
 export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
         return res.status(203).json(
-            await UserService.update(
-                req.params.user_id, 
+            await SpecialityService.update(
+                req.params.speciality_id, 
                 req.body
             )
         );
@@ -68,10 +60,10 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
 export async function remove(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
         return res.status(204).json(
-            await UserService.remove(
+            await SpecialityService.remove(
                 {
                     where: {
-                        id: req.params.user_id
+                        id: req.params.speciality_id
                     }
                 }
             )
