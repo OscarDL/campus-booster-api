@@ -1,6 +1,9 @@
 import { Model, Optional } from "sequelize";
 import UserScope from './user.scope';
 import config from '../../../config/env.config';
+import { CampusModel } from './../../campus/model/campus.interface';
+import Speciality from './../../specialities/model/speciality.model';
+import { ClasseModel } from "./../../classes/model/classe.interface";
 const { permissionLevel } = config;
 export const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
@@ -16,6 +19,12 @@ export interface UserAttributes {
 	role?: typeof permissionLevel[keyof typeof permissionLevel];
 	readonly created_at?: Date;
 	readonly updated_at?: Date;
+	campusId: number;
+	Campus?: CampusModel;
+	specialityId?: number;
+	Speciality?: Speciality;
+	classId: number;
+	Class?: ClasseModel;
 };
 
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
