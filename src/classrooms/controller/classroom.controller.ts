@@ -1,12 +1,12 @@
 import { Req, Res, Next, Resp } from '../../../types/express';
-import * as ClasseService from '../service/classe.service';
+import * as ClassroomService from '../service/classroom.service';
 import boom from '@hapi/boom';
 
 export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         return res.status(200).json(
-            await ClasseService.findById(
-                req.params.classe_id
+            await ClassroomService.findById(
+                req.params.classroom_id
             )
         );
     } catch (err: any) {
@@ -18,7 +18,7 @@ export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
 export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         return res.status(200).json(
-            await ClasseService.findAll(
+            await ClassroomService.findAll(
                 {
                     limit: req.query?.limit
                 }
@@ -33,7 +33,7 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
 export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
         return res.status(201).json(
-            await ClasseService.create(
+            await ClassroomService.create(
                 req.body as any
             )
         );
@@ -46,8 +46,8 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
 export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
         return res.status(203).json(
-            await ClasseService.update(
-                req.params.classe_id, 
+            await ClassroomService.update(
+                req.params.classroom_id, 
                 req.body
             )
         );
@@ -60,10 +60,10 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
 export async function remove(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
         return res.status(204).json(
-            await ClasseService.remove(
+            await ClassroomService.remove(
                 {
                     where: {
-                        id: req.params.classe_id
+                        id: req.params.classroom_id
                     }
                 }
             )

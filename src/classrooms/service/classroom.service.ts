@@ -1,10 +1,10 @@
 import { FindOptions, UpdateOptions } from 'sequelize';
 import { 
-    ClasseModel, 
-    ClasseAttributes, 
-    ClasseScopesAttributes,
-    ClasseCreationAttributes
-} from '../model/classe.interface';
+    ClassroomModel, 
+    ClassroomAttributes, 
+    ClassroomScopesAttributes,
+    ClassroomCreationAttributes
+} from '../model/classroom.interface';
 import { models } from '../../../config/models.config'; 
 const { Class } = models;
 /**
@@ -30,9 +30,9 @@ const { Class } = models;
 * @return {Promise} a promise of the rows or empty array
 */
 export function findAll(
-    options?: FindOptions<ClasseAttributes> | null,
-    scope?: (ClasseScopesAttributes | ClasseScopesAttributes[])
-): Promise<ClasseModel[]> {
+    options?: FindOptions<ClassroomAttributes> | null,
+    scope?: (ClassroomScopesAttributes | ClassroomScopesAttributes[])
+): Promise<ClassroomModel[]> {
     return Class.scope(scope).findAll(options!);
 }
 /**
@@ -58,9 +58,9 @@ export function findAll(
 * @return {Promise} a promise of a row or NULL
 */
 export function findOne(
-    options?: FindOptions<ClasseAttributes> | null,
-    scope?: (ClasseScopesAttributes | ClasseScopesAttributes[])
-): Promise<ClasseModel | null> {
+    options?: FindOptions<ClassroomAttributes> | null,
+    scope?: (ClassroomScopesAttributes | ClassroomScopesAttributes[])
+): Promise<ClassroomModel | null> {
     return Class.scope(scope).findOne(options!);
 }
 /**
@@ -96,9 +96,9 @@ export function findOne(
 */
 export function findById(
     id: number | any, 
-    options?: FindOptions<ClasseAttributes> | null,
-    scope?: (ClasseScopesAttributes | ClasseScopesAttributes[])
-): Promise<ClasseModel | null> {
+    options?: FindOptions<ClassroomAttributes> | null,
+    scope?: (ClassroomScopesAttributes | ClassroomScopesAttributes[])
+): Promise<ClassroomModel | null> {
     return Class.scope(scope).findByPk(id, options!);
 }
 /**
@@ -119,9 +119,9 @@ export function findById(
 * @return {Promise} a promise of the created row
 */
 export function create(
-    data: ClasseCreationAttributes,
-    scope?: (ClasseScopesAttributes | ClasseScopesAttributes[])
-): Promise<ClasseModel> {
+    data: ClassroomCreationAttributes,
+    scope?: (ClassroomScopesAttributes | ClassroomScopesAttributes[])
+): Promise<ClassroomModel> {
     return Class.scope(scope).create(data);
 }
 /**
@@ -151,9 +151,9 @@ export function create(
 * @return {Promise} a promise of the created rows
 */
 export function createMany(
-    data: ClasseCreationAttributes[],
-    scope?: (ClasseScopesAttributes | ClasseScopesAttributes[])
-): Promise<ClasseModel[]> {
+    data: ClassroomCreationAttributes[],
+    scope?: (ClassroomScopesAttributes | ClassroomScopesAttributes[])
+): Promise<ClassroomModel[]> {
     return Class.scope(scope).bulkCreate(data);
 }
 /**
@@ -184,16 +184,16 @@ export function createMany(
 */
 export function update(
     id: number | any, 
-    data: Partial<ClasseAttributes>,
-    scope?: (ClasseScopesAttributes | ClasseScopesAttributes[])
-): Promise<ClasseModel> {
+    data: Partial<ClassroomAttributes>,
+    scope?: (ClassroomScopesAttributes | ClassroomScopesAttributes[])
+): Promise<ClassroomModel> {
     return new Promise((resolve, reject) => {
         Class.scope(scope).findByPk(id)
-        .then((classe) => {
-            if (!classe) {
+        .then((classroom) => {
+            if (!classroom) {
                 reject("not found");
             } else {
-                classe
+                classroom
                 .update(data)
                 .then(resolve)
                 .catch(reject);
@@ -235,9 +235,9 @@ export function update(
 * affected rows (only supported in postgres and mssql with `options.returning` true).
 */
 export function updateMany(
-    options: UpdateOptions<ClasseAttributes>, 
-    data: Partial<ClasseAttributes>,
-    scope?: (ClasseScopesAttributes | ClasseScopesAttributes[])
+    options: UpdateOptions<ClassroomAttributes>, 
+    data: Partial<ClassroomAttributes>,
+    scope?: (ClassroomScopesAttributes | ClassroomScopesAttributes[])
 ): Promise<[ affectedCount: number ]> {
     return Class.scope(scope).update(data, options);
 }
@@ -261,7 +261,7 @@ export function updateMany(
 * @return {Promise} a promise of the number of destroyed rows
 */
 export function remove(
-    options?: FindOptions<ClasseAttributes> | null
+    options?: FindOptions<ClassroomAttributes> | null
 ): Promise<number> {
     return Class.destroy(options!);
 }
@@ -288,7 +288,7 @@ export function remove(
 * @return {Promise} a promise of the number of counted rows
 */
 export function count(
-    options?: FindOptions<ClasseAttributes> | null
+    options?: FindOptions<ClassroomAttributes> | null
 ): Promise<number> {
     return Class.count(options!);
 }

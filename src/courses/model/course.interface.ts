@@ -1,7 +1,7 @@
 import { Model, Optional } from "sequelize";
 import CourseScope from './course.scope';
 import { SpecialityModel } from './../../specialities/model/speciality.interface';
-import { ClasseModel } from './../../classes/model/classe.interface';
+import { ClassroomModel } from '../../classrooms/model/classroom.interface';
 import { TeacherModel } from './../../teachers/model/teacher.interface';
 import { FeedbackModel } from './../../feedbacks/model/feedback.interface';
 export interface CourseAttributes {
@@ -14,8 +14,8 @@ export interface CourseAttributes {
 	readonly updated_at?: Date;
 	specialityId?: number;
 	Speciality?: SpecialityModel;
-	classId?: number;
-	Class?: ClasseModel;
+	classroomId?: number;
+	Class?: ClassroomModel;
 	Teachers?: TeacherModel[];
 	Feedbacks?: FeedbackModel[];
 };

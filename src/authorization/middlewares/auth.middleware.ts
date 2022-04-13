@@ -21,6 +21,8 @@ export async function decryptToken(req: Req, res: Res, next: Next): Promise<Resp
       },
       'all'
     );
+    console.log(1)
+    console.log(req.user);
 
     if(!req.user) return next(boom.badRequest(`access_denied`));
     if(!req.user.azureId) {

@@ -16,38 +16,38 @@ export default (app: App): void => {
     // GET ALL CAMPUSS
     app.get(routePrefix, [
         ValidationMiddleware.validJWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
-		CampusController.getAll
+        PermissionMiddleware.iMustBe([ User ]), 
+        CampusController.getAll
     ]);
     // GET CAMPUS BY ID
-    app.get(`${routePrefix}/:campus_id${regInt}`, [
+    app.get(`${routePrefix}/:campusId${regInt}`, [
         ValidationMiddleware.validJWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
-		RequestMiddleware.paramParametersNeeded('campus_id', 'integer'),
-        CampusMiddleware.campusExistAsParam("campus_id"),
+        PermissionMiddleware.iMustBe([ User ]), 
+        RequestMiddleware.paramParametersNeeded('campusId', 'integer'),
+        CampusMiddleware.campusExistAsParam("campusId"),
         CampusController.getById
     ]);
     // CREATE A NEW CAMPUS
     app.post(routePrefix, [
         ValidationMiddleware.validJWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
-		RequestMiddleware.bodyParametersNeeded(['name','city','address'], 'string'),
-		CampusController.create
+        PermissionMiddleware.iMustBe([ User ]), 
+        RequestMiddleware.bodyParametersNeeded(['name','city','address'], 'string'),
+        CampusController.create
     ]);
     // UPDATE CAMPUS
-    app.patch(`${routePrefix}/:campus_id${regInt}`, [
+    app.patch(`${routePrefix}/:campusId${regInt}`, [
         ValidationMiddleware.validJWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
-		RequestMiddleware.paramParametersNeeded('campus_id', 'integer'),
-        CampusMiddleware.campusExistAsParam("campus_id"),
+        PermissionMiddleware.iMustBe([ User ]), 
+        RequestMiddleware.paramParametersNeeded('campusId', 'integer'),
+        CampusMiddleware.campusExistAsParam('campusId'),
         CampusController.update
     ]);
     // DELETE CAMPUS
-    app.delete(`${routePrefix}/:campus_id${regInt}`, [
+    app.delete(`${routePrefix}/:campusId${regInt}`, [
         ValidationMiddleware.validJWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
-		RequestMiddleware.paramParametersNeeded('campus_id', 'integer'),
-        CampusMiddleware.campusExistAsParam("campus_id"),
+        PermissionMiddleware.iMustBe([ User ]), 
+        RequestMiddleware.paramParametersNeeded('campusId', 'integer'),
+        CampusMiddleware.campusExistAsParam('campusId'),
         CampusController.remove
     ]);
 }

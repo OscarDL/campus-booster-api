@@ -4,18 +4,18 @@
 import * as S from 'sequelize-typescript';
 import { HasManyOptions } from 'sequelize/types';
 import User from '../../users/model/user.model';
-import { ClasseModel } from './classe.interface';
-import ClasseScope from './classe.scope';
-import Course from './../../courses/model/course.model';
+import { ClassroomModel } from './classroom.interface';
+import ClassroomScope from './classroom.scope';
+import Course from '../../courses/model/course.model';
 
-@S.Scopes(ClasseScope)
+@S.Scopes(ClassroomScope)
 @S.Table({
   timestamps: true,
   underscored: true,
-  tableName: 'classes',
+  tableName: 'classrooms',
   schema: 'public'
 })
-export default class Class extends S.Model implements ClasseModel {
+export default class Class extends S.Model implements ClassroomModel {
   @S.PrimaryKey
 	@S.AutoIncrement
 	@S.Column(S.DataType.BIGINT)
@@ -26,13 +26,13 @@ export default class Class extends S.Model implements ClasseModel {
 	public section!: number;
 
 	@S.HasMany(() => User, { 
-		foreignKey: 'class_id', 
+		foreignKey: 'classroom_id', 
 		onDelete: 'CASCADE'
 	} as HasManyOptions)
 	public Users!: User[];
 	
 	@S.HasMany(() => Course, { 
-		foreignKey: 'class_id', 
+		foreignKey: 'classroom_id', 
 		onDelete: 'CASCADE'
 	} as HasManyOptions)
 	public Courses!: Course[];
