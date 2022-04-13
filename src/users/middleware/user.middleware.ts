@@ -7,7 +7,7 @@ export function userExistAsQuery(name: string): AsyncFn {
         try {
             if(req.query[name]) {
                 const user = await findById(req.query[name]);
-                return (!user) ? next(boom.badRequest(`User does not exist!`)) : next();
+                return (!user) ? next(boom.badRequest(`user_not_found`)) : next();
             }
             return next();
         } catch (err: any) {
@@ -22,7 +22,7 @@ export function userExistAsBody(name: string): AsyncFn {
         try {
             if(req.body[name]) {
                 const user = await findById(req.body[name]);
-                return (!user) ? next(boom.badRequest(`User does not exist!`)) : next();
+                return (!user) ? next(boom.badRequest(`user_not_found`)) : next();
             }
             return next();
         } catch (err: any) {
@@ -37,7 +37,7 @@ export function userExistAsParam(name: string): AsyncFn {
         try {
             if(req.params[name]) { 
                 const user = await findById(req.params[name]);
-                return (!user) ? next(boom.badRequest(`User does not exist!`)) : next();
+                return (!user) ? next(boom.badRequest(`user_not_found`)) : next();
             }
             return next();
         } catch (err: any) {

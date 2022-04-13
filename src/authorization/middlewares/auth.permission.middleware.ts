@@ -14,17 +14,17 @@ export function minimumRoleRequired(required_role: number = 0): Fn {
                     return next();
                 } else {
                     if(!userRole) {
-                        return next(boom.forbidden(`You have been banned from ${app_name}.`));
+                        return next(boom.forbidden(`banned`));
                     } else {
-                        return next(boom.badRequest('You cannot perform this action, your access rights are not sufficient.'));
+                        return next(boom.badRequest('access_right'));
                     }
                 }
             } else {
-                return next(boom.notAcceptable(`You have received an email at ${req.user?.email} to validate your account.`, {shouldBeActivated : true}));
+                return next(boom.notAcceptable('validate_account'));
             }
         } catch (e: any) {
             console.log(`${e}`.error);
-            return next(boom.unauthorized('Invalid session!')); 
+            return next(boom.unauthorized('invalid_session')); 
         }
     }
 }
@@ -44,21 +44,21 @@ export function onlySameUserOrAdmin(req: Req, res: Res, next: Next): Resp {
                         return next();
                     } else {
                         if(!userRole) {
-                            return next(boom.forbidden(`You have been banned from ${app_name}.`));
+                            return next(boom.forbidden(`banned`));
                         } else {
-                            return next(boom.badRequest('You cannot perform this action, your access rights are not sufficient.'));
+                            return next(boom.badRequest('access_right'));
                         }
                     }
                 } else {
-                    return next(boom.badRequest('user_id parameter is missing in the request.'));
+                    return next(boom.badRequest('user_id_param_missing'));
                 }
             }   
         } else {
-            return next(boom.notAcceptable(`You have received an email at ${req.user?.email} to validate your account.`, {shouldBeActivated : true}));
+            return next(boom.notAcceptable('validate_account'));
         }
     } catch (e: any) {
         console.log(`${e}`.error);
-        return next(boom.unauthorized('Invalid session!'));
+        return next(boom.unauthorized('invalid_session'));
     }
 }
 
@@ -77,21 +77,21 @@ export function onlySameUserOrSuperAdmin(req: Req, res: Res, next: Next): Resp {
                         return next();
                     } else {
                         if(!userRole) {
-                            return next(boom.forbidden(`You have been banned from ${app_name}.`));
+                            return next(boom.forbidden(`banned`));
                         } else {
-                            return next(boom.badRequest('You cannot perform this action, your access rights are not sufficient.'));
+                            return next(boom.badRequest('access_right'));
                         }
                     }
                 } else {
-                    return next(boom.badRequest('user_id parameter is missing in the request.'));
+                    return next(boom.badRequest('user_id_param_missing'));
                 }
             }
         } else {
-            return next(boom.notAcceptable(`You have received an email at ${req.user?.email} to validate your account.`, {shouldBeActivated : true}));
+            return next(boom.notAcceptable('validate_account'));
         }
     } catch (e: any) {
         console.log(`${e}`.error);
-        return next(boom.unauthorized('Invalid session!'));
+        return next(boom.unauthorized('invalid_session'));
     }
 }
 
@@ -104,17 +104,17 @@ export function onlySuperAdmin(req: Req, res: Res, next: Next): Resp {
                 return next();
             } else {
                 if(!userRole) {
-                    return next(boom.forbidden(`You have been banned from ${config.app_name}.`));
+                    return next(boom.forbidden(`banned`));
                 } else {
-                    return next(boom.badRequest('You cannot perform this action, your access rights are not sufficient.'));
+                    return next(boom.badRequest('access_right'));
                 }
             }
         } else {
-            return next(boom.notAcceptable(`You have received an email at ${req.user?.email} to validate your account.`, {shouldBeActivated : true}));
+            return next(boom.notAcceptable('validate_account'));
         }
     } catch (e: any) {
         console.log(`${e}`.error);
-        return next(boom.unauthorized('Invalid session!'));
+        return next(boom.unauthorized('invalid_session'));
     }
 }
 
@@ -128,17 +128,17 @@ export function iMustBe(roles: number | number[]): Fn {
                     return next();
                 } else {
                     if(!userRole) {
-                        return next(boom.forbidden(`You have been banned from ${app_name}.`));
+                        return next(boom.forbidden(`banned`));
                     } else {
-                        return next(boom.badRequest('You cannot perform this action, your access rights are not sufficient.'));
+                        return next(boom.badRequest('access_right'));
                     }
                 }    
             } else {
-                return next(boom.notAcceptable(`You have received an email at ${req.user?.email} to validate your account.`, {shouldBeActivated : true}));
+                return next(boom.notAcceptable('validate_account'));
             }
         } catch (e: any) {
             console.log(`${e}`.error);
-            return next(boom.unauthorized('Invalid session!')); 
+            return next(boom.unauthorized('invalid_session')); 
         }
     }
 }

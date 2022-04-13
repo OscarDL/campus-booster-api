@@ -17,7 +17,7 @@ import User from './../../users/model/user.model';
 export default class Campus extends S.Model implements CampusModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.INTEGER)
+	@S.Column(S.DataType.BIGINT)
 	public id!: number;
 
 	@S.AllowNull(false)

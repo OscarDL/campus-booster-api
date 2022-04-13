@@ -4,6 +4,8 @@ import config from '../../../config/env.config';
 import { CampusModel } from './../../campus/model/campus.interface';
 import Speciality from './../../specialities/model/speciality.model';
 import { ClasseModel } from "./../../classes/model/classe.interface";
+import { FeedbackModel } from './../../feedbacks/model/feedback.interface';
+import { TeacherModel } from './../../teachers/model/teacher.interface';
 const { permissionLevel } = config;
 export const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
@@ -25,6 +27,8 @@ export interface UserAttributes {
 	Speciality?: Speciality;
 	classId: number;
 	Class?: ClasseModel;
+	Feedbacks?: FeedbackModel[];
+	Teachers?: TeacherModel[];
 };
 
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}

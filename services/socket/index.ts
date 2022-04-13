@@ -16,7 +16,7 @@ export function authSocketMidddleware (io: IServer): void {
         try {
             const token = socket.handshake.auth?.token?.split(' ') || [];
             if (token[0] !== 'Bearer') {
-                return next(boom.badRequest('You need to provide a Bearer token'));
+                return next(boom.badRequest('bearer_missing'));
             } else {
                 try {
                     socket.jwt = jwt.verify(
@@ -38,7 +38,7 @@ export function authSocketMidddleware (io: IServer): void {
                         return next();
                     } else {
                         socket.connected = false;
-                        return next(boom.unauthorized('Unauthorize.'));
+                        return next(boom.unauthorized('unauthorize'));
                     }
                 } catch (err: any) {
                     console.log(`${err}`.error);

@@ -18,7 +18,7 @@ import SpecialityScope from './speciality.scope';
 export default class Speciality extends S.Model implements SpecialityModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.INTEGER)
+	@S.Column(S.DataType.BIGINT)
 	public id!: number;
 
 	@S.AllowNull(false)

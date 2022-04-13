@@ -5,8 +5,10 @@ import * as S from 'sequelize-typescript';
 import { CourseModel, STATUS } from './course.interface';
 import CourseScope from './course.scope';
 import Speciality from './../../specialities/model/speciality.model';
-import { BelongsToOptions } from 'sequelize/types';
+import { BelongsToOptions, HasManyOptions } from 'sequelize/types';
 import Class from './../../classes/model/classe.model';
+import Teacher from '../../teachers/model/teacher.model';
+import Feedback from './../../feedbacks/model/feedback.model';
 
 @S.Scopes(CourseScope)
 @S.Table({
@@ -18,7 +20,7 @@ import Class from './../../classes/model/classe.model';
 export default class Course extends S.Model implements CourseModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.INTEGER)
+	@S.Column(S.DataType.BIGINT)
 	public id!: number;
 
 	@S.AllowNull(false)
@@ -72,4 +74,16 @@ export default class Course extends S.Model implements CourseModel {
 		onDelete: 'CASCADE'
 	} as BelongsToOptions)
 	public Class!: Class;
+
+	@S.HasMany(() => Teacher, { 
+		foreignKey: 'course_id', 
+		onDelete: 'CASCADE'
+	} as HasManyOptions)
+	public Teachers!: Teacher[];
+
+	@S.HasMany(() => Feedback, { 
+		foreignKey: 'course_id', 
+		onDelete: 'CASCADE'
+	} as HasManyOptions)
+	public Feedbacks!: Feedback[];
 }

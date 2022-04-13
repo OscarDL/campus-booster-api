@@ -29,15 +29,9 @@ export default abstract class ExpressMiddlewares {
     static ErrorHandler(): any {
         return (err: any, req: Req, res: Res, next: Next): Resp => {
             if (err.isBoom) {
-                return res.status(err.output.statusCode).json(err.output.payload);
+                return res.end(res.status(err.output.statusCode).__(err.output.payload.message));
             } else {
-                return res.status(500).json(
-                    {
-                        statusCode: 500,
-                        error: 'Internal',
-                        message: `${err.name}: ${err.message}`,
-                    }
-                );
+                return res.end(res.status(500).__('internal'));
             }
         }
     }

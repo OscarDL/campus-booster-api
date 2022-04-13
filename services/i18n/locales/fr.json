@@ -1,0 +1,21 @@
+{
+  "internal": "Une erreur de serveur interne s'est produite.",
+  "bearer_missing": "Votre jeton Bearer est manquant.",
+  "unauthorize": "Vous n'êtes pas autorisé à effectuer cette action.",
+  "azure_ad_unauthorize": "Vous n'êtes pas autorisé à effectuer cette action AD.",
+  "access_denied": "L'accès à ce contenu vous a été refusé.",
+  "invalid_hash": "Vous possédez un hash invalide.",
+  "banned": "Vous avez été banni.",
+  "access_right": "Vous ne possédez pas de droits d'accès.",
+  "validate_account": "Votre compte n'a pas été validé.",
+  "invalid_session": "Votre session n'est pas valide.",
+  "user_id_param_missing": "Paramètre d'identification de l'utilisateur manquant.",
+  "invalid_token": "Votre jeton n'est pas valide.",
+  "missing_token": "Jeton d'autorisation manquant.",
+  "expire_token": "Votre jeton a expiré.",
+  "campus_not_found": "Aucun campus n'a été trouvé.",
+  "class_not_found": "Aucune classe n'a été trouvée.",
+  "user_not_found": "Aucun utilisateur n'a été trouvé.",
+  "speciality_not_found": "Aucune spécialité n'a été trouvée.",
+  "course_not_found": "Aucun cours n'a été trouvé."
+}

@@ -1,6 +1,6 @@
 {
     "watch": [ "*" ],
-    "ext": ".ts,.js,.csv,.json",
+    "ext": ".ts,.js,.csv,.sjon",
     "ignore": [
         "/tests",
         "/node_modules"

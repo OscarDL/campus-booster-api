@@ -7,7 +7,7 @@ export function campusExistAsQuery(name: string): AsyncFn {
         try {
             if(req.query[name]) {
                 const campus = await findById(req.query[name]);
-                return (!campus) ? next(boom.badRequest(`Campus does not exist!`)) : next();
+                return (!campus) ? next(boom.badRequest(`campus_not_found`)) : next();
             }
             return next();
         } catch (err: any) {
@@ -22,7 +22,7 @@ export function campusExistAsBody(name: string): AsyncFn {
         try {
             if(req.body[name]) {
                 const campus = await findById(req.body[name]);
-                return (!campus) ? next(boom.badRequest(`Campus does not exist!`)) : next();
+                return (!campus) ? next(boom.badRequest(`campus_not_found`)) : next();
             }
             return next();
         } catch (err: any) {
@@ -37,7 +37,7 @@ export function campusExistAsParam(name: string): AsyncFn {
         try {
             if(req.params[name]) { 
                 const campus = await findById(req.params[name]);
-                return (!campus) ? next(boom.badRequest(`Campus does not exist!`)) : next();
+                return (!campus) ? next(boom.badRequest(`campus_not_found`)) : next();
             }
             return next();
         } catch (err: any) {

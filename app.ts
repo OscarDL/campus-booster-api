@@ -24,7 +24,7 @@ import socketConfig from './config/sockets.config';
 import ExpressMiddleware from './services/express';
 import { Next, Req, Res, Resp } from './types/express';
 import { authSocketMidddleware } from './services/socket';
-
+import { i18n } from './services/i18n';
 import '@dulysse1/better-node';
 
 
@@ -94,7 +94,6 @@ const contentSecurityPolicy = {
     }
 };
 
-
 // Setup base config & models
 process.env.MODELS = `${__dirname}/config/models.config.ts`;
 process.env.CONFIG = `${__dirname}/config/env.config.ts`;
@@ -148,6 +147,12 @@ const io = new Server(
 // Add socket.io instance to express requests
 app.use((req: Req, res: Res, next: Next): Resp => {
     res.io = io;
+    return next();
+});
+
+// set up i18n
+app.use((req: Req, res: Res, next: Next): Resp  => {
+    i18n.init(req, res);
     return next();
 });
 
