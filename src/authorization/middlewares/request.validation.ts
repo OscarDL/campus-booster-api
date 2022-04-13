@@ -66,20 +66,20 @@ export function queryParametersNeeded(params: string | string[], type: Parameter
                 return (req.query[params]) ?
                     (checkType((['float', 'integer'].includes(type)) ? parseNumber(req.query[params]) : req.query[params], type, enumOptions)) ?
                         next() : 
-                        next(boom.badRequest(`Format incorrect pour ${params} !`)) : 
-                        next(boom.badRequest(`Argument manquant ${params} dans la requête !`));
+                        next(boom.badRequest(`${params}_format`)) : 
+                        next(boom.badRequest(`${params}_missing`));
             } else if(typeof params === 'object' && Array.isArray(params)) {
                 for (let i = 0; i < params.length; i++) {
                     const param = params[i];
                     if(!req.query[param]) {
-                        return next(boom.badRequest(`Argument manquant ${param} dans la requête !`));
+                        return next(boom.badRequest(`${param}_missing`));
                     } else if(!checkType((['float', 'integer'].includes(type)) ? parseNumber(req.query[param]) : req.query[param], type, enumOptions)) {
-                        return next(boom.badRequest(`Format incorrect pour ${param} !`)); 
+                        return next(boom.badRequest(`${param}_format`)); 
                     }  
                 }
                 return next();
             } else {
-                return next(boom.badGateway('Erreur du serveur : les paramètres de requête doivent être au format String ou Array[String].'));
+                return next(boom.badGateway('incorrect_param'));
             }
         } catch (err: any) {
             return await ExpressErrorHandler(err)(req, res, next); 
@@ -94,20 +94,20 @@ export function paramParametersNeeded(params: string | string[], type: Parameter
                 return (req.params[params]) ?
                     (checkType((['float', 'integer'].includes(type)) ? parseNumber(req.params[params]) : req.params[params], type, enumOptions)) ?
                     next() : 
-                    next(boom.badRequest(`Format incorrect pour ${params} !`)) : 
-                    next(boom.badRequest(`Argument manquant ${params} comme paramètre !`));
+                    next(boom.badRequest(`${params}_format`)) : 
+                    next(boom.badRequest(`${params}_missing`));
             } else if(typeof params === 'object' && Array.isArray(params)) {
                 for (let i = 0; i < params.length; i++) {
                     const param = params[i];
                     if(!req.params[param]) {
-                        return next(boom.badRequest(`Argument manquant ${param} comme paramètre !`));
+                        return next(boom.badRequest(`${param}_missing`));
                     } else if(!checkType((['float', 'integer'].includes(type)) ? parseNumber(req.params[param]) : req.params[param], type, enumOptions)) {
-                        return next(boom.badRequest(`Format incorrect pour ${param} !`)); 
+                        return next(boom.badRequest(`${param}_format`)); 
                     }  
                 }
                 return next();
             } else {
-                return next(boom.badGateway('Erreur du serveur : les paramètres de paramètre doivent être au format String ou Array[String].'));
+                return next(boom.badGateway('incorrect_param'));
             }
         } catch (err: any) {
             return await ExpressErrorHandler(err)(req, res, next); 
@@ -122,20 +122,20 @@ export function bodyParametersNeeded(params: string | string[], type: ParameterT
                 return (req.body[params] || [false, 0].includes(req.body[params])) ?
                     (checkType(req.body[params], type, enumOptions)) ?
                     next() : 
-                    next(boom.badRequest(`Format incorrect pour ${params} !`)) : 
-                    next(boom.badRequest(`Argument manquant ${params} dans le body !`));
+                    next(boom.badRequest(`${params}_format`)) : 
+                    next(boom.badRequest(`${params}_missing`));
             } else if(typeof params === 'object' && Array.isArray(params)) {
                 for (let i = 0; i < params.length; i++) {
                     const param = params[i];
                     if(!req.body[param] && ![false, 0].includes(req.body[param])) {
-                        return next(boom.badRequest(`Argument manquant ${param} dans le body !`));
+                        return next(boom.badRequest(`${param}_missing`));
                     } else if(!checkType(req.body[param], type, enumOptions) && ![false, 0].includes(req.body[param])) {
-                        return next(boom.badRequest(`Format incorrect pour ${param} !`)); 
+                        return next(boom.badRequest(`${param}_format`)); 
                     }  
                 }
                 next();
             } else {
-                return next(boom.badGateway('Erreur du serveur : les paramètres du body doivent être au format String ou Array[String].'));
+                return next(boom.badGateway('incorrect_param'));
             }
         } catch (err: any) {
             return await ExpressErrorHandler(err)(req, res, next); 

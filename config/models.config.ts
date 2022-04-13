@@ -51,6 +51,7 @@ sequelize.sync({
     );
     console.log('\n✅ Database is synchronized'.green);
 }).catch((err) => {
+    console.log(err);
     console.log(`\n❌ Unable to synchronize the Database => Error: ${JSON.stringify(err)}`.error);
     process.kill(process.pid);
 });

@@ -18,7 +18,7 @@ import Course from './../../courses/model/course.model';
 export default class Class extends S.Model implements ClasseModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.INTEGER)
+	@S.Column(S.DataType.BIGINT)
 	public id!: number;
 
 	@S.AllowNull(false)

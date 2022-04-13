@@ -8,9 +8,11 @@ import config from '../../../config/env.config';
 const { permissionLevel } = config;
 import bcrypt from 'bcrypt';
 import Campus from './../../campus/model/campus.model';
-import { BelongsToOptions } from 'sequelize/types';
+import { BelongsToOptions, HasManyOptions } from 'sequelize/types';
 import Speciality from './../../specialities/model/speciality.model';
 import Class from './../../classes/model/classe.model';
+import Teacher from './../../teachers/model/teacher.model';
+import Feedback from './../../feedbacks/model/feedback.model';
 
 
 @S.Scopes(UserScope)
@@ -131,4 +133,16 @@ export default class User extends S.Model implements UserModel {
 		onDelete: 'CASCADE'
 	} as BelongsToOptions)
 	public Class!: Class;
+
+	@S.HasMany(() => Teacher, { 
+		foreignKey: 'user_id', 
+		onDelete: 'CASCADE'
+	} as HasManyOptions)
+	public Teachers!: Teacher[];
+
+	@S.HasMany(() => Feedback, { 
+		foreignKey: 'user_id', 
+		onDelete: 'CASCADE'
+	} as HasManyOptions)
+	public Feedbacks!: Feedback[];
 }

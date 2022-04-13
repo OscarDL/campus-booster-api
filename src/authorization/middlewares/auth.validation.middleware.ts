@@ -25,7 +25,7 @@ export async function validRefreshToken(req: Req, res: Res, next: Next): Promise
       return next();
     }
 
-    return next(boom.badRequest("Jeton d'actualisation non valide."));
+    return next(boom.badRequest("invalid_token"));
   } catch (err) {
     return await ExpressErrorHandler(err)(req, res, next); 
   }
@@ -36,7 +36,7 @@ export async function validJWTNeeded(req: Req, res: Res, next: Next): Promise<Re
     try {
       const accessToken = req.cookies.accessToken;
       if (!accessToken) {
-        return next(boom.badRequest("Vous devez fournir un jeton d'accès."));
+        return next(boom.badRequest("missing_token"));
       }
 
       req.jwt = jwt.verify(
@@ -46,13 +46,13 @@ export async function validJWTNeeded(req: Req, res: Res, next: Next): Promise<Re
       ) as ReqJWT;
       req.user = await UserService.findById(req.jwt.id, {}, 'all');
 
-      return (req.user) ? next() : next(boom.unauthorized('Votre session a expiré !'));
+      return (req.user) ? next() : next(boom.unauthorized('expire_token'));
     } catch (err: any) {
       console.log(`${err}`.error);
-      return next(boom.unauthorized('Votre session a expiré !'));
+      return next(boom.unauthorized('expire_token'));
     }
   } else {
-    return next(boom.badRequest('Aucune autorisation fournie.'));
+    return next(boom.badRequest('missing_token'));
   }
 };
 
@@ -61,7 +61,7 @@ export async function JWTNeeded(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
       const accessToken = req.cookies.accessToken;
       if (!accessToken) {
-        return next(boom.badRequest("Vous devez fournir un jeton d'accès."));
+        return next(boom.badRequest("missing_token"));
       }
 
       req.jwt = jwt.decode(accessToken) as ReqJWT;
@@ -72,6 +72,6 @@ export async function JWTNeeded(req: Req, res: Res, next: Next): Promise<Resp> {
       return await ExpressErrorHandler(err)(req, res, next);
     }
   } else {
-    next(boom.badRequest('Aucune autorisation fournie.'));
+    next(boom.badRequest('missing_token'));
   }
 };

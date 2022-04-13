@@ -1,13 +1,13 @@
 import { Req, Res, Next, Resp, AsyncFn } from '../../../types/express';
 import boom from '@hapi/boom';
-import { findById } from '../service/speciality.service';
+import { findById } from '../service/teacher.service';
 
-export function specialityExistAsQuery(name: string): AsyncFn {
+export function teacherExistAsQuery(name: string): AsyncFn {
     return async(req: Req, res: Res, next: Next): Promise<Resp> => {
         try {
             if(req.query[name]) {
-                const speciality = await findById(req.query[name]);
-                return (!speciality) ? next(boom.badRequest(`speciality_not_found`)) : next();
+                const teacher = await findById(req.query[name]);
+                return (!teacher) ? next(boom.badRequest(`Teacher does not exist!`)) : next();
             }
             return next();
         } catch (err: any) {
@@ -17,12 +17,12 @@ export function specialityExistAsQuery(name: string): AsyncFn {
     }
 }
 
-export function specialityExistAsBody(name: string): AsyncFn {
+export function teacherExistAsBody(name: string): AsyncFn {
     return async(req: Req, res: Res, next: Next): Promise<Resp> => {
         try {
             if(req.body[name]) {
-                const speciality = await findById(req.body[name]);
-                return (!speciality) ? next(boom.badRequest(`speciality_not_found`)) : next();
+                const teacher = await findById(req.body[name]);
+                return (!teacher) ? next(boom.badRequest(`Teacher does not exist!`)) : next();
             }
             return next();
         } catch (err: any) {
@@ -32,12 +32,12 @@ export function specialityExistAsBody(name: string): AsyncFn {
     }
 }
 
-export function specialityExistAsParam(name: string): AsyncFn {
+export function teacherExistAsParam(name: string): AsyncFn {
     return async(req: Req, res: Res, next: Next): Promise<Resp> => {
         try {
             if(req.params[name]) { 
-                const speciality = await findById(req.params[name]);
-                return (!speciality) ? next(boom.badRequest(`speciality_not_found`)) : next();
+                const teacher = await findById(req.params[name]);
+                return (!teacher) ? next(boom.badRequest(`Teacher does not exist!`)) : next();
             }
             return next();
         } catch (err: any) {

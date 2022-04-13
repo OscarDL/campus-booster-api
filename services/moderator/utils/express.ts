@@ -35,7 +35,7 @@ module ExpressModerator {
                     if(req.body[f.toString()] && moderator.detect(req.body[f.toString()])?.length) {
                         return next(
                             boom.badRequest(
-                                `Sorry but the ${f} field seems to be an insult.`
+                                'injure'
                             )
                         );
                     }

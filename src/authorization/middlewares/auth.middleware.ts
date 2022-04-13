@@ -10,7 +10,7 @@ Azure.OAuth();
 export async function decryptToken(req: Req, res: Res, next: Next): Promise<Resp> {
   try {
     const user = await Azure.getUser(req.body.azureId);
-    if(!user) return next(boom.badRequest(`Access denied to Azure AD.`));
+    if(!user) return next(boom.badRequest(`azure_ad_unauthorize`));
     const { userPrincipalName } = user;
     req.user = await UserService.findOne(
       {
@@ -22,7 +22,7 @@ export async function decryptToken(req: Req, res: Res, next: Next): Promise<Resp
       'all'
     );
 
-    if(!req.user) return next(boom.badRequest(`You hasn't access to Campus booster, please contact administrator.`));
+    if(!req.user) return next(boom.badRequest(`access_denied`));
     if(!req.user.azureId) {
       req.user = await UserService.update(
         req.user.id,
@@ -35,7 +35,7 @@ export async function decryptToken(req: Req, res: Res, next: Next): Promise<Resp
 
     const validAzureId = await bcrypt.compare(req.body.azureId, req.user.azureId!);
 
-    if (!validAzureId) return next(boom.badRequest(`Invalid hash please try again later.`));
+    if (!validAzureId) return next(boom.badRequest(`invalid_hash`));
 
     req.user.azureId = undefined;
     next();
