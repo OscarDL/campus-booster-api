@@ -10,7 +10,7 @@ import bcrypt from 'bcrypt';
 import Campus from './../../campus/model/campus.model';
 import { BelongsToOptions, HasManyOptions } from 'sequelize/types';
 import Speciality from './../../specialities/model/speciality.model';
-import Class from './../../classes/model/classe.model';
+import Class from '../../classrooms/model/classroom.model';
 import Teacher from './../../teachers/model/teacher.model';
 import Feedback from './../../feedbacks/model/feedback.model';
 
@@ -52,13 +52,15 @@ export default class User extends S.Model implements UserModel {
 
 	@S.AllowNull(false)
 	@S.IsEmail
-	@S.Unique
 	@S.Is('emailFormat', (email) => {
 		if(!EMAIL_REGEX.test(email)) {
 			throw new Error(`'${email}' is not a correct email format.`)
 		}
 	})
-	@S.Column(S.DataType.STRING(255))
+	@S.Column({
+    type: S.DataType.STRING(255),
+    unique: true
+  })
 	public email!: string;
 
 	@S.AllowNull(false)
@@ -93,11 +95,9 @@ export default class User extends S.Model implements UserModel {
 	}
 
 	@S.ForeignKey(() => Campus)
-	@S.Column(
-		{
-			field: 'campus_id',
-		}
-	)
+	@S.Column({
+    field: 'campus_id',
+  })
 	public campusId!: number;
 
 	@S.BelongsTo(() => Campus, { 
@@ -107,11 +107,9 @@ export default class User extends S.Model implements UserModel {
 	public Campus!: Campus;
 
 	@S.ForeignKey(() => Speciality)
-	@S.Column(
-		{
-			field: 'speciality_id',
-		}
-	)
+	@S.Column({
+    field: 'speciality_id',
+  })
 	public specialityId!: number;
 
 	@S.BelongsTo(() => Speciality, { 
@@ -121,15 +119,13 @@ export default class User extends S.Model implements UserModel {
 	public Speciality!: Speciality;
 
 	@S.ForeignKey(() => Class)
-	@S.Column(
-		{
-			field: 'class_id',
-		}
-	)
-	public classId!: number;
+	@S.Column({
+    field: 'classroom_id',
+	})
+	public classroomId!: number;
 
 	@S.BelongsTo(() => Class, { 
-		foreignKey: 'class_id', 
+		foreignKey: 'classroom_id', 
 		onDelete: 'CASCADE'
 	} as BelongsToOptions)
 	public Class!: Class;

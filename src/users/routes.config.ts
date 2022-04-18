@@ -4,7 +4,7 @@ import * as RequestMiddleware from '../authorization/middlewares/request.validat
 import * as PermissionMiddleware from '../authorization/middlewares/auth.permission.middleware';
 import * as UserController from './controller/user.controller';
 import * as UserMiddleware from './middleware/user.middleware';
-import * as ClassMiddleware from '../classes/middleware/classe.middleware';
+import * as ClassMiddleware from '../classrooms/middleware/classroom.middleware';
 import * as CampusMiddleware from '../campus/middleware/campus.middleware';
 
 import config from '../../config/env.config';
@@ -37,10 +37,10 @@ export default (app: App): void => {
 		RequestMiddleware.bodyParametersNeeded(['azureId','firstName','lastName', 'birthday'], 'string'),
         RequestMiddleware.bodyParametersNeeded('email', 'email'),
         RequestMiddleware.bodyParametersNeeded([
-            'classId',
+            'classroomId',
             'campusId'
         ], 'integer'),
-        ClassMiddleware.classeExistAsBody('classId'),
+        ClassMiddleware.classroomExistAsBody('classroomId'),
         CampusMiddleware.campusExistAsBody('campusId'),
 		UserController.create
     ]);

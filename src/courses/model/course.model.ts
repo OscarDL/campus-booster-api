@@ -6,7 +6,7 @@ import { CourseModel, STATUS } from './course.interface';
 import CourseScope from './course.scope';
 import Speciality from './../../specialities/model/speciality.model';
 import { BelongsToOptions, HasManyOptions } from 'sequelize/types';
-import Class from './../../classes/model/classe.model';
+import Class from '../../classrooms/model/classroom.model';
 import Teacher from '../../teachers/model/teacher.model';
 import Feedback from './../../feedbacks/model/feedback.model';
 
@@ -65,12 +65,12 @@ export default class Course extends S.Model implements CourseModel {
 
 	@S.ForeignKey(() => Class)
 	@S.Column({
-		field: 'class_id'
+		field: 'classroom_id'
 	})
-	public classId!: number;
+	public classroomId!: number;
 
 	@S.BelongsTo(() => Class, { 
-		foreignKey: 'class_id', 
+		foreignKey: 'classroom_id', 
 		onDelete: 'CASCADE'
 	} as BelongsToOptions)
 	public Class!: Class;

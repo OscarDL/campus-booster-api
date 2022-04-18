@@ -1,9 +1,9 @@
 import { ScopesOptions } from "sequelize-typescript";
-import { ClasseProtectedFields } from "./classe.interface";
+import { ClassroomProtectedFields } from "./classroom.interface";
 export default (() => ({
     defaultScope: ({
         attributes: { 
-            exclude: ClasseProtectedFields
+            exclude: ClassroomProtectedFields
         }
     }) as ScopesOptions,
     all: ({
