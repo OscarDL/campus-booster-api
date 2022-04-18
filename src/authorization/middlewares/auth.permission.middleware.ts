@@ -16,7 +16,7 @@ export function minimumRoleRequired(required_role: number = 0): Fn {
                     if(!userRole) {
                         return next(boom.forbidden(`banned`));
                     } else {
-                        return next(boom.badRequest('access_right'));
+                        return next(boom.badRequest('missing_access_rights'));
                     }
                 }
             } else {
@@ -46,11 +46,11 @@ export function onlySameUserOrAdmin(req: Req, res: Res, next: Next): Resp {
                         if(!userRole) {
                             return next(boom.forbidden(`banned`));
                         } else {
-                            return next(boom.badRequest('access_right'));
+                            return next(boom.badRequest('missing_access_rights'));
                         }
                     }
                 } else {
-                    return next(boom.badRequest('user_id_param_missing'));
+                    return next(boom.badRequest('params.missing_user_id'));
                 }
             }   
         } else {
@@ -79,11 +79,11 @@ export function onlySameUserOrSuperAdmin(req: Req, res: Res, next: Next): Resp {
                         if(!userRole) {
                             return next(boom.forbidden(`banned`));
                         } else {
-                            return next(boom.badRequest('access_right'));
+                            return next(boom.badRequest('missing_access_rights'));
                         }
                     }
                 } else {
-                    return next(boom.badRequest('user_id_param_missing'));
+                    return next(boom.badRequest('params.missing_user_id'));
                 }
             }
         } else {
@@ -106,7 +106,7 @@ export function onlySuperAdmin(req: Req, res: Res, next: Next): Resp {
                 if(!userRole) {
                     return next(boom.forbidden(`banned`));
                 } else {
-                    return next(boom.badRequest('access_right'));
+                    return next(boom.badRequest('missing_access_rights'));
                 }
             }
         } else {
@@ -130,7 +130,7 @@ export function iMustBe(roles: number | number[]): Fn {
                     if(!userRole) {
                         return next(boom.forbidden(`banned`));
                     } else {
-                        return next(boom.badRequest('access_right'));
+                        return next(boom.badRequest('missing_access_rights'));
                     }
                 }    
             } else {

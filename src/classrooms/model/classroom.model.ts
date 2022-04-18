@@ -26,13 +26,17 @@ export default class Class extends S.Model implements ClassroomModel {
 	public section!: number;
 
 	@S.HasMany(() => User, { 
-		foreignKey: 'classroom_id', 
+		foreignKey: {
+      field: 'classroom_id'
+    },
 		onDelete: 'CASCADE'
 	} as HasManyOptions)
 	public Users!: User[];
 	
 	@S.HasMany(() => Course, { 
-		foreignKey: 'classroom_id', 
+		foreignKey: {
+      field: 'classroom_id'
+    },
 		onDelete: 'CASCADE'
 	} as HasManyOptions)
 	public Courses!: Course[];

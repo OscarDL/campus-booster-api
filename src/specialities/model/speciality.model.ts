@@ -29,13 +29,17 @@ export default class Speciality extends S.Model implements SpecialityModel {
 	public name!: string;
 
 	@S.HasMany(() => User, { 
-		foreignKey: 'speciality_id', 
+		foreignKey: {
+      field: 'speciality_id'
+    },
 		onDelete: 'CASCADE'
 	} as HasManyOptions)
 	public Users!: User[];
 	
 	@S.HasMany(() => Course, { 
-		foreignKey: 'speciality_id', 
+		foreignKey: {
+      field: 'speciality_id'
+    },
 		onDelete: 'CASCADE'
 	} as HasManyOptions)
 	public Courses!: Course[];

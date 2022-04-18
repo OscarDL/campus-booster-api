@@ -6,7 +6,7 @@ export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         return res.status(200).json(
             await CampusService.findById(
-                req.params.campus_id
+                req.params.campusId
             )
         );
     } catch (err: any) {
@@ -47,7 +47,7 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
         return res.status(203).json(
             await CampusService.update(
-                req.params.campus_id, 
+                req.params.campusId, 
                 req.body
             )
         );
@@ -63,7 +63,7 @@ export async function remove(req: Req, res: Res, next: Next): Promise<Resp>  {
             await CampusService.remove(
                 {
                     where: {
-                        id: req.params.campus_id
+                        id: req.params.campusId
                     }
                 }
             )

@@ -35,7 +35,9 @@ export default class Teacher extends S.Model implements TeacherModel {
 	public userId!: number;
 
 	@S.BelongsTo(() => User, { 
-		foreignKey: 'user_id', 
+		foreignKey: {
+      field: 'user_id'
+    },
 		onDelete: 'CASCADE'
 	} as BelongsToOptions)
 	public User!: User;
@@ -49,7 +51,9 @@ export default class Teacher extends S.Model implements TeacherModel {
 	public courseId!: number;
 
 	@S.BelongsTo(() => Course, { 
-		foreignKey: 'course_id', 
+		foreignKey: {
+      field: 'course_id'
+    },
 		onDelete: 'CASCADE'
 	} as BelongsToOptions)
 	public Course!: Course;
