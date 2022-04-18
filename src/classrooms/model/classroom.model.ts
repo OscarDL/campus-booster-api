@@ -2,7 +2,6 @@
 // DOC : https://www.npmjs.com/package/sequelize-typescript
 // Generate by Ulysse Dupont
 import * as S from 'sequelize-typescript';
-import { HasManyOptions } from 'sequelize/types';
 import User from '../../users/model/user.model';
 import { ClassroomModel } from './classroom.interface';
 import ClassroomScope from './classroom.scope';
@@ -26,14 +25,12 @@ export default class Class extends S.Model implements ClassroomModel {
 	public section!: number;
 
 	@S.HasMany(() => User, { 
-		foreignKey: 'classroom_id', 
 		onDelete: 'CASCADE'
-	} as HasManyOptions)
+	})
 	public Users!: User[];
 	
 	@S.HasMany(() => Course, { 
-		foreignKey: 'classroom_id', 
 		onDelete: 'CASCADE'
-	} as HasManyOptions)
+	})
 	public Courses!: Course[];
 }

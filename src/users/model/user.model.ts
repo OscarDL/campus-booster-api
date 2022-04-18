@@ -8,7 +8,6 @@ import config from '../../../config/env.config';
 const { permissionLevel } = config;
 import bcrypt from 'bcrypt';
 import Campus from './../../campus/model/campus.model';
-import { BelongsToOptions, HasManyOptions } from 'sequelize/types';
 import Speciality from './../../specialities/model/speciality.model';
 import Class from '../../classrooms/model/classroom.model';
 import Teacher from './../../teachers/model/teacher.model';
@@ -101,9 +100,8 @@ export default class User extends S.Model implements UserModel {
 	public campusId!: number;
 
 	@S.BelongsTo(() => Campus, { 
-		foreignKey: 'campus_id', 
 		onDelete: 'CASCADE'
-	} as BelongsToOptions)
+	})
 	public Campus!: Campus;
 
 	@S.ForeignKey(() => Speciality)
@@ -113,9 +111,8 @@ export default class User extends S.Model implements UserModel {
 	public specialityId!: number;
 
 	@S.BelongsTo(() => Speciality, { 
-		foreignKey: 'speciality_id', 
 		onDelete: 'CASCADE'
-	} as BelongsToOptions)
+	})
 	public Speciality!: Speciality;
 
 	@S.ForeignKey(() => Class)
@@ -125,20 +122,17 @@ export default class User extends S.Model implements UserModel {
 	public classroomId!: number;
 
 	@S.BelongsTo(() => Class, { 
-		foreignKey: 'classroom_id', 
 		onDelete: 'CASCADE'
-	} as BelongsToOptions)
+	})
 	public Class!: Class;
 
 	@S.HasMany(() => Teacher, { 
-		foreignKey: 'user_id', 
 		onDelete: 'CASCADE'
-	} as HasManyOptions)
+	})
 	public Teachers!: Teacher[];
 
 	@S.HasMany(() => Feedback, { 
-		foreignKey: 'user_id', 
 		onDelete: 'CASCADE'
-	} as HasManyOptions)
+	})
 	public Feedbacks!: Feedback[];
 }

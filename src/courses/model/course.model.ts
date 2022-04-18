@@ -5,7 +5,6 @@ import * as S from 'sequelize-typescript';
 import { CourseModel, STATUS } from './course.interface';
 import CourseScope from './course.scope';
 import Speciality from './../../specialities/model/speciality.model';
-import { BelongsToOptions, HasManyOptions } from 'sequelize/types';
 import Class from '../../classrooms/model/classroom.model';
 import Teacher from '../../teachers/model/teacher.model';
 import Feedback from './../../feedbacks/model/feedback.model';
@@ -58,9 +57,8 @@ export default class Course extends S.Model implements CourseModel {
 	public specialityId!: number;
 
 	@S.BelongsTo(() => Speciality, { 
-		foreignKey: 'speciality_id', 
 		onDelete: 'CASCADE'
-	} as BelongsToOptions)
+	})
 	public Speciality!: Speciality;
 
 	@S.ForeignKey(() => Class)
@@ -70,20 +68,17 @@ export default class Course extends S.Model implements CourseModel {
 	public classroomId!: number;
 
 	@S.BelongsTo(() => Class, { 
-		foreignKey: 'classroom_id', 
 		onDelete: 'CASCADE'
-	} as BelongsToOptions)
+	})
 	public Class!: Class;
 
 	@S.HasMany(() => Teacher, { 
-		foreignKey: 'course_id', 
 		onDelete: 'CASCADE'
-	} as HasManyOptions)
+	})
 	public Teachers!: Teacher[];
 
 	@S.HasMany(() => Feedback, { 
-		foreignKey: 'course_id', 
 		onDelete: 'CASCADE'
-	} as HasManyOptions)
+	})
 	public Feedbacks!: Feedback[];
 }
