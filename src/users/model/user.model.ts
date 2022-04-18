@@ -101,7 +101,9 @@ export default class User extends S.Model implements UserModel {
 	public campusId!: number;
 
 	@S.BelongsTo(() => Campus, { 
-		foreignKey: 'campus_id', 
+		foreignKey: {
+      field: 'campus_id'
+    },
 		onDelete: 'CASCADE'
 	} as BelongsToOptions)
 	public Campus!: Campus;
@@ -113,7 +115,9 @@ export default class User extends S.Model implements UserModel {
 	public specialityId!: number;
 
 	@S.BelongsTo(() => Speciality, { 
-		foreignKey: 'speciality_id', 
+		foreignKey: {
+      field: 'speciality_id'
+    },
 		onDelete: 'CASCADE'
 	} as BelongsToOptions)
 	public Speciality!: Speciality;
@@ -125,19 +129,25 @@ export default class User extends S.Model implements UserModel {
 	public classroomId!: number;
 
 	@S.BelongsTo(() => Class, { 
-		foreignKey: 'classroom_id', 
+		foreignKey: {
+      field: 'classroom_id'
+    },
 		onDelete: 'CASCADE'
 	} as BelongsToOptions)
 	public Class!: Class;
 
 	@S.HasMany(() => Teacher, { 
-		foreignKey: 'user_id', 
+		foreignKey: {
+      field: 'user_id'
+    },
 		onDelete: 'CASCADE'
 	} as HasManyOptions)
 	public Teachers!: Teacher[];
 
 	@S.HasMany(() => Feedback, { 
-		foreignKey: 'user_id', 
+		foreignKey: {
+      field: 'user_id'
+    },
 		onDelete: 'CASCADE'
 	} as HasManyOptions)
 	public Feedbacks!: Feedback[];

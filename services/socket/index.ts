@@ -38,7 +38,7 @@ export function authSocketMidddleware (io: IServer): void {
                         return next();
                     } else {
                         socket.connected = false;
-                        return next(boom.unauthorized('unauthorize'));
+                        return next(boom.unauthorized('unauthorized'));
                     }
                 } catch (err: any) {
                     console.log(`${err}`.error);

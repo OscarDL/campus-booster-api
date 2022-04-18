@@ -65,7 +65,9 @@ export default class Feedback extends S.Model implements FeedbackModel {
 	public userId!: number;
 
 	@S.BelongsTo(() => User, { 
-		foreignKey: 'user_id', 
+		foreignKey: {
+      field: 'user_id'
+    },
 		onDelete: 'CASCADE'
 	} as BelongsToOptions)
 	public User!: User;
@@ -79,7 +81,9 @@ export default class Feedback extends S.Model implements FeedbackModel {
 	public teacherId!: number;
 
 	@S.BelongsTo(() => Teacher, { 
-		foreignKey: 'teacher_id', 
+		foreignKey: {
+      field: 'teacher_id'
+    },
 		onDelete: 'CASCADE'
 	} as BelongsToOptions)
 	public Teacher!: Teacher;
@@ -93,7 +97,9 @@ export default class Feedback extends S.Model implements FeedbackModel {
 	public courseId!: number;
 
 	@S.BelongsTo(() => Course, { 
-		foreignKey: 'course_id', 
+		foreignKey: {
+      field: 'course_id'
+    },
 		onDelete: 'CASCADE'
 	} as BelongsToOptions)
 	public Course!: Course;
