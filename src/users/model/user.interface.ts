@@ -6,6 +6,7 @@ import Speciality from './../../specialities/model/speciality.model';
 import { ClassroomModel } from "../../classrooms/model/classroom.interface";
 import { FeedbackModel } from './../../feedbacks/model/feedback.interface';
 import { TeacherModel } from './../../teachers/model/teacher.interface';
+import { AttendanceModel } from './../../attendances/model/attendance.interface';
 const { permissionLevel } = config;
 export const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
@@ -26,9 +27,10 @@ export interface UserAttributes {
 	specialityId?: number;
 	Speciality?: Speciality;
 	classroomId: number;
-	Class?: ClassroomModel;
+	Classroom?: ClassroomModel;
 	Feedbacks?: FeedbackModel[];
 	Teachers?: TeacherModel[];
+	Attendances?: AttendanceModel[];
 };
 
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}

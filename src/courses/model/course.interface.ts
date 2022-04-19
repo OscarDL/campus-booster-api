@@ -4,6 +4,8 @@ import { SpecialityModel } from './../../specialities/model/speciality.interface
 import { ClassroomModel } from '../../classrooms/model/classroom.interface';
 import { TeacherModel } from './../../teachers/model/teacher.interface';
 import { FeedbackModel } from './../../feedbacks/model/feedback.interface';
+import { CourseContentModel } from './../../course-contents/model/course-content.interface';
+import { PlanningModel } from './../../plannings/model/planning.interface';
 export interface CourseAttributes {
   readonly id?: number;
 	name: string;
@@ -15,9 +17,11 @@ export interface CourseAttributes {
 	specialityId?: number;
 	Speciality?: SpecialityModel;
 	classroomId?: number;
-	Class?: ClassroomModel;
+	Classroom?: ClassroomModel;
 	Teachers?: TeacherModel[];
 	Feedbacks?: FeedbackModel[];
+	CourseContents?: CourseContentModel[];
+	Plannings?: PlanningModel[];
 };
 export interface CourseCreationAttributes extends Optional<CourseAttributes, 'id'> {}
 export interface CourseModel extends Model<CourseAttributes, CourseCreationAttributes>, Partial<CourseAttributes> {

@@ -5,9 +5,11 @@ import * as S from 'sequelize-typescript';
 import { CourseModel, STATUS } from './course.interface';
 import CourseScope from './course.scope';
 import Speciality from './../../specialities/model/speciality.model';
-import Class from '../../classrooms/model/classroom.model';
+import Classroom from '../../classrooms/model/classroom.model';
 import Teacher from '../../teachers/model/teacher.model';
 import Feedback from './../../feedbacks/model/feedback.model';
+import CourseContent from './../../course-contents/model/course-content.model';
+import Planning from './../../plannings/model/planning.model';
 
 @S.Scopes(CourseScope)
 @S.Table({
@@ -61,16 +63,16 @@ export default class Course extends S.Model implements CourseModel {
 	})
 	public Speciality!: Speciality;
 
-	@S.ForeignKey(() => Class)
+	@S.ForeignKey(() => Classroom)
 	@S.Column({
 		field: 'classroom_id'
 	})
 	public classroomId!: number;
 
-	@S.BelongsTo(() => Class, { 
+	@S.BelongsTo(() => Classroom, { 
 		onDelete: 'CASCADE'
 	})
-	public Class!: Class;
+	public Classroom!: Classroom;
 
 	@S.HasMany(() => Teacher, { 
 		onDelete: 'CASCADE'
@@ -81,4 +83,14 @@ export default class Course extends S.Model implements CourseModel {
 		onDelete: 'CASCADE'
 	})
 	public Feedbacks!: Feedback[];
+
+	@S.HasMany(() => CourseContent, { 
+		onDelete: 'CASCADE'
+	})
+	public CourseContents!: CourseContent[];
+
+	@S.HasMany(() => Planning, { 
+		onDelete: 'CASCADE'
+	})
+	public Plannings!: Planning[];
 }

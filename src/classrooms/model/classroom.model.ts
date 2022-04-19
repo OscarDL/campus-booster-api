@@ -14,7 +14,7 @@ import Course from '../../courses/model/course.model';
   tableName: 'classrooms',
   schema: 'public'
 })
-export default class Class extends S.Model implements ClassroomModel {
+export default class Classroom extends S.Model implements ClassroomModel {
   @S.PrimaryKey
 	@S.AutoIncrement
 	@S.Column(S.DataType.BIGINT)

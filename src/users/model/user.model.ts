@@ -9,9 +9,10 @@ const { permissionLevel } = config;
 import bcrypt from 'bcrypt';
 import Campus from './../../campus/model/campus.model';
 import Speciality from './../../specialities/model/speciality.model';
-import Class from '../../classrooms/model/classroom.model';
+import Classroom from '../../classrooms/model/classroom.model';
 import Teacher from './../../teachers/model/teacher.model';
 import Feedback from './../../feedbacks/model/feedback.model';
+import Attendance from './../../attendances/model/attendance.model';
 
 
 @S.Scopes(UserScope)
@@ -82,7 +83,6 @@ export default class User extends S.Model implements UserModel {
 	@S.Column(S.DataType.SMALLINT)
 	public role!: typeof permissionLevel[keyof typeof permissionLevel];
 
-
 	// ---------------------
 	// @BEFORE CREATE/UPDATE
 	// ---------------------
@@ -115,16 +115,16 @@ export default class User extends S.Model implements UserModel {
 	})
 	public Speciality!: Speciality;
 
-	@S.ForeignKey(() => Class)
+	@S.ForeignKey(() => Classroom)
 	@S.Column({
     field: 'classroom_id',
 	})
 	public classroomId!: number;
 
-	@S.BelongsTo(() => Class, { 
+	@S.BelongsTo(() => Classroom, { 
 		onDelete: 'CASCADE'
 	})
-	public Class!: Class;
+	public Classroom!: Classroom;
 
 	@S.HasMany(() => Teacher, { 
 		onDelete: 'CASCADE'
@@ -135,4 +135,9 @@ export default class User extends S.Model implements UserModel {
 		onDelete: 'CASCADE'
 	})
 	public Feedbacks!: Feedback[];
+
+	@S.HasMany(() => Attendance, { 
+		onDelete: 'CASCADE'
+	})
+	Attendances !: Attendance[];
 }
