@@ -42,6 +42,9 @@ export default class Campus extends S.Model implements CampusModel {
 	public virtual!: string;
 
 	@S.HasMany(() => User, { 
+		foreignKey: {
+      field: 'campus_id'
+    },
 		onDelete: 'CASCADE'
 	})
 	public Users!: User[];

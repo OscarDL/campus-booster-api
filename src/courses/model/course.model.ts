@@ -59,6 +59,9 @@ export default class Course extends S.Model implements CourseModel {
 	public specialityId!: number;
 
 	@S.BelongsTo(() => Speciality, { 
+		foreignKey: {
+      field: 'speciality_id'
+    },
 		onDelete: 'CASCADE'
 	})
 	public Speciality!: Speciality;
@@ -70,16 +73,25 @@ export default class Course extends S.Model implements CourseModel {
 	public classroomId!: number;
 
 	@S.BelongsTo(() => Classroom, { 
+		foreignKey: {
+      field: 'classroom_id'
+    },
 		onDelete: 'CASCADE'
 	})
 	public Classroom!: Classroom;
 
 	@S.HasMany(() => Teacher, { 
+		foreignKey: {
+      field: 'course_id'
+    },
 		onDelete: 'CASCADE'
 	})
 	public Teachers!: Teacher[];
 
 	@S.HasMany(() => Feedback, { 
+		foreignKey: {
+      field: 'course_id'
+    },
 		onDelete: 'CASCADE'
 	})
 	public Feedbacks!: Feedback[];

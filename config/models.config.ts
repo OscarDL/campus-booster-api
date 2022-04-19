@@ -42,8 +42,8 @@ const sequelize =  new Sequelize({
 
 // INITIALISATION SEQUELIZE
 sequelize.sync({ 
-    force: false,
     alter: false,
+    force: false,
     logging: false
 }).then(() => {
     console.log(

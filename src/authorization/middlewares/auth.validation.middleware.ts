@@ -46,10 +46,10 @@ export async function validJWTNeeded(req: Req, res: Res, next: Next): Promise<Re
       ) as ReqJWT;
       req.user = await UserService.findById(req.jwt.id, {}, 'all');
 
-      return (req.user) ? next() : next(boom.unauthorized('expire_token'));
+      return (req.user) ? next() : next(boom.unauthorized('expired_token'));
     } catch (err: any) {
       console.log(`${err}`.error);
-      return next(boom.unauthorized('expire_token'));
+      return next(boom.unauthorized('expired_token'));
     }
   } else {
     return next(boom.badRequest('missing_token'));
