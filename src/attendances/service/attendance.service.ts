@@ -238,7 +238,7 @@ export function updateMany(
     options: UpdateOptions<AttendanceAttributes>, 
     data: Partial<AttendanceAttributes>,
     scope?: (AttendanceScopesAttributes | AttendanceScopesAttributes[])
-): Promise<[ number, AttendanceModel[]]> {
+): Promise<[ affectedCount: number ]> {
     return Attendance.scope(scope).update(data, options);
 }
 /**

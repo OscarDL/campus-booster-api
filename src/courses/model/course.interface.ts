@@ -6,6 +6,7 @@ import { TeacherModel } from './../../teachers/model/teacher.interface';
 import { FeedbackModel } from './../../feedbacks/model/feedback.interface';
 import { CourseContentModel } from './../../course-contents/model/course-content.interface';
 import { PlanningModel } from './../../plannings/model/planning.interface';
+import { ClassroomHasCourseModel } from "./../../classroom_has_courses/model/classroomhascourse.interface";
 export interface CourseAttributes {
   readonly id?: number;
 	name: string;
@@ -16,12 +17,11 @@ export interface CourseAttributes {
 	readonly updated_at?: Date;
 	specialityId?: number;
 	Speciality?: SpecialityModel;
-	classroomId?: number;
-	Classroom?: ClassroomModel;
 	Teachers?: TeacherModel[];
 	Feedbacks?: FeedbackModel[];
 	CourseContents?: CourseContentModel[];
 	Plannings?: PlanningModel[];
+	ClassroomHasCourses?: ClassroomHasCourseModel[];
 };
 export interface CourseCreationAttributes extends Optional<CourseAttributes, 'id'> {}
 export interface CourseModel extends Model<CourseAttributes, CourseCreationAttributes>, Partial<CourseAttributes> {

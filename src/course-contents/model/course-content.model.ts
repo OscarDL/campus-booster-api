@@ -39,6 +39,9 @@ export default class CourseContent extends S.Model implements CourseContentModel
 	public courseId!: number;
 
 	@S.BelongsTo(() => Course, { 
+		foreignKey: {
+      field: 'course_id'
+    },
 		onDelete: 'CASCADE'
 	})
 	public Course!: Course;

@@ -1,12 +1,12 @@
 import { FindOptions, UpdateOptions } from 'sequelize';
 import { 
-    PlanningModel, 
-    PlanningAttributes, 
-    PlanningScopesAttributes,
-    PlanningCreationAttributes
-} from '../model/planning.interface';
+    ClassroomHasCourseModel, 
+    ClassroomHasCourseAttributes, 
+    ClassroomHasCourseScopesAttributes,
+    ClassroomHasCourseCreationAttributes
+} from '../model/classroomhascourse.interface';
 import { models } from '../../../config/models.config'; 
-const { Planning } = models;
+const { ClassroomHasCourse } = models;
 /**
 * Find all rows with specified options
 *
@@ -30,10 +30,10 @@ const { Planning } = models;
 * @return {Promise} a promise of the rows or empty array
 */
 export function findAll(
-    options?: FindOptions<PlanningAttributes> | null,
-    scope?: (PlanningScopesAttributes | PlanningScopesAttributes[])
-): Promise<PlanningModel[]> {
-    return Planning.scope(scope).findAll(options!);
+    options?: FindOptions<ClassroomHasCourseAttributes> | null,
+    scope?: (ClassroomHasCourseScopesAttributes | ClassroomHasCourseScopesAttributes[])
+): Promise<ClassroomHasCourseModel[]> {
+    return ClassroomHasCourse.scope(scope).findAll(options!);
 }
 /**
 * Search for a single instance. Returns the first instance found, or null if none can be found.
@@ -58,10 +58,10 @@ export function findAll(
 * @return {Promise} a promise of a row or NULL
 */
 export function findOne(
-    options?: FindOptions<PlanningAttributes> | null,
-    scope?: (PlanningScopesAttributes | PlanningScopesAttributes[])
-): Promise<PlanningModel | null> {
-    return Planning.scope(scope).findOne(options!);
+    options?: FindOptions<ClassroomHasCourseAttributes> | null,
+    scope?: (ClassroomHasCourseScopesAttributes | ClassroomHasCourseScopesAttributes[])
+): Promise<ClassroomHasCourseModel | null> {
+    return ClassroomHasCourse.scope(scope).findOne(options!);
 }
 /**
 * Find a row by his primary key & more find options
@@ -96,10 +96,10 @@ export function findOne(
 */
 export function findById(
     id: number | any, 
-    options?: FindOptions<PlanningAttributes> | null,
-    scope?: (PlanningScopesAttributes | PlanningScopesAttributes[])
-): Promise<PlanningModel | null> {
-    return Planning.scope(scope).findByPk(id, options!);
+    options?: FindOptions<ClassroomHasCourseAttributes> | null,
+    scope?: (ClassroomHasCourseScopesAttributes | ClassroomHasCourseScopesAttributes[])
+): Promise<ClassroomHasCourseModel | null> {
+    return ClassroomHasCourse.scope(scope).findByPk(id, options!);
 }
 /**
 * Create a new row in bdd with specified attributes
@@ -119,10 +119,10 @@ export function findById(
 * @return {Promise} a promise of the created row
 */
 export function create(
-    data: PlanningCreationAttributes,
-    scope?: (PlanningScopesAttributes | PlanningScopesAttributes[])
-): Promise<PlanningModel> {
-    return Planning.scope(scope).create(data);
+    data: ClassroomHasCourseCreationAttributes,
+    scope?: (ClassroomHasCourseScopesAttributes | ClassroomHasCourseScopesAttributes[])
+): Promise<ClassroomHasCourseModel> {
+    return ClassroomHasCourse.scope(scope).create(data);
 }
 /**
 * Create multiple rows in bdd with array of specified attributes
@@ -151,10 +151,10 @@ export function create(
 * @return {Promise} a promise of the created rows
 */
 export function createMany(
-    data: PlanningCreationAttributes[],
-    scope?: (PlanningScopesAttributes | PlanningScopesAttributes[])
-): Promise<PlanningModel[]> {
-    return Planning.scope(scope).bulkCreate(data);
+    data: ClassroomHasCourseCreationAttributes[],
+    scope?: (ClassroomHasCourseScopesAttributes | ClassroomHasCourseScopesAttributes[])
+): Promise<ClassroomHasCourseModel[]> {
+    return ClassroomHasCourse.scope(scope).bulkCreate(data);
 }
 /**
 * Update attributes of a row by his primary key
@@ -184,16 +184,16 @@ export function createMany(
 */
 export function update(
     id: number | any, 
-    data: Partial<PlanningAttributes>,
-    scope?: (PlanningScopesAttributes | PlanningScopesAttributes[])
-): Promise<PlanningModel> {
+    data: Partial<ClassroomHasCourseAttributes>,
+    scope?: (ClassroomHasCourseScopesAttributes | ClassroomHasCourseScopesAttributes[])
+): Promise<ClassroomHasCourseModel> {
     return new Promise((resolve, reject) => {
-        Planning.scope(scope).findByPk(id)
-        .then((planning) => {
-            if (!planning) {
+        ClassroomHasCourse.scope(scope).findByPk(id)
+        .then((classroomhascourse) => {
+            if (!classroomhascourse) {
                 reject("not found");
             } else {
-                planning
+                classroomhascourse
                 .update(data)
                 .then(resolve)
                 .catch(reject);
@@ -235,11 +235,11 @@ export function update(
 * affected rows (only supported in postgres and mssql with `options.returning` true).
 */
 export function updateMany(
-    options: UpdateOptions<PlanningAttributes>, 
-    data: Partial<PlanningAttributes>,
-    scope?: (PlanningScopesAttributes | PlanningScopesAttributes[])
+    options: UpdateOptions<ClassroomHasCourseAttributes>, 
+    data: Partial<ClassroomHasCourseAttributes>,
+    scope?: (ClassroomHasCourseScopesAttributes | ClassroomHasCourseScopesAttributes[])
 ): Promise<[ affectedCount: number ]> {
-    return Planning.scope(scope).update(data, options);
+    return ClassroomHasCourse.scope(scope).update(data, options);
 }
 /**
 * Delete multiple instances, or set their deletedAt timestamp to the current time if paranoid is enabled.
@@ -261,9 +261,9 @@ export function updateMany(
 * @return {Promise} a promise of the number of destroyed rows
 */
 export function remove(
-    options?: FindOptions<PlanningAttributes> | null
+    options?: FindOptions<ClassroomHasCourseAttributes> | null
 ): Promise<number> {
-    return Planning.destroy(options!);
+    return ClassroomHasCourse.destroy(options!);
 }
 /**
 * Count the number of records matching the provided where clause.
@@ -288,7 +288,7 @@ export function remove(
 * @return {Promise} a promise of the number of counted rows
 */
 export function count(
-    options?: FindOptions<PlanningAttributes> | null
+    options?: FindOptions<ClassroomHasCourseAttributes> | null
 ): Promise<number> {
-    return Planning.count(options!);
+    return ClassroomHasCourse.count(options!);
 }

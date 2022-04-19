@@ -5,6 +5,7 @@ import * as S from 'sequelize-typescript';
 import { CampusModel } from './campus.interface';
 import CampusScope from './campus.scope';
 import User from './../../users/model/user.model';
+import Classroom from './../../classrooms/model/classroom.model';
 
 @S.Scopes(CampusScope)
 @S.Table({
@@ -48,4 +49,12 @@ export default class Campus extends S.Model implements CampusModel {
 		onDelete: 'CASCADE'
 	})
 	public Users!: User[];
+
+	@S.HasMany(() => Classroom, { 
+		foreignKey: {
+      field: 'campus_id'
+    },
+		onDelete: 'CASCADE'
+	})
+	public Classrooms!: Classroom[];
 }

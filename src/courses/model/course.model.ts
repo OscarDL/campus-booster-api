@@ -10,6 +10,7 @@ import Teacher from '../../teachers/model/teacher.model';
 import Feedback from './../../feedbacks/model/feedback.model';
 import CourseContent from './../../course-contents/model/course-content.model';
 import Planning from './../../plannings/model/planning.model';
+import ClassroomHasCourse from './../../classroom_has_courses/model/classroomhascourse.model';
 
 @S.Scopes(CourseScope)
 @S.Table({
@@ -66,28 +67,6 @@ export default class Course extends S.Model implements CourseModel {
 	})
 	public Speciality!: Speciality;
 
-	@S.ForeignKey(() => Classroom)
-	@S.Column({
-		field: 'classroom_id'
-	})
-	public classroomId!: number;
-
-	@S.BelongsTo(() => Classroom, { 
-		foreignKey: {
-      field: 'classroom_id'
-    },
-		onDelete: 'CASCADE'
-	})
-	public Classroom!: Classroom;
-
-	@S.HasMany(() => Teacher, { 
-		foreignKey: {
-      field: 'course_id'
-    },
-		onDelete: 'CASCADE'
-	})
-	public Teachers!: Teacher[];
-
 	@S.HasMany(() => Feedback, { 
 		foreignKey: {
       field: 'course_id'
@@ -97,12 +76,18 @@ export default class Course extends S.Model implements CourseModel {
 	public Feedbacks!: Feedback[];
 
 	@S.HasMany(() => CourseContent, { 
+		foreignKey: {
+      field: 'course_id'
+    },
 		onDelete: 'CASCADE'
 	})
 	public CourseContents!: CourseContent[];
 
-	@S.HasMany(() => Planning, { 
+	@S.HasMany(() => ClassroomHasCourse, { 
+		foreignKey: {
+      field: 'course_id'
+    },
 		onDelete: 'CASCADE'
 	})
-	public Plannings!: Planning[];
+	public ClassroomHasCourses!: ClassroomHasCourse[];
 }
