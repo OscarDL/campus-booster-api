@@ -2,7 +2,6 @@
 // DOC : https://www.npmjs.com/package/sequelize-typescript
 // Generate by Ulysse Dupont
 import * as S from 'sequelize-typescript';
-import { HasManyOptions } from 'sequelize/types';
 import Course from '../../courses/model/course.model';
 import User from '../../users/model/user.model';
 import { SpecialityModel } from './speciality.interface';
@@ -33,7 +32,7 @@ export default class Speciality extends S.Model implements SpecialityModel {
       field: 'speciality_id'
     },
 		onDelete: 'CASCADE'
-	} as HasManyOptions)
+	})
 	public Users!: User[];
 	
 	@S.HasMany(() => Course, { 
@@ -41,6 +40,6 @@ export default class Speciality extends S.Model implements SpecialityModel {
       field: 'speciality_id'
     },
 		onDelete: 'CASCADE'
-	} as HasManyOptions)
+	})
 	public Courses!: Course[];
 }

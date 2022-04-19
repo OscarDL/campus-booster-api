@@ -5,10 +5,11 @@ import * as S from 'sequelize-typescript';
 import { CourseModel, STATUS } from './course.interface';
 import CourseScope from './course.scope';
 import Speciality from './../../specialities/model/speciality.model';
-import { BelongsToOptions, HasManyOptions } from 'sequelize/types';
-import Class from '../../classrooms/model/classroom.model';
+import Classroom from '../../classrooms/model/classroom.model';
 import Teacher from '../../teachers/model/teacher.model';
 import Feedback from './../../feedbacks/model/feedback.model';
+import CourseContent from './../../course-contents/model/course-content.model';
+import Planning from './../../plannings/model/planning.model';
 
 @S.Scopes(CourseScope)
 @S.Table({
@@ -62,29 +63,29 @@ export default class Course extends S.Model implements CourseModel {
       field: 'speciality_id'
     },
 		onDelete: 'CASCADE'
-	} as BelongsToOptions)
+	})
 	public Speciality!: Speciality;
 
-	@S.ForeignKey(() => Class)
+	@S.ForeignKey(() => Classroom)
 	@S.Column({
 		field: 'classroom_id'
 	})
 	public classroomId!: number;
 
-	@S.BelongsTo(() => Class, { 
+	@S.BelongsTo(() => Classroom, { 
 		foreignKey: {
       field: 'classroom_id'
     },
 		onDelete: 'CASCADE'
-	} as BelongsToOptions)
-	public Class!: Class;
+	})
+	public Classroom!: Classroom;
 
 	@S.HasMany(() => Teacher, { 
 		foreignKey: {
       field: 'course_id'
     },
 		onDelete: 'CASCADE'
-	} as HasManyOptions)
+	})
 	public Teachers!: Teacher[];
 
 	@S.HasMany(() => Feedback, { 
@@ -92,6 +93,16 @@ export default class Course extends S.Model implements CourseModel {
       field: 'course_id'
     },
 		onDelete: 'CASCADE'
-	} as HasManyOptions)
+	})
 	public Feedbacks!: Feedback[];
+
+	@S.HasMany(() => CourseContent, { 
+		onDelete: 'CASCADE'
+	})
+	public CourseContents!: CourseContent[];
+
+	@S.HasMany(() => Planning, { 
+		onDelete: 'CASCADE'
+	})
+	public Plannings!: Planning[];
 }

@@ -5,7 +5,6 @@ import * as S from 'sequelize-typescript';
 import { TeacherModel } from './teacher.interface';
 import TeacherScope from './teacher.scope';
 import User from './../../users/model/user.model';
-import { BelongsToOptions } from 'sequelize/types';
 import Course from './../../courses/model/course.model';
 
 @S.Scopes(TeacherScope)
@@ -39,7 +38,7 @@ export default class Teacher extends S.Model implements TeacherModel {
       field: 'user_id'
     },
 		onDelete: 'CASCADE'
-	} as BelongsToOptions)
+	})
 	public User!: User;
 	
 	@S.ForeignKey(() => Course)
@@ -55,6 +54,6 @@ export default class Teacher extends S.Model implements TeacherModel {
       field: 'course_id'
     },
 		onDelete: 'CASCADE'
-	} as BelongsToOptions)
+	})
 	public Course!: Course;
 }

@@ -2,7 +2,6 @@
 // DOC : https://www.npmjs.com/package/sequelize-typescript
 // Generate by Ulysse Dupont
 import * as S from 'sequelize-typescript';
-import { BelongsToOptions } from 'sequelize/types';
 import User from '../../users/model/user.model';
 import { FeedbackModel } from './feedback.interface';
 import FeedbackScope from './feedback.scope';
@@ -69,7 +68,7 @@ export default class Feedback extends S.Model implements FeedbackModel {
       field: 'user_id'
     },
 		onDelete: 'CASCADE'
-	} as BelongsToOptions)
+	})
 	public User!: User;
 
 	@S.ForeignKey(() => Teacher)
@@ -85,7 +84,7 @@ export default class Feedback extends S.Model implements FeedbackModel {
       field: 'teacher_id'
     },
 		onDelete: 'CASCADE'
-	} as BelongsToOptions)
+	})
 	public Teacher!: Teacher;
 
 	@S.ForeignKey(() => Course)
@@ -101,6 +100,6 @@ export default class Feedback extends S.Model implements FeedbackModel {
       field: 'course_id'
     },
 		onDelete: 'CASCADE'
-	} as BelongsToOptions)
+	})
 	public Course!: Course;
 }

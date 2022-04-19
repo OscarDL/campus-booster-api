@@ -2,7 +2,6 @@
 // DOC : https://www.npmjs.com/package/sequelize-typescript
 // Generate by Ulysse Dupont
 import * as S from 'sequelize-typescript';
-import { HasManyOptions } from 'sequelize/types';
 import { CampusModel } from './campus.interface';
 import CampusScope from './campus.scope';
 import User from './../../users/model/user.model';
@@ -47,6 +46,6 @@ export default class Campus extends S.Model implements CampusModel {
       field: 'campus_id'
     },
 		onDelete: 'CASCADE'
-	} as HasManyOptions)
+	})
 	public Users!: User[];
 }

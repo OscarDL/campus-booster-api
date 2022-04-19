@@ -8,11 +8,11 @@ import config from '../../../config/env.config';
 const { permissionLevel } = config;
 import bcrypt from 'bcrypt';
 import Campus from './../../campus/model/campus.model';
-import { BelongsToOptions, HasManyOptions } from 'sequelize/types';
 import Speciality from './../../specialities/model/speciality.model';
-import Class from '../../classrooms/model/classroom.model';
+import Classroom from '../../classrooms/model/classroom.model';
 import Teacher from './../../teachers/model/teacher.model';
 import Feedback from './../../feedbacks/model/feedback.model';
+import Attendance from './../../attendances/model/attendance.model';
 
 
 @S.Scopes(UserScope)
@@ -83,7 +83,6 @@ export default class User extends S.Model implements UserModel {
 	@S.Column(S.DataType.SMALLINT)
 	public role!: typeof permissionLevel[keyof typeof permissionLevel];
 
-
 	// ---------------------
 	// @BEFORE CREATE/UPDATE
 	// ---------------------
@@ -105,7 +104,7 @@ export default class User extends S.Model implements UserModel {
       field: 'campus_id'
     },
 		onDelete: 'CASCADE'
-	} as BelongsToOptions)
+	})
 	public Campus!: Campus;
 
 	@S.ForeignKey(() => Speciality)
@@ -119,29 +118,29 @@ export default class User extends S.Model implements UserModel {
       field: 'speciality_id'
     },
 		onDelete: 'CASCADE'
-	} as BelongsToOptions)
+	})
 	public Speciality!: Speciality;
 
-	@S.ForeignKey(() => Class)
+	@S.ForeignKey(() => Classroom)
 	@S.Column({
     field: 'classroom_id',
 	})
 	public classroomId!: number;
 
-	@S.BelongsTo(() => Class, { 
+	@S.BelongsTo(() => Classroom, { 
 		foreignKey: {
       field: 'classroom_id'
     },
 		onDelete: 'CASCADE'
-	} as BelongsToOptions)
-	public Class!: Class;
+	})
+	public Classroom!: Classroom;
 
 	@S.HasMany(() => Teacher, { 
 		foreignKey: {
       field: 'user_id'
     },
 		onDelete: 'CASCADE'
-	} as HasManyOptions)
+	})
 	public Teachers!: Teacher[];
 
 	@S.HasMany(() => Feedback, { 
@@ -149,6 +148,11 @@ export default class User extends S.Model implements UserModel {
       field: 'user_id'
     },
 		onDelete: 'CASCADE'
-	} as HasManyOptions)
+	})
 	public Feedbacks!: Feedback[];
+
+	@S.HasMany(() => Attendance, { 
+		onDelete: 'CASCADE'
+	})
+	Attendances !: Attendance[];
 }
