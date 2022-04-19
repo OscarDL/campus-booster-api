@@ -4,7 +4,7 @@
 import * as S from 'sequelize-typescript';
 import { PlanningModel } from './planning.interface';
 import PlanningScope from './planning.scope';
-import Course from './../../courses/model/course.model';
+import ClassroomHasCourse from './../../classroom_has_courses/model/classroomhascourse.model';
 
 @S.Scopes(PlanningScope)
 @S.Table({
@@ -16,7 +16,7 @@ import Course from './../../courses/model/course.model';
 export default class Planning extends S.Model implements PlanningModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.INTEGER)
+	@S.Column(S.DataType.BIGINT)
 	public id!: number;
 
 	@S.AllowNull(false)
@@ -28,14 +28,17 @@ export default class Planning extends S.Model implements PlanningModel {
 	@S.Column(S.DataType.BOOLEAN)
 	public canceled!: string;
 
-	@S.ForeignKey(() => Course)
+	@S.ForeignKey(() => ClassroomHasCourse)
 	@S.Column({
-		field: 'course_id'
+		field: 'classroom_has_course_id'
 	})
-	public courseId!: number;
+	public classroomHasCourseId!: number;
 
-	@S.BelongsTo(() => Course, { 
+	@S.BelongsTo(() => ClassroomHasCourse, { 
+		foreignKey: {
+      field: 'classroom_has_course_id'
+    },
 		onDelete: 'CASCADE'
 	})
-	public Course!: Course;
+	public ClassroomHasCourse!: ClassroomHasCourse;
 }

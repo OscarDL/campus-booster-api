@@ -1,7 +1,7 @@
 import { Model, Optional } from "sequelize";
 import { UserModel } from "../../users/model/user.interface";
 import TeacherScope from './teacher.scope';
-import { CourseModel } from './../../courses/model/course.interface';
+import { ClassroomHasCourseModel } from './../../classroom_has_courses/model/classroomhascourse.interface';
 export interface TeacherAttributes {
   readonly id: number;
 	active?: string;
@@ -9,8 +9,8 @@ export interface TeacherAttributes {
 	readonly updated_at?: Date;
 	userId?: number;
 	User?: UserModel;
-	courseId?: number;
-	Course?: CourseModel;
+	classroomHasCourseId?: number;
+	ClassroomHasCourse?: ClassroomHasCourseModel;
 };
 export interface TeacherCreationAttributes extends Optional<TeacherAttributes, 'id'> {}
 export interface TeacherModel extends Model<TeacherAttributes, TeacherCreationAttributes>, Partial<TeacherAttributes> {

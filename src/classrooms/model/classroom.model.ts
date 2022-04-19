@@ -6,6 +6,8 @@ import User from '../../users/model/user.model';
 import { ClassroomModel } from './classroom.interface';
 import ClassroomScope from './classroom.scope';
 import Course from '../../courses/model/course.model';
+import Campus from './../../campus/model/campus.model';
+import ClassroomHasCourse from './../../classroom_has_courses/model/classroomhascourse.model';
 
 @S.Scopes(ClassroomScope)
 @S.Table({
@@ -31,12 +33,26 @@ export default class Classroom extends S.Model implements ClassroomModel {
 		onDelete: 'CASCADE'
 	})
 	public Users!: User[];
-	
-	@S.HasMany(() => Course, { 
+
+	@S.HasMany(() => ClassroomHasCourse, { 
 		foreignKey: {
       field: 'classroom_id'
     },
 		onDelete: 'CASCADE'
 	})
-	public Courses!: Course[];
+	public ClassroomHasCourses!: ClassroomHasCourse[];
+
+	@S.ForeignKey(() => Campus)
+	@S.Column({
+		field: 'campus_id'
+	})
+	public campusId!: number;
+
+	@S.BelongsTo(() => Campus, { 
+		foreignKey: {
+      field: 'campus_id'
+    },
+		onDelete: 'CASCADE'
+	})
+	public Campus!: Campus;
 }

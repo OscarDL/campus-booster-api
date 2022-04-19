@@ -17,7 +17,7 @@ import User from './../../users/model/user.model';
 export default class Attendance extends S.Model implements AttendanceModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.INTEGER)
+	@S.Column(S.DataType.BIGINT)
 	public id!: number;
 
 	@S.AllowNull(true)
@@ -36,6 +36,9 @@ export default class Attendance extends S.Model implements AttendanceModel {
 	public planningId!: number;
 
 	@S.BelongsTo(() => Planning, { 
+		foreignKey: {
+      field: 'planning_id'
+    },
 		onDelete: 'CASCADE'
 	})
 	public Planning!: Planning;
@@ -47,6 +50,9 @@ export default class Attendance extends S.Model implements AttendanceModel {
 	public userId!: number;
 
 	@S.BelongsTo(() => User, { 
+		foreignKey: {
+      field: 'user_id'
+    },
 		onDelete: 'CASCADE'
 	})
 	public User!: User;

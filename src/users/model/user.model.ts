@@ -152,6 +152,9 @@ export default class User extends S.Model implements UserModel {
 	public Feedbacks!: Feedback[];
 
 	@S.HasMany(() => Attendance, { 
+		foreignKey: {
+      field: 'user_id'
+    },
 		onDelete: 'CASCADE'
 	})
 	Attendances !: Attendance[];

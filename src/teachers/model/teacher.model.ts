@@ -5,7 +5,7 @@ import * as S from 'sequelize-typescript';
 import { TeacherModel } from './teacher.interface';
 import TeacherScope from './teacher.scope';
 import User from './../../users/model/user.model';
-import Course from './../../courses/model/course.model';
+import ClassroomHasCourse from './../../classroom_has_courses/model/classroomhascourse.model';
 
 @S.Scopes(TeacherScope)
 @S.Table({
@@ -41,19 +41,19 @@ export default class Teacher extends S.Model implements TeacherModel {
 	})
 	public User!: User;
 	
-	@S.ForeignKey(() => Course)
+	@S.ForeignKey(() => ClassroomHasCourse)
 	@S.Column(
 		{
-			field: 'course_id',
+			field: 'classroom_has_course_id',
 		}
 	)
-	public courseId!: number;
+	public classroomHasCourseId!: number;
 
-	@S.BelongsTo(() => Course, { 
+	@S.BelongsTo(() => ClassroomHasCourse, { 
 		foreignKey: {
-      field: 'course_id'
+      field: 'classroom_has_course_id'
     },
 		onDelete: 'CASCADE'
 	})
-	public Course!: Course;
+	public ClassroomHasCourse!: ClassroomHasCourse;
 }

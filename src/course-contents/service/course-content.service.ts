@@ -238,7 +238,7 @@ export function updateMany(
     options: UpdateOptions<CourseContentAttributes>, 
     data: Partial<CourseContentAttributes>,
     scope?: (CourseContentScopesAttributes | CourseContentScopesAttributes[])
-): Promise<[ number, CourseContentModel[]]> {
+): Promise<[ affectedCount: number ]> {
     return CourseContent.scope(scope).update(data, options);
 }
 /**
