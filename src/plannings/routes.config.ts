@@ -13,13 +13,13 @@ const {
 export default (app: App): void => {
     // GET ALL PLANNINGS
     app.get('/plannings', [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		PlanningController.getAll
     ]);
     // GET PLANNING BY ID
     app.get(`/planning/:planning_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('planning_id', 'integer'),
         PlanningMiddleware.planningExistAsParam("planning_id"),
@@ -27,14 +27,14 @@ export default (app: App): void => {
     ]);
     // CREATE A NEW PLANNING
     app.post('/planning', [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.bodyParametersNeeded(['date'], 'string'),
 		PlanningController.create
     ]);
     // UPDATE PLANNING
     app.patch(`/planning/:planning_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('planning_id', 'integer'),
         PlanningMiddleware.planningExistAsParam("planning_id"),
@@ -42,7 +42,7 @@ export default (app: App): void => {
     ]);
     // DELETE PLANNING
     app.delete(`/planning/:planning_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('planning_id', 'integer'),
         PlanningMiddleware.planningExistAsParam("planning_id"),

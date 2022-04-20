@@ -15,13 +15,13 @@ const routePrefix = config.route_prefix + '/specialities';
 export default (app: App): void => {
     // GET ALL SPECIALITYS
     app.get(routePrefix, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		SpecialityController.getAll
     ]);
     // GET SPECIALITY BY ID
     app.get(`${routePrefix}/:speciality_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('speciality_id', 'integer'),
         SpecialityMiddleware.specialityExistAsParam("speciality_id"),
@@ -29,14 +29,14 @@ export default (app: App): void => {
     ]);
     // CREATE A NEW SPECIALITY
     app.post(routePrefix, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.bodyParametersNeeded(['name'], 'string'),
 		SpecialityController.create
     ]);
     // UPDATE SPECIALITY
     app.patch(`${routePrefix}/:speciality_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('speciality_id', 'integer'),
         SpecialityMiddleware.specialityExistAsParam("speciality_id"),
@@ -44,7 +44,7 @@ export default (app: App): void => {
     ]);
     // DELETE SPECIALITY
     app.delete(`${routePrefix}/:speciality_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('speciality_id', 'integer'),
         SpecialityMiddleware.specialityExistAsParam("speciality_id"),

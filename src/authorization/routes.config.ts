@@ -17,12 +17,10 @@ export default (app: App): void => {
     ]);
     // LOGOUT
     app.get(routePrefix + '/logout', [
-        ValidationMiddleware.JWTNeeded,
         AuthController.logout
     ]);
     // REFRESH TOKEN
     app.post(routePrefix + '/refresh', [
-        ValidationMiddleware.JWTNeeded,
         ValidationMiddleware.validRefreshToken,
         AuthController.refreshToken
     ]);

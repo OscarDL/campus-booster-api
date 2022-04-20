@@ -13,13 +13,13 @@ const {
 export default (app: App): void => {
     // GET ALL COURSE CONTENTS
     app.get('/coursecontents', [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		CourseContentController.getAll
     ]);
     // GET COURSE CONTENT BY ID
     app.get(`/coursecontent/:coursecontent_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('coursecontent_id', 'integer'),
         CourseContentMiddleware.coursecontentExistAsParam("coursecontent_id"),
@@ -27,14 +27,14 @@ export default (app: App): void => {
     ]);
     // CREATE A NEW COURSE CONTENT
     app.post('/coursecontent', [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.bodyParametersNeeded(['name','link'], 'string'),
 		CourseContentController.create
     ]);
     // UPDATE COURSE CONTENT
     app.patch(`/coursecontent/:coursecontent_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('coursecontent_id', 'integer'),
         CourseContentMiddleware.coursecontentExistAsParam("coursecontent_id"),
@@ -42,7 +42,7 @@ export default (app: App): void => {
     ]);
     // DELETE COURSE CONTENT
     app.delete(`/coursecontent/:coursecontent_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('coursecontent_id', 'integer'),
         CourseContentMiddleware.coursecontentExistAsParam("coursecontent_id"),

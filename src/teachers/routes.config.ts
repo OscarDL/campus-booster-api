@@ -15,13 +15,13 @@ const routePrefix = config.route_prefix + '/teachers';
 export default (app: App): void => {
     // GET ALL TEACHERS
     app.get(routePrefix, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		TeacherController.getAll
     ]);
     // GET TEACHER BY ID
     app.get(`${routePrefix}/:teacher_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('teacher_id', 'integer'),
         TeacherMiddleware.teacherExistAsParam("teacher_id"),
@@ -29,13 +29,13 @@ export default (app: App): void => {
     ]);
     // CREATE A NEW TEACHER
     app.post(routePrefix, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		TeacherController.create
     ]);
     // UPDATE TEACHER
     app.patch(`${routePrefix}/:teacher_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('teacher_id', 'integer'),
         TeacherMiddleware.teacherExistAsParam("teacher_id"),
@@ -43,7 +43,7 @@ export default (app: App): void => {
     ]);
     // DELETE TEACHER
     app.delete(`${routePrefix}/:teacher_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('teacher_id', 'integer'),
         TeacherMiddleware.teacherExistAsParam("teacher_id"),
