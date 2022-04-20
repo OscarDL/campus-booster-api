@@ -31,7 +31,7 @@ export default (app: App): void => {
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
-		RequestMiddleware.bodyParametersNeeded(['name','status','description'], 'string'),
+		RequestMiddleware.bodyParametersNeeded(['name','description'], 'string'),
 		CourseController.create
     ]);
     // UPDATE COURSE

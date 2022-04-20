@@ -210,12 +210,12 @@ export function update(
 * ```js
 *  {
 *     where: {
-*       status: 'ready'
+*       name: '4LPIC'
 *     }
 *  }
 * ```
 * ```sql
-* WHERE status='ready';
+* WHERE name='4LPIC';
 * ```
 *
 * @param data - Model attributes defined
