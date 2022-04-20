@@ -8,6 +8,7 @@ import ClassroomScope from './classroom.scope';
 import Course from '../../courses/model/course.model';
 import Campus from './../../campus/model/campus.model';
 import ClassroomHasCourse from './../../classroom_has_courses/model/classroomhascourse.model';
+import UserHasClassroom from './../../user_has_classrooms/model/user-hasclassroom.model';
 
 @S.Scopes(ClassroomScope)
 @S.Table({
@@ -26,14 +27,6 @@ export default class Classroom extends S.Model implements ClassroomModel {
 	@S.Column(S.DataType.INTEGER)
 	public section!: number;
 
-	@S.HasMany(() => User, { 
-		foreignKey: {
-      field: 'classroom_id'
-    },
-		onDelete: 'CASCADE'
-	})
-	public Users!: User[];
-
 	@S.HasMany(() => ClassroomHasCourse, { 
 		foreignKey: {
       field: 'classroom_id'
@@ -41,6 +34,14 @@ export default class Classroom extends S.Model implements ClassroomModel {
 		onDelete: 'CASCADE'
 	})
 	public ClassroomHasCourses!: ClassroomHasCourse[];
+
+	@S.HasMany(() => UserHasClassroom, { 
+		foreignKey: {
+      field: 'classroom_id'
+    },
+		onDelete: 'CASCADE'
+	})
+	public UserHasClassrooms!: UserHasClassroom[];
 
 	@S.ForeignKey(() => Campus)
 	@S.Column({

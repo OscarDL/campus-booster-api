@@ -3,6 +3,7 @@ import config from '../../../config/env.config';
 import jwt, { VerifyOptions } from 'jsonwebtoken';
 import crypto from 'crypto';
 import boom from '@hapi/boom';
+import { __ } from 'i18n';
 import * as UserService from '../../users/service/user.service';
 import { ExpressErrorHandler } from '../../../services/express';
 
@@ -31,47 +32,48 @@ export async function validRefreshToken(req: Req, res: Res, next: Next): Promise
   }
 };
 
-export async function validJWTNeeded(req: Req, res: Res, next: Next): Promise<Resp> {
-  if (req.cookies.accessToken) {
-    try {
-      const accessToken = req.cookies.accessToken;
-      if (!accessToken) {
-        return next(boom.badRequest("missing_token"));
-      }
-
-      req.jwt = jwt.verify(
-        accessToken,
-        config.jwtSecret,
-        config.jwtOptions as VerifyOptions
-      ) as ReqJWT;
-      req.user = await UserService.findById(req.jwt.id, {}, 'all');
-
-      return (req.user) ? next() : next(boom.unauthorized('expired_token'));
-    } catch (err: any) {
-      console.log(`${err}`.error);
-      return next(boom.unauthorized('expired_token'));
-    }
-  } else {
-    return next(boom.badRequest('missing_token'));
-  }
-};
-
 export async function JWTNeeded(req: Req, res: Res, next: Next): Promise<Resp> {
-  if (req.cookies.accessToken) {
-    try {
-      const accessToken = req.cookies.accessToken;
-      if (!accessToken) {
-        return next(boom.badRequest("missing_token"));
+  try {
+    const isLoggedIn = req.headers['logged-in'];
+    const accessToken = req.cookies.accessToken;
+
+    if (!accessToken) {
+      if (isLoggedIn) {
+        throw __('expired_token');
       }
-
-      req.jwt = jwt.decode(accessToken) as ReqJWT;
-      req.user = await UserService.findById(req.jwt?.id);
-
-      return next();
-    } catch (err: any) {
-      return await ExpressErrorHandler(err)(req, res, next);
+      return next(boom.badRequest('missing_token'));
     }
-  } else {
-    next(boom.badRequest('missing_token'));
+
+    req.jwt = jwt.verify(
+      accessToken,
+      config.jwtSecret, 
+      config.jwtOptions as VerifyOptions
+    ) as ReqJWT;
+    req.user = await UserService.findById(req.jwt.id, {}, 'all');
+
+    return (req.user) ? next() : next(boom.unauthorized('expired_token'));
+  } catch (err: any) {
+    console.log(`${err}`.error);
+    return next(boom.unauthorized('expired_token'));
   }
 };
+
+// export async function JWTNeeded(req: Req, res: Res, next: Next): Promise<Resp> {
+//   if (req.cookies.accessToken) {
+//     try {
+//       const accessToken = req.cookies.accessToken;
+//       if (!accessToken) {
+//         return next(boom.badRequest("missing_token"));
+//       }
+
+//       req.jwt = jwt.decode(accessToken) as ReqJWT;
+//       req.user = await UserService.findById(req.jwt?.id);
+
+//       return next();
+//     } catch (err: any) {
+//       return await ExpressErrorHandler(err)(req, res, next);
+//     }
+//   } else {
+//     next(boom.badRequest('missing_token'));
+//   }
+// };

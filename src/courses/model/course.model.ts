@@ -4,12 +4,7 @@
 import * as S from 'sequelize-typescript';
 import { CourseModel, STATUS } from './course.interface';
 import CourseScope from './course.scope';
-import Speciality from './../../specialities/model/speciality.model';
-import Classroom from '../../classrooms/model/classroom.model';
-import Teacher from '../../teachers/model/teacher.model';
-import Feedback from './../../feedbacks/model/feedback.model';
 import CourseContent from './../../course-contents/model/course-content.model';
-import Planning from './../../plannings/model/planning.model';
 import ClassroomHasCourse from './../../classroom_has_courses/model/classroomhascourse.model';
 
 @S.Scopes(CourseScope)
@@ -41,6 +36,13 @@ export default class Course extends S.Model implements CourseModel {
 
 	@S.AllowNull(false)
 	@S.Column({
+    field: 'credits',
+    type: S.DataType.INTEGER
+  })
+	public credits!: number;
+
+	@S.AllowNull(false)
+	@S.Column({
     field: 'link',
     type: S.DataType.STRING(255)
   })
@@ -52,28 +54,6 @@ export default class Course extends S.Model implements CourseModel {
     type: S.DataType.STRING(2048)
   })
 	public description!: string;
-
-	@S.ForeignKey(() => Speciality)
-	@S.Column({
-		field: 'speciality_id'
-	})
-	public specialityId!: number;
-
-	@S.BelongsTo(() => Speciality, { 
-		foreignKey: {
-      field: 'speciality_id'
-    },
-		onDelete: 'CASCADE'
-	})
-	public Speciality!: Speciality;
-
-	@S.HasMany(() => Feedback, { 
-		foreignKey: {
-      field: 'course_id'
-    },
-		onDelete: 'CASCADE'
-	})
-	public Feedbacks!: Feedback[];
 
 	@S.HasMany(() => CourseContent, { 
 		foreignKey: {

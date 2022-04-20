@@ -15,13 +15,13 @@ const routePrefix = config.route_prefix + '/courses';
 export default (app: App): void => {
     // GET ALL COURSES
     app.get(routePrefix, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		CourseController.getAll
     ]);
     // GET COURSE BY ID
     app.get(`${routePrefix}/:course_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('course_id', 'integer'),
         CourseMiddleware.courseExistAsParam("course_id"),
@@ -29,14 +29,14 @@ export default (app: App): void => {
     ]);
     // CREATE A NEW COURSE
     app.post(routePrefix, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.bodyParametersNeeded(['name','status','description'], 'string'),
 		CourseController.create
     ]);
     // UPDATE COURSE
     app.patch(`${routePrefix}/:course_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('course_id', 'integer'),
         CourseMiddleware.courseExistAsParam("course_id"),
@@ -44,7 +44,7 @@ export default (app: App): void => {
     ]);
     // DELETE COURSE
     app.delete(`${routePrefix}/:course_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('course_id', 'integer'),
         CourseMiddleware.courseExistAsParam("course_id"),

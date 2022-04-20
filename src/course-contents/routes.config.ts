@@ -10,39 +10,41 @@ const {
     customRegex: { regInt } 
 } = config;
 
+const routePrefix = config.route_prefix + '/coursecontents';
+
 export default (app: App): void => {
     // GET ALL COURSE CONTENTS
-    app.get('/coursecontents', [
-        ValidationMiddleware.validJWTNeeded,
+    app.get(routePrefix, [
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		CourseContentController.getAll
     ]);
     // GET COURSE CONTENT BY ID
-    app.get(`/coursecontent/:coursecontent_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+    app.get(`${routePrefix}/:coursecontent_id${regInt}`, [
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('coursecontent_id', 'integer'),
         CourseContentMiddleware.coursecontentExistAsParam("coursecontent_id"),
         CourseContentController.getById
     ]);
     // CREATE A NEW COURSE CONTENT
-    app.post('/coursecontent', [
-        ValidationMiddleware.validJWTNeeded,
+    app.post(routePrefix, [
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.bodyParametersNeeded(['name','link'], 'string'),
 		CourseContentController.create
     ]);
     // UPDATE COURSE CONTENT
-    app.patch(`/coursecontent/:coursecontent_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+    app.patch(`${routePrefix}/:coursecontent_id${regInt}`, [
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('coursecontent_id', 'integer'),
         CourseContentMiddleware.coursecontentExistAsParam("coursecontent_id"),
         CourseContentController.update
     ]);
     // DELETE COURSE CONTENT
-    app.delete(`/coursecontent/:coursecontent_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+    app.delete(`${routePrefix}/:coursecontent_id${regInt}`, [
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('coursecontent_id', 'integer'),
         CourseContentMiddleware.coursecontentExistAsParam("coursecontent_id"),

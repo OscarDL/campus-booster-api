@@ -8,6 +8,8 @@ import ClassroomHasCourseScope from './classroomhascourse.scope';
 import Classroom from './../../classrooms/model/classroom.model';
 import Teacher from './../../teachers/model/teacher.model';
 import Planning from './../../plannings/model/planning.model';
+import Feedback from './../../feedbacks/model/feedback.model';
+import Grade from './../../grades/model/grade.model';
 
 @S.Scopes(ClassroomHasCourseScope)
 @S.Table({
@@ -47,7 +49,7 @@ export default class ClassroomHasCourse extends S.Model implements ClassroomHasC
 	})
 	public classroomId!: number;
 
-	@S.BelongsTo(() => Course, { 
+	@S.BelongsTo(() => Classroom, { 
 		foreignKey: {
       field: 'classroom_id'
     },
@@ -70,4 +72,20 @@ export default class ClassroomHasCourse extends S.Model implements ClassroomHasC
 		onDelete: 'CASCADE'
 	})
 	public Plannings!: Planning[];
+
+	@S.HasMany(() => Feedback, { 
+		foreignKey: {
+      field: 'classroom_has_course_id'
+    },
+		onDelete: 'CASCADE'
+	})
+	public Feedbacks!: Feedback[];
+
+	@S.HasMany(() => Grade, { 
+		foreignKey: {
+      field: 'classroom_has_course_id'
+    },
+		onDelete: 'CASCADE'
+	})
+	public Grades!: Grade[];
 }

@@ -1,12 +1,12 @@
 import { Req, Res, Next, Resp } from '../../../types/express';
-import * as SpecialityService from '../service/speciality.service';
+import * as ContractService from '../service/contract.service';
 import boom from '@hapi/boom';
 
 export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         return res.status(200).json(
-            await SpecialityService.findById(
-                req.params.speciality_id
+            await ContractService.findById(
+                req.params.contract_id
             )
         );
     } catch (err: any) {
@@ -18,7 +18,7 @@ export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
 export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         return res.status(200).json(
-            await SpecialityService.findAll(
+            await ContractService.findAll(
                 {
                     limit: req.query?.limit
                 }
@@ -33,7 +33,7 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
 export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
         return res.status(201).json(
-            await SpecialityService.create(
+            await ContractService.create(
                 req.body as any
             )
         );
@@ -46,8 +46,8 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
 export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
         return res.status(203).json(
-            await SpecialityService.update(
-                req.params.speciality_id, 
+            await ContractService.update(
+                req.params.contract_id, 
                 req.body
             )
         );
@@ -60,10 +60,10 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
 export async function remove(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
         return res.status(204).json(
-            await SpecialityService.remove(
+            await ContractService.remove(
                 {
                     where: {
-                        id: req.params.speciality_id
+                        id: req.params.contract_id
                     }
                 }
             )
