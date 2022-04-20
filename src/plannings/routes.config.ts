@@ -10,15 +10,17 @@ const {
     customRegex: { regInt } 
 } = config;
 
+const routePrefix = config.route_prefix + '/plannings';
+
 export default (app: App): void => {
     // GET ALL PLANNINGS
-    app.get('/plannings', [
+    app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		PlanningController.getAll
     ]);
     // GET PLANNING BY ID
-    app.get(`/planning/:planning_id${regInt}`, [
+    app.get(`${routePrefix}/:planning_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('planning_id', 'integer'),
@@ -26,14 +28,14 @@ export default (app: App): void => {
         PlanningController.getById
     ]);
     // CREATE A NEW PLANNING
-    app.post('/planning', [
+    app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.bodyParametersNeeded(['date'], 'string'),
 		PlanningController.create
     ]);
     // UPDATE PLANNING
-    app.patch(`/planning/:planning_id${regInt}`, [
+    app.patch(`${routePrefix}/:planning_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('planning_id', 'integer'),
@@ -41,7 +43,7 @@ export default (app: App): void => {
         PlanningController.update
     ]);
     // DELETE PLANNING
-    app.delete(`/planning/:planning_id${regInt}`, [
+    app.delete(`${routePrefix}/:planning_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('planning_id', 'integer'),

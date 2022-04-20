@@ -1,12 +1,12 @@
 import { FindOptions, UpdateOptions } from 'sequelize';
 import { 
-    SpecialityModel, 
-    SpecialityAttributes, 
-    SpecialityScopesAttributes,
-    SpecialityCreationAttributes
-} from '../model/speciality.interface';
+    ContractModel, 
+    ContractAttributes, 
+    ContractScopesAttributes,
+    ContractCreationAttributes
+} from '../model/contract.interface';
 import { models } from '../../../config/models.config'; 
-const { Speciality } = models;
+const { Contract } = models;
 /**
 * Find all rows with specified options
 *
@@ -30,10 +30,10 @@ const { Speciality } = models;
 * @return {Promise} a promise of the rows or empty array
 */
 export function findAll(
-    options?: FindOptions<SpecialityAttributes> | null,
-    scope?: (SpecialityScopesAttributes | SpecialityScopesAttributes[])
-): Promise<SpecialityModel[]> {
-    return Speciality.scope(scope).findAll(options!);
+    options?: FindOptions<ContractAttributes> | null,
+    scope?: (ContractScopesAttributes | ContractScopesAttributes[])
+): Promise<ContractModel[]> {
+    return Contract.scope(scope).findAll(options!);
 }
 /**
 * Search for a single instance. Returns the first instance found, or null if none can be found.
@@ -58,10 +58,10 @@ export function findAll(
 * @return {Promise} a promise of a row or NULL
 */
 export function findOne(
-    options?: FindOptions<SpecialityAttributes> | null,
-    scope?: (SpecialityScopesAttributes | SpecialityScopesAttributes[])
-): Promise<SpecialityModel | null> {
-    return Speciality.scope(scope).findOne(options!);
+    options?: FindOptions<ContractAttributes> | null,
+    scope?: (ContractScopesAttributes | ContractScopesAttributes[])
+): Promise<ContractModel | null> {
+    return Contract.scope(scope).findOne(options!);
 }
 /**
 * Find a row by his primary key & more find options
@@ -96,10 +96,10 @@ export function findOne(
 */
 export function findById(
     id: number | any, 
-    options?: FindOptions<SpecialityAttributes> | null,
-    scope?: (SpecialityScopesAttributes | SpecialityScopesAttributes[])
-): Promise<SpecialityModel | null> {
-    return Speciality.scope(scope).findByPk(id, options!);
+    options?: FindOptions<ContractAttributes> | null,
+    scope?: (ContractScopesAttributes | ContractScopesAttributes[])
+): Promise<ContractModel | null> {
+    return Contract.scope(scope).findByPk(id, options!);
 }
 /**
 * Create a new row in bdd with specified attributes
@@ -119,10 +119,10 @@ export function findById(
 * @return {Promise} a promise of the created row
 */
 export function create(
-    data: SpecialityCreationAttributes,
-    scope?: (SpecialityScopesAttributes | SpecialityScopesAttributes[])
-): Promise<SpecialityModel> {
-    return Speciality.scope(scope).create(data);
+    data: ContractCreationAttributes,
+    scope?: (ContractScopesAttributes | ContractScopesAttributes[])
+): Promise<ContractModel> {
+    return Contract.scope(scope).create(data);
 }
 /**
 * Create multiple rows in bdd with array of specified attributes
@@ -151,10 +151,10 @@ export function create(
 * @return {Promise} a promise of the created rows
 */
 export function createMany(
-    data: SpecialityCreationAttributes[],
-    scope?: (SpecialityScopesAttributes | SpecialityScopesAttributes[])
-): Promise<SpecialityModel[]> {
-    return Speciality.scope(scope).bulkCreate(data);
+    data: ContractCreationAttributes[],
+    scope?: (ContractScopesAttributes | ContractScopesAttributes[])
+): Promise<ContractModel[]> {
+    return Contract.scope(scope).bulkCreate(data);
 }
 /**
 * Update attributes of a row by his primary key
@@ -184,16 +184,16 @@ export function createMany(
 */
 export function update(
     id: number | any, 
-    data: Partial<SpecialityAttributes>,
-    scope?: (SpecialityScopesAttributes | SpecialityScopesAttributes[])
-): Promise<SpecialityModel> {
+    data: Partial<ContractAttributes>,
+    scope?: (ContractScopesAttributes | ContractScopesAttributes[])
+): Promise<ContractModel> {
     return new Promise((resolve, reject) => {
-        Speciality.scope(scope).findByPk(id)
-        .then((speciality) => {
-            if (!speciality) {
+        Contract.scope(scope).findByPk(id)
+        .then((contract) => {
+            if (!contract) {
                 reject("not found");
             } else {
-                speciality
+                contract
                 .update(data)
                 .then(resolve)
                 .catch(reject);
@@ -235,11 +235,11 @@ export function update(
 * affected rows (only supported in postgres and mssql with `options.returning` true).
 */
 export function updateMany(
-    options: UpdateOptions<SpecialityAttributes>, 
-    data: Partial<SpecialityAttributes>,
-    scope?: (SpecialityScopesAttributes | SpecialityScopesAttributes[])
-): Promise<[ affectedCount: number ]> {
-    return Speciality.scope(scope).update(data, options);
+    options: UpdateOptions<ContractAttributes>, 
+    data: Partial<ContractAttributes>,
+    scope?: (ContractScopesAttributes | ContractScopesAttributes[])
+): Promise<[affectedCount: number]> {
+    return Contract.scope(scope).update(data, options);
 }
 /**
 * Delete multiple instances, or set their deletedAt timestamp to the current time if paranoid is enabled.
@@ -261,9 +261,9 @@ export function updateMany(
 * @return {Promise} a promise of the number of destroyed rows
 */
 export function remove(
-    options?: FindOptions<SpecialityAttributes> | null
+    options?: FindOptions<ContractAttributes> | null
 ): Promise<number> {
-    return Speciality.destroy(options!);
+    return Contract.destroy(options!);
 }
 /**
 * Count the number of records matching the provided where clause.
@@ -288,7 +288,7 @@ export function remove(
 * @return {Promise} a promise of the number of counted rows
 */
 export function count(
-    options?: FindOptions<SpecialityAttributes> | null
+    options?: FindOptions<ContractAttributes> | null
 ): Promise<number> {
-    return Speciality.count(options!);
+    return Contract.count(options!);
 }

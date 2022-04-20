@@ -41,7 +41,6 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                     email: req.body.email,
                     birthday: req.body.birthday,
                     campusId: req.body.campusId,
-                    classroomId: req.body.classroomId
                 }
             )
         );

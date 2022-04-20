@@ -46,7 +46,7 @@ export async function JWTNeeded(req: Req, res: Res, next: Next): Promise<Resp> {
 
     req.jwt = jwt.verify(
       accessToken,
-      config.jwtSecret,
+      config.jwtSecret, 
       config.jwtOptions as VerifyOptions
     ) as ReqJWT;
     req.user = await UserService.findById(req.jwt.id, {}, 'all');

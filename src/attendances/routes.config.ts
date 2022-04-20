@@ -10,15 +10,17 @@ const {
     customRegex: { regInt } 
 } = config;
 
+const routePrefix = config.route_prefix + '/attendances';
+
 export default (app: App): void => {
     // GET ALL ATTENDANCES
-    app.get('/attendances', [
+    app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		AttendanceController.getAll
     ]);
     // GET ATTENDANCE BY ID
-    app.get(`/attendance/:attendance_id${regInt}`, [
+    app.get(`${routePrefix}/:attendance_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('attendance_id', 'integer'),
@@ -26,13 +28,13 @@ export default (app: App): void => {
         AttendanceController.getById
     ]);
     // CREATE A NEW ATTENDANCE
-    app.post('/attendance', [
+    app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		AttendanceController.create
     ]);
     // UPDATE ATTENDANCE
-    app.patch(`/attendance/:attendance_id${regInt}`, [
+    app.patch(`${routePrefix}/:attendance_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('attendance_id', 'integer'),
@@ -40,7 +42,7 @@ export default (app: App): void => {
         AttendanceController.update
     ]);
     // DELETE ATTENDANCE
-    app.delete(`/attendance/:attendance_id${regInt}`, [
+    app.delete(`${routePrefix}/:attendance_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('attendance_id', 'integer'),

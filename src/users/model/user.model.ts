@@ -8,11 +8,12 @@ import config from '../../../config/env.config';
 const { permissionLevel } = config;
 import bcrypt from 'bcrypt';
 import Campus from './../../campus/model/campus.model';
-import Speciality from './../../specialities/model/speciality.model';
-import Classroom from '../../classrooms/model/classroom.model';
 import Teacher from './../../teachers/model/teacher.model';
 import Feedback from './../../feedbacks/model/feedback.model';
 import Attendance from './../../attendances/model/attendance.model';
+import Grade from './../../grades/model/grade.model';
+import Balance from './../../balances/model/balance.model';
+import UserHasClassroom from './../../user_has_classrooms/model/user-hasclassroom.model';
 
 
 @S.Scopes(UserScope)
@@ -107,33 +108,13 @@ export default class User extends S.Model implements UserModel {
 	})
 	public Campus!: Campus;
 
-	@S.ForeignKey(() => Speciality)
-	@S.Column({
-    field: 'speciality_id',
-  })
-	public specialityId!: number;
-
-	@S.BelongsTo(() => Speciality, { 
+	@S.HasMany(() => UserHasClassroom, { 
 		foreignKey: {
-      field: 'speciality_id'
+      field: 'user_id'
     },
 		onDelete: 'CASCADE'
 	})
-	public Speciality!: Speciality;
-
-	@S.ForeignKey(() => Classroom)
-	@S.Column({
-    field: 'classroom_id',
-	})
-	public classroomId!: number;
-
-	@S.BelongsTo(() => Classroom, { 
-		foreignKey: {
-      field: 'classroom_id'
-    },
-		onDelete: 'CASCADE'
-	})
-	public Classroom!: Classroom;
+	public UserHasClassrooms!: UserHasClassroom[];
 
 	@S.HasMany(() => Teacher, { 
 		foreignKey: {
@@ -158,4 +139,20 @@ export default class User extends S.Model implements UserModel {
 		onDelete: 'CASCADE'
 	})
 	Attendances !: Attendance[];
+
+	@S.HasMany(() => Grade, { 
+		foreignKey: {
+      field: 'user_id'
+    },
+		onDelete: 'CASCADE'
+	})
+	public Grades!: Grade[];
+
+	@S.HasMany(() => Balance, { 
+		foreignKey: {
+      field: 'user_id'
+    },
+		onDelete: 'CASCADE'
+	})
+	public Balances!: Balance[];
 }

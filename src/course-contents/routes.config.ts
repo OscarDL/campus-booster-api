@@ -10,15 +10,17 @@ const {
     customRegex: { regInt } 
 } = config;
 
+const routePrefix = config.route_prefix + '/coursecontents';
+
 export default (app: App): void => {
     // GET ALL COURSE CONTENTS
-    app.get('/coursecontents', [
+    app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		CourseContentController.getAll
     ]);
     // GET COURSE CONTENT BY ID
-    app.get(`/coursecontent/:coursecontent_id${regInt}`, [
+    app.get(`${routePrefix}/:coursecontent_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('coursecontent_id', 'integer'),
@@ -26,14 +28,14 @@ export default (app: App): void => {
         CourseContentController.getById
     ]);
     // CREATE A NEW COURSE CONTENT
-    app.post('/coursecontent', [
+    app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.bodyParametersNeeded(['name','link'], 'string'),
 		CourseContentController.create
     ]);
     // UPDATE COURSE CONTENT
-    app.patch(`/coursecontent/:coursecontent_id${regInt}`, [
+    app.patch(`${routePrefix}/:coursecontent_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('coursecontent_id', 'integer'),
@@ -41,7 +43,7 @@ export default (app: App): void => {
         CourseContentController.update
     ]);
     // DELETE COURSE CONTENT
-    app.delete(`/coursecontent/:coursecontent_id${regInt}`, [
+    app.delete(`${routePrefix}/:coursecontent_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('coursecontent_id', 'integer'),

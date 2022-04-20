@@ -6,6 +6,8 @@ import { TeacherModel } from './teacher.interface';
 import TeacherScope from './teacher.scope';
 import User from './../../users/model/user.model';
 import ClassroomHasCourse from './../../classroom_has_courses/model/classroomhascourse.model';
+import Feedback from './../../feedbacks/model/feedback.model';
+import Grade from './../../grades/model/grade.model';
 
 @S.Scopes(TeacherScope)
 @S.Table({
@@ -56,4 +58,20 @@ export default class Teacher extends S.Model implements TeacherModel {
 		onDelete: 'CASCADE'
 	})
 	public ClassroomHasCourse!: ClassroomHasCourse;
+
+	@S.HasMany(() => Feedback, { 
+		foreignKey: {
+      field: 'teacher_id'
+    },
+		onDelete: 'CASCADE'
+	})
+	public Feedbacks!: Feedback[];
+
+	@S.HasMany(() => Grade, { 
+		foreignKey: {
+      field: 'teacher_id'
+    },
+		onDelete: 'CASCADE'
+	})
+	public Grades!: Grade[];
 }

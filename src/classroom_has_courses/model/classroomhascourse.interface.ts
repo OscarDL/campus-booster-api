@@ -4,6 +4,8 @@ import { CourseModel } from './../../courses/model/course.interface';
 import { ClassroomModel } from './../../classrooms/model/classroom.interface';
 import { TeacherModel } from './../../teachers/model/teacher.interface';
 import { PlanningModel } from './../../plannings/model/planning.interface';
+import { GradeModel } from './../../grades/model/grade.interface';
+import { FeedbackModel } from './../../feedbacks/model/feedback.interface';
 export interface ClassroomHasCourseAttributes {
   readonly id: number;
 	activated?: string;
@@ -15,6 +17,8 @@ export interface ClassroomHasCourseAttributes {
 	Classroom?: ClassroomModel;
 	Teachers?: TeacherModel[];
 	Plannings?: PlanningModel[];
+	Feedbacks?: FeedbackModel[];
+	Grades?: GradeModel[];
 };
 export interface ClassroomHasCourseCreationAttributes extends Optional<ClassroomHasCourseAttributes, 'id'> {}
 export interface ClassroomHasCourseModel extends Model<ClassroomHasCourseAttributes, ClassroomHasCourseCreationAttributes>, Partial<ClassroomHasCourseAttributes> {

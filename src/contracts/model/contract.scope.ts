@@ -1,9 +1,9 @@
 import { ScopesOptions } from "sequelize-typescript";
-import { SpecialityProtectedFields } from "./speciality.interface";
+import { ContractProtectedFields } from "./contract.interface";
 export default (() => ({
     defaultScope: ({
         attributes: { 
-            exclude: SpecialityProtectedFields
+            exclude: ContractProtectedFields
         }
     }) as ScopesOptions,
     all: ({

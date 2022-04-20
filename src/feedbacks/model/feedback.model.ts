@@ -6,7 +6,7 @@ import User from '../../users/model/user.model';
 import { FeedbackModel } from './feedback.interface';
 import FeedbackScope from './feedback.scope';
 import Teacher from './../../teachers/model/teacher.model';
-import Course from '../../courses/model/course.model';
+import ClassroomHasCourse from './../../classroom_has_courses/model/classroomhascourse.model';
 
 @S.Scopes(FeedbackScope)
 @S.Table({
@@ -87,19 +87,19 @@ export default class Feedback extends S.Model implements FeedbackModel {
 	})
 	public Teacher!: Teacher;
 
-	@S.ForeignKey(() => Course)
+	@S.ForeignKey(() => ClassroomHasCourse)
 	@S.Column(
 		{
-			field: 'course_id',
+			field: 'classroom_has_course_id',
 		}
 	)
 	public courseId!: number;
 
-	@S.BelongsTo(() => Course, { 
+	@S.BelongsTo(() => ClassroomHasCourse, { 
 		foreignKey: {
-      field: 'course_id'
+      field: 'classroom_has_course_id'
     },
 		onDelete: 'CASCADE'
 	})
-	public Course!: Course;
+	public ClassroomHasCourse!: ClassroomHasCourse;
 }

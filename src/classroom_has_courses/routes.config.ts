@@ -10,15 +10,17 @@ const {
     customRegex: { regInt } 
 } = config;
 
+const routePrefix = config.route_prefix + '/classroomhascourses';
+
 export default (app: App): void => {
     // GET ALL CLASSROOMHASCOURSES
-    app.get('/classroomhascourses', [
+    app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		ClassroomHasCourseController.getAll
     ]);
     // GET CLASSROOMHASCOURSE BY ID
-    app.get(`/classroomhascourse/:classroomhascourse_id${regInt}`, [
+    app.get(`${routePrefix}/:classroomhascourse_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
@@ -26,13 +28,13 @@ export default (app: App): void => {
         ClassroomHasCourseController.getById
     ]);
     // CREATE A NEW CLASSROOMHASCOURSE
-    app.post('/classroomhascourse', [
+    app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		ClassroomHasCourseController.create
     ]);
     // UPDATE CLASSROOMHASCOURSE
-    app.patch(`/classroomhascourse/:classroomhascourse_id${regInt}`, [
+    app.patch(`${routePrefix}/:classroomhascourse_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
@@ -40,7 +42,7 @@ export default (app: App): void => {
         ClassroomHasCourseController.update
     ]);
     // DELETE CLASSROOMHASCOURSE
-    app.delete(`/classroomhascourse/:classroomhascourse_id${regInt}`, [
+    app.delete(`${routePrefix}/:classroomhascourse_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
