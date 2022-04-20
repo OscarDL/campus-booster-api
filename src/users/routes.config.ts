@@ -15,7 +15,13 @@ const {
 
 const routePrefix = config.route_prefix + '/users';
 
+import multer from '../../services/cloudinary';
+const uploader = multer("attendances");
+const uploadSingle = uploader.single("file");
+
+
 export default (app: App): void => {
+
     // GET ALL USERS
     app.get(routePrefix, [
         ValidationMiddleware.validJWTNeeded,

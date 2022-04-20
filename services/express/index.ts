@@ -31,6 +31,11 @@ export default abstract class ExpressMiddlewares {
             if (err.isBoom) {
                 return res.end(res.status(err.output.statusCode).__(err.output.payload.message));
             } else {
+                if(err instanceof Error) {
+                    console.log(err.message.red.bold);
+                } else {
+                    console.log(JSON.stringify(err).red.bold);
+                }
                 return res.end(res.status(500).__('internal'));
             }
         }
