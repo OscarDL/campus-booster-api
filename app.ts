@@ -71,7 +71,7 @@ const corsOpts: cors.CorsOptions = {
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: [
-        'Accept', 'Authorization', 'Content-Type', 'X-Requested-With', 'Range', 'Lang'
+        'Accept', 'Authorization', 'Content-Type', 'X-Requested-With', 'Range', 'Lang', 'Logged-In'
     ],
     exposedHeaders: [
         'Content-Length'

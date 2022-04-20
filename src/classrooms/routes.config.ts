@@ -15,13 +15,13 @@ const routePrefix = config.route_prefix + '/classrooms';
 export default (app: App): void => {
     // GET ALL CLASSES
     app.get(routePrefix, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		ClassroomController.getAll
     ]);
     // GET CLASSE BY ID
     app.get(`${routePrefix}/:classroom_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('classroom_id', 'integer'),
         ClassroomMiddleware.classroomExistAsParam("classroom_id"),
@@ -29,14 +29,14 @@ export default (app: App): void => {
     ]);
     // CREATE A NEW CLASSE
     app.post(routePrefix, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.bodyParametersNeeded(['section'], 'string'),
 		ClassroomController.create
     ]);
     // UPDATE CLASSE
     app.patch(`${routePrefix}/:classroom_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('classroom_id', 'integer'),
         ClassroomMiddleware.classroomExistAsParam("classroom_id"),
@@ -44,7 +44,7 @@ export default (app: App): void => {
     ]);
     // DELETE CLASSE
     app.delete(`${routePrefix}/:classroom_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('classroom_id', 'integer'),
         ClassroomMiddleware.classroomExistAsParam("classroom_id"),

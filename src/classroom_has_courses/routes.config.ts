@@ -13,13 +13,13 @@ const {
 export default (app: App): void => {
     // GET ALL CLASSROOMHASCOURSES
     app.get('/classroomhascourses', [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		ClassroomHasCourseController.getAll
     ]);
     // GET CLASSROOMHASCOURSE BY ID
     app.get(`/classroomhascourse/:classroomhascourse_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
         ClassroomHasCourseMiddleware.classroomhascourseExistAsParam("classroomhascourse_id"),
@@ -27,13 +27,13 @@ export default (app: App): void => {
     ]);
     // CREATE A NEW CLASSROOMHASCOURSE
     app.post('/classroomhascourse', [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		ClassroomHasCourseController.create
     ]);
     // UPDATE CLASSROOMHASCOURSE
     app.patch(`/classroomhascourse/:classroomhascourse_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
         ClassroomHasCourseMiddleware.classroomhascourseExistAsParam("classroomhascourse_id"),
@@ -41,7 +41,7 @@ export default (app: App): void => {
     ]);
     // DELETE CLASSROOMHASCOURSE
     app.delete(`/classroomhascourse/:classroomhascourse_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
         ClassroomHasCourseMiddleware.classroomhascourseExistAsParam("classroomhascourse_id"),

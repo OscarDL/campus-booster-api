@@ -15,13 +15,13 @@ const routePrefix = config.route_prefix + '/campus';
 export default (app: App): void => {
     // GET ALL CAMPUSS
     app.get(routePrefix, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.iMustBe([ User ]), 
         CampusController.getAll
     ]);
     // GET CAMPUS BY ID
     app.get(`${routePrefix}/:campusId${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.iMustBe([ User ]), 
         RequestMiddleware.paramParametersNeeded('campusId', 'integer'),
         CampusMiddleware.campusExistAsParam("campusId"),
@@ -29,14 +29,14 @@ export default (app: App): void => {
     ]);
     // CREATE A NEW CAMPUS
     app.post(routePrefix, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.iMustBe([ User ]), 
         RequestMiddleware.bodyParametersNeeded(['name','city','address'], 'string'),
         CampusController.create
     ]);
     // UPDATE CAMPUS
     app.patch(`${routePrefix}/:campusId${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.iMustBe([ User ]), 
         RequestMiddleware.paramParametersNeeded('campusId', 'integer'),
         CampusMiddleware.campusExistAsParam('campusId'),
@@ -44,7 +44,7 @@ export default (app: App): void => {
     ]);
     // DELETE CAMPUS
     app.delete(`${routePrefix}/:campusId${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.iMustBe([ User ]), 
         RequestMiddleware.paramParametersNeeded('campusId', 'integer'),
         CampusMiddleware.campusExistAsParam('campusId'),

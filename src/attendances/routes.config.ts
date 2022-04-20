@@ -13,13 +13,13 @@ const {
 export default (app: App): void => {
     // GET ALL ATTENDANCES
     app.get('/attendances', [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		AttendanceController.getAll
     ]);
     // GET ATTENDANCE BY ID
     app.get(`/attendance/:attendance_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('attendance_id', 'integer'),
         AttendanceMiddleware.attendanceExistAsParam("attendance_id"),
@@ -27,13 +27,13 @@ export default (app: App): void => {
     ]);
     // CREATE A NEW ATTENDANCE
     app.post('/attendance', [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		AttendanceController.create
     ]);
     // UPDATE ATTENDANCE
     app.patch(`/attendance/:attendance_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('attendance_id', 'integer'),
         AttendanceMiddleware.attendanceExistAsParam("attendance_id"),
@@ -41,7 +41,7 @@ export default (app: App): void => {
     ]);
     // DELETE ATTENDANCE
     app.delete(`/attendance/:attendance_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ User ]), 
 		RequestMiddleware.paramParametersNeeded('attendance_id', 'integer'),
         AttendanceMiddleware.attendanceExistAsParam("attendance_id"),

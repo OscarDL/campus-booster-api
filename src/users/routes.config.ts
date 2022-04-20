@@ -18,13 +18,13 @@ const routePrefix = config.route_prefix + '/users';
 export default (app: App): void => {
     // GET ALL USERS
     app.get(routePrefix, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.minimumRoleRequired(User),
 		UserController.getAll
     ]);
     // GET USER BY ID
     app.get(routePrefix + `/:user_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.onlySameUserOrAdmin,
 		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
@@ -32,7 +32,7 @@ export default (app: App): void => {
     ]);
     // CREATE A NEW USER
     app.post(routePrefix, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.minimumRoleRequired(CampusManager),
 		RequestMiddleware.bodyParametersNeeded(['azureId','firstName','lastName', 'birthday'], 'string'),
         RequestMiddleware.bodyParametersNeeded('email', 'email'),
@@ -46,7 +46,7 @@ export default (app: App): void => {
     ]);
     // UPDATE USER
     app.patch(routePrefix + `/:user_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.onlySameUserOrAdmin,
 		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
@@ -54,7 +54,7 @@ export default (app: App): void => {
     ]);
     // DELETE USER
     app.delete(routePrefix + `/:user_id${regInt}`, [
-        ValidationMiddleware.validJWTNeeded,
+        ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.onlySameUserOrAdmin,
 		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
