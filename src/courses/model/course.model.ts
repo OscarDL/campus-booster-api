@@ -2,7 +2,7 @@
 // DOC : https://www.npmjs.com/package/sequelize-typescript
 // Generate by Ulysse Dupont
 import * as S from 'sequelize-typescript';
-import { CourseModel, STATUS } from './course.interface';
+import { CourseModel } from './course.interface';
 import CourseScope from './course.scope';
 import CourseContent from './../../course-contents/model/course-content.model';
 import ClassroomHasCourse from './../../classroom_has_courses/model/classroomhascourse.model';
@@ -29,10 +29,10 @@ export default class Course extends S.Model implements CourseModel {
 
 	@S.AllowNull(false)
 	@S.Column({
-    field: 'status',
+    field: 'link',
     type: S.DataType.STRING(255)
   })
-	public status!: STATUS;
+	public link!: string;
 
 	@S.AllowNull(false)
 	@S.Column({
@@ -43,17 +43,18 @@ export default class Course extends S.Model implements CourseModel {
 
 	@S.AllowNull(false)
 	@S.Column({
-    field: 'link',
-    type: S.DataType.STRING(255)
-  })
-	public link!: string;
-
-	@S.AllowNull(false)
-	@S.Column({
     field: 'description',
     type: S.DataType.STRING(2048)
   })
 	public description!: string;
+
+	@S.AllowNull(false)
+  @S.Default(false)
+	@S.Column({
+    field: 'speciality',
+    type: S.DataType.BOOLEAN
+  })
+	public speciality!: boolean;
 
 	@S.HasMany(() => CourseContent, { 
 		foreignKey: {

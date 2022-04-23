@@ -34,13 +34,8 @@ export async function validRefreshToken(req: Req, res: Res, next: Next): Promise
 
 export async function JWTNeeded(req: Req, res: Res, next: Next): Promise<Resp> {
   try {
-    const isLoggedIn = req.headers['logged-in'];
     const accessToken = req.cookies.accessToken;
-
     if (!accessToken) {
-      if (isLoggedIn) {
-        throw __('expired_token');
-      }
       return next(boom.badRequest('missing_token'));
     }
 

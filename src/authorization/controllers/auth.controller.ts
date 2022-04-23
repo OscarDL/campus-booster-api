@@ -25,7 +25,6 @@ export async function login(req: Req, res: Res, next: Next): Promise<Resp> {
       );
 
       return res.cookie('accessToken', accessToken, {
-          maxAge: config.cookieExpires,
           sameSite: 'strict',
           httpOnly: true,
           secure: true

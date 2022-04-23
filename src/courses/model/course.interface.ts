@@ -5,13 +5,12 @@ import { ClassroomHasCourseModel } from "./../../classroom_has_courses/model/cla
 export interface CourseAttributes {
   readonly id?: number;
 	name: string;
-	status: STATUS;
 	link: string;
-	description: string;
 	credits: number;
+	speciality: boolean;
+	description: string;
 	readonly created_at?: Date;
 	readonly updated_at?: Date;
-	specialityId?: number;
 	CourseContents?: CourseContentModel[];
 	ClassroomHasCourses?: ClassroomHasCourseModel[];
 };
@@ -21,4 +20,3 @@ export interface CourseModel extends Model<CourseAttributes, CourseCreationAttri
 };
 export type CourseScopesAttributes = keyof ReturnType<typeof CourseScope>;
 export const CourseProtectedFields = [];
-export type STATUS = "";
