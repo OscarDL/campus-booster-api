@@ -2,7 +2,7 @@
   "internal": "Une erreur de serveur interne s'est produite.",
   "bearer_missing": "Votre jeton de connexion est manquant.",
   "unauthorized": "Vous n'êtes pas autorisé à effectuer cette action.",
-  "azure_ad_denied": "Vous n'êtes pas autorisé à effectuer cette action AD.",
+  "azure_ad_denied": "L'accès à Campus Booster vous a été refusé. Assurez-vous de vous connecter avec la bonne adresse mail.",
   "access_denied": "L'accès à ce contenu vous a été refusé.",
   "banned": "Votre compte a été banni.",
   "missing_access_rights": "Vous ne possédez pas de droits d'accès.",
