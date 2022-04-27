@@ -3,12 +3,11 @@ import config from '../../../config/env.config';
 import jwt, { VerifyOptions } from 'jsonwebtoken';
 import crypto from 'crypto';
 import boom from '@hapi/boom';
-import { __ } from 'i18n';
 import * as UserService from '../../users/service/user.service';
 import { ExpressErrorHandler } from '../../../services/express';
 
 export async function validRefreshToken(req: Req, res: Res, next: Next): Promise<Resp> {
-  try {
+  try { 
     const b = Buffer.from(req.body.refreshToken, 'base64');
     const refreshToken = b.toString();
     const refreshId = req.jwt?.id + config.jwtSecret;
@@ -38,7 +37,7 @@ export async function JWTNeeded(req: Req, res: Res, next: Next): Promise<Resp> {
     if (!accessToken) {
       return next(boom.badRequest('missing_token'));
     }
-
+    
     req.jwt = jwt.verify(
       accessToken,
       config.jwtSecret, 
@@ -53,22 +52,20 @@ export async function JWTNeeded(req: Req, res: Res, next: Next): Promise<Resp> {
   }
 };
 
-// export async function JWTNeeded(req: Req, res: Res, next: Next): Promise<Resp> {
-//   if (req.cookies.accessToken) {
-//     try {
-//       const accessToken = req.cookies.accessToken;
-//       if (!accessToken) {
-//         return next(boom.badRequest("missing_token"));
-//       }
+export async function ExpireJWTNeeded(req: Req, res: Res, next: Next): Promise<Resp> {
+  try {
+    const accessToken = req.cookies.accessToken;
+    if (!accessToken) {
+      return next(boom.badRequest('missing_token'));
+    }
+    req.jwt = jwt.decode(
+      accessToken
+    ) as ReqJWT;
+    req.user = await UserService.findById(req.jwt.id, {}, 'all');
 
-//       req.jwt = jwt.decode(accessToken) as ReqJWT;
-//       req.user = await UserService.findById(req.jwt?.id);
-
-//       return next();
-//     } catch (err: any) {
-//       return await ExpressErrorHandler(err)(req, res, next);
-//     }
-//   } else {
-//     next(boom.badRequest('missing_token'));
-//   }
-// };
+    return (req.user) ? next() : next(boom.unauthorized('expired_token'));
+  } catch (err: any) {
+    console.log(`${err}`.error);
+    return next(boom.unauthorized('expired_token'));
+  }
+};

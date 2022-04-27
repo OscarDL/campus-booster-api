@@ -21,7 +21,8 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
             await UserService.findAll(
                 {
                     limit: req.query?.limit
-                }
+                },
+                "withClassrooms"
             )
         );
     } catch (err: any) {

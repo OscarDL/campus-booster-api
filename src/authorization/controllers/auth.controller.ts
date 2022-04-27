@@ -12,6 +12,7 @@ export async function login(req: Req, res: Res, next: Next): Promise<Resp> {
 
       const refreshId = req.user?.id + config.jwtSecret;
       const salt = crypto.randomBytes(16).toString('base64'); 
+
       const hash = crypto
         .createHmac('sha512', salt)
         .update(refreshId)
@@ -49,15 +50,19 @@ export async function logout(req: Req, res: Res, next: Next): Promise<Resp> {
 
 export async function refreshToken(req: Req, res: Res, next: Next): Promise<Resp> {
   try {
-      res.status(200).json(
-          { 
-            accessToken: jwt.sign(
-              req.body,
-              config.jwtSecret, 
-              config.jwtOptions
-            ) 
-          }
-      );
+    return res.cookie(
+      'accessToken', 
+      jwt.sign(
+        req.body,
+        config.jwtSecret, 
+        config.jwtOptions
+      ),
+      {
+        sameSite: 'strict',
+        httpOnly: true,
+        secure: true
+      }
+    ).sendStatus(200);
   } catch (err: any) {
       return await ExpressErrorHandler(err)(req, res, next);
   }
