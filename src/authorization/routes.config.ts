@@ -21,6 +21,8 @@ export default (app: App): void => {
     ]);
     // REFRESH TOKEN
     app.post(routePrefix + '/refresh', [
+        RequestMiddleware.bodyParametersNeeded('refreshToken', 'string'),
+        ValidationMiddleware.ExpireJWTNeeded,
         ValidationMiddleware.validRefreshToken,
         AuthController.refreshToken
     ]);

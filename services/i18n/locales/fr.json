@@ -1,24 +1,26 @@
 {
-  "internal": "Une erreur de serveur interne s'est produite.",
-  "bearer_missing": "Votre jeton de connexion est manquant.",
-  "unauthorized": "Vous n'êtes pas autorisé à effectuer cette action.",
-  "azure_ad_denied": "L'accès à Campus Booster vous a été refusé. Assurez-vous de vous connecter avec la bonne adresse mail.",
-  "access_denied": "L'accès à ce contenu vous a été refusé.",
-  "banned": "Votre compte a été banni.",
-  "missing_access_rights": "Vous ne possédez pas de droits d'accès.",
-  "validate_account": "Votre compte n'a pas été validé.",
-  "invalid_session": "Votre session n'est pas valide.",
-  "invalid_token": "Votre jeton d'accès n'est pas valide.",
-  "missing_token": "Jeton d'autorisation manquant.",
-  "expired_token": "Votre jeton d'accès a expiré.",
-  "campus_not_found": "Aucun campus n'a été trouvé.",
-  "class_not_found": "Aucune classe n'a été trouvée.",
-  "user_not_found": "Aucun utilisateur n'a été trouvé.",
-  "speciality_not_found": "Aucune spécialité n'a été trouvée.",
-  "course_not_found": "Aucun cours n'a été trouvé.",
-
-  "params": {
-    "invalid_hash": "Hash de connexion invalide.",
-    "missing_user_id": "Paramètre d'identification de l'utilisateur manquant."
-  }
+	"internal": "Une erreur de serveur interne s'est produite.",
+	"bearer_missing": "Votre jeton de connexion est manquant.",
+	"unauthorized": "Vous n'êtes pas autorisé à effectuer cette action.",
+	"azure_ad_denied": "Vous n'êtes pas autorisé à effectuer cette action AD.",
+	"access_denied": "L'accès à ce contenu vous a été refusé.",
+	"banned": "Votre compte a été banni.",
+	"missing_access_rights": "Vous ne possédez pas de droits d'accès.",
+	"validate_account": "Votre compte n'a pas été validé.",
+	"invalid_session": "Votre session n'est pas valide.",
+	"invalid_token": "Votre jeton d'accès n'est pas valide.",
+	"missing_token": "Jeton d'autorisation manquant.",
+	"expired_token": "Votre jeton d'accès a expiré.",
+	"campus_not_found": "Aucun campus n'a été trouvé.",
+	"class_not_found": "Aucune classe n'a été trouvée.",
+	"user_not_found": "Aucun utilisateur n'a été trouvé.",
+	"speciality_not_found": "Aucune spécialité n'a été trouvée.",
+	"course_not_found": "Aucun cours n'a été trouvé.",
+	"params": {
+		"invalid_hash": "Hash de connexion invalide.",
+		"missing_user_id": "Paramètre d'identification de l'utilisateur manquant."
+	},
+	"section_missing": "Vous devez spécifier une section dans votre corps de requête.",
+	"campusId_missing": "Vous devez spécifier un campusId dans votre corps de requête.",
+	"refreshToken_missing": "Vous devez spécifier un refreshToken dans votre corps de requête."
 }

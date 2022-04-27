@@ -1,24 +1,24 @@
 {
-  "internal": "An internal server error has occured.",
-  "bearer_missing": "Bearer token is missing.",
-  "unauthorized": "You are not allowed to do this action.",
-  "azure_ad_denied": "You have been denied access to Campus Booster. Make sure you've tried to sign in with the correct email address.",
-  "access_denied": "You have been denied access to this content.",
-  "banned": "Your account has been banned.",
-  "missing_access_rights": "You don't have access rights.",
-  "validate_account": "Your account has not been validated",
-  "invalid_session": "Your session is invalid.",
-  "invalid_token": "Your access token is not valid.",
-  "missing_token": "Missing authorization token.",
-  "expired_token": "Your access token has expired.",
-  "campus_not_found": "No campus was found.",
-  "class_not_found": "No class was found.",
-  "user_not_found": "No user was found.",
-  "speciality_not_found": "No speciality was found.",
-  "course_not_found": "No course was found.",
-
-  "params": {
-    "invalid_hash": "Invalid connection hash.",
-    "missing_user_id": "Missing user identification parameter."
-  }
+	"internal": "An internal server error has occured.",
+	"bearer_missing": "Bearer token is missing.",
+	"unauthorized": "You are not allowed to do this action.",
+	"azure_ad_denied": "You are not allowed to do this AD action.",
+	"access_denied": "You have been denied access to this content.",
+	"banned": "Your account has been banned.",
+	"missing_access_rights": "You don't have access rights.",
+	"validate_account": "Your account has not been validated",
+	"invalid_session": "Your session is invalid.",
+	"invalid_token": "Your access token is not valid.",
+	"missing_token": "Missing authorization token.",
+	"expired_token": "Your access token has expired.",
+	"campus_not_found": "No campus was found.",
+	"class_not_found": "No class was found.",
+	"user_not_found": "No user was found.",
+	"speciality_not_found": "No speciality was found.",
+	"course_not_found": "No course was found.",
+	"params": {
+		"invalid_hash": "Invalid connection hash.",
+		"missing_user_id": "Missing user identification parameter."
+	},
+	"refreshToken_missing": "You should specify a refreshToken in your body request."
 }

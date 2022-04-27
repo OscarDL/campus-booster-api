@@ -1,12 +1,13 @@
 import { Req, Res, Next, Resp, Fn } from '../../../types/express';
 import config from '../../../config/env.config';
-const { permissionLevel, app_name } = config;
+const { permissionLevel } = config;
 import boom from '@hapi/boom';
 
 
 export function minimumRoleRequired(required_role: number = 0): Fn {
     return (req: Req, res: Res, next: Next): Resp => {
         try {
+            if(!req.user) throw new Error('Login required.');
             if(req.user?.active) {
                 const userRole = req.user?.role;
                 if (userRole && userRole >= required_role && userRole <= permissionLevel.CampusBoosterAdmin && Object.values(permissionLevel).includes(userRole)) {
@@ -31,6 +32,7 @@ export function minimumRoleRequired(required_role: number = 0): Fn {
 
 export function onlySameUserOrAdmin(req: Req, res: Res, next: Next): Resp {
     try {
+        if(!req.user) throw new Error('Login required.');
         if(req.user?.active) {
             const userRole = req.user?.role;
             const user_id = req.user?.id;
@@ -64,6 +66,7 @@ export function onlySameUserOrAdmin(req: Req, res: Res, next: Next): Resp {
 
 export function onlySameUserOrSuperAdmin(req: Req, res: Res, next: Next): Resp {
     try {
+        if(!req.user) throw new Error('Login required.');
         if(req.user?.active) {
             const userRole = req.user?.role;
             const user_id = req.user?.id;
@@ -97,6 +100,7 @@ export function onlySameUserOrSuperAdmin(req: Req, res: Res, next: Next): Resp {
 
 export function onlySuperAdmin(req: Req, res: Res, next: Next): Resp {
     try {
+        if(!req.user) throw new Error('Login required.');
         if(req.user?.active) {
             const userRole = req.user?.role;
             if (userRole === permissionLevel.CampusBoosterAdmin) {
@@ -121,6 +125,7 @@ export function onlySuperAdmin(req: Req, res: Res, next: Next): Resp {
 export function iMustBe(roles: number | number[]): Fn {
     return (req: Req, res: Res, next: Next): Resp => {
         try {
+            if(!req.user) throw new Error('Login required.');
             if(req.user?.active) {
                 const userRole = req.user?.role;
                 if (userRole && Array.isArray(roles) ? roles.includes(userRole) : userRole === roles) {

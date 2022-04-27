@@ -4,9 +4,10 @@ import * as PermissionMiddleware from "../authorization/middlewares/auth.permiss
 import * as RequestMiddleware from '../authorization/middlewares/request.validation';
 import * as ClassroomController from './controller/classroom.controller';
 import * as ClassroomMiddleware from './middleware/classroom.middleware';
+import * as CampusMiddleware from '../campus/middleware/campus.middleware';
 import config from '../../config/env.config';
 const { 
-	permissionLevel: { User }, 
+	permissionLevel: { User, CampusManager, CampusBoosterAdmin }, 
     customRegex: { regInt } 
 } = config;
 
@@ -30,8 +31,9 @@ export default (app: App): void => {
     // CREATE A NEW CLASSE
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
-		RequestMiddleware.bodyParametersNeeded(['section'], 'string'),
+		PermissionMiddleware.iMustBe([ CampusManager, CampusBoosterAdmin ]), 
+		RequestMiddleware.bodyParametersNeeded(['section', 'campusId'], 'integer'),
+        CampusMiddleware.campusExistAsBody('campusId'),
 		ClassroomController.create
     ]);
     // UPDATE CLASSE
