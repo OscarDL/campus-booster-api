@@ -6,7 +6,7 @@ import * as ClassroomHasCourseController from './controller/classroomhascourse.c
 import * as ClassroomHasCourseMiddleware from './middleware/classroomhascourse.middleware';
 import config from '../../config/env.config';
 const { 
-	permissionLevel: { User }, 
+	permissionLevel: { Student }, 
     customRegex: { regInt } 
 } = config;
 
@@ -16,13 +16,13 @@ export default (app: App): void => {
     // GET ALL CLASSROOMHASCOURSES
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		ClassroomHasCourseController.getAll
     ]);
     // GET CLASSROOMHASCOURSE BY ID
     app.get(`${routePrefix}/:classroomhascourse_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
         ClassroomHasCourseMiddleware.classroomhascourseExistAsParam("classroomhascourse_id"),
         ClassroomHasCourseController.getById
@@ -30,13 +30,13 @@ export default (app: App): void => {
     // CREATE A NEW CLASSROOMHASCOURSE
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		ClassroomHasCourseController.create
     ]);
     // UPDATE CLASSROOMHASCOURSE
     app.patch(`${routePrefix}/:classroomhascourse_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
         ClassroomHasCourseMiddleware.classroomhascourseExistAsParam("classroomhascourse_id"),
         ClassroomHasCourseController.update
@@ -44,7 +44,7 @@ export default (app: App): void => {
     // DELETE CLASSROOMHASCOURSE
     app.delete(`${routePrefix}/:classroomhascourse_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
         ClassroomHasCourseMiddleware.classroomhascourseExistAsParam("classroomhascourse_id"),
         ClassroomHasCourseController.remove

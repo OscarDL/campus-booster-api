@@ -6,7 +6,7 @@ import * as TeacherController from './controller/teacher.controller';
 import * as TeacherMiddleware from './middleware/teacher.middleware';
 import config from '../../config/env.config';
 const { 
-	permissionLevel: { User }, 
+	permissionLevel: { Student }, 
     customRegex: { regInt } 
 } = config;
 
@@ -16,13 +16,13 @@ export default (app: App): void => {
     // GET ALL TEACHERS
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		TeacherController.getAll
     ]);
     // GET TEACHER BY ID
     app.get(`${routePrefix}/:teacher_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('teacher_id', 'integer'),
         TeacherMiddleware.teacherExistAsParam("teacher_id"),
         TeacherController.getById
@@ -30,13 +30,13 @@ export default (app: App): void => {
     // CREATE A NEW TEACHER
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		TeacherController.create
     ]);
     // UPDATE TEACHER
     app.patch(`${routePrefix}/:teacher_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('teacher_id', 'integer'),
         TeacherMiddleware.teacherExistAsParam("teacher_id"),
         TeacherController.update
@@ -44,7 +44,7 @@ export default (app: App): void => {
     // DELETE TEACHER
     app.delete(`${routePrefix}/:teacher_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('teacher_id', 'integer'),
         TeacherMiddleware.teacherExistAsParam("teacher_id"),
         TeacherController.remove

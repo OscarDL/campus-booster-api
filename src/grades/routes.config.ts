@@ -6,7 +6,7 @@ import * as GradeController from './controller/grade.controller';
 import * as GradeMiddleware from './middleware/grade.middleware';
 import config from '../../config/env.config';
 const { 
-	permissionLevel: { User }, 
+	permissionLevel: { Student }, 
     customRegex: { regInt } 
 } = config;
 
@@ -16,13 +16,13 @@ export default (app: App): void => {
     // GET ALL GRADES
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		GradeController.getAll
     ]);
     // GET GRADE BY ID
     app.get(`${routePrefix}/:grade_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('grade_id', 'integer'),
         GradeMiddleware.gradeExistAsParam("grade_id"),
         GradeController.getById
@@ -30,14 +30,14 @@ export default (app: App): void => {
     // CREATE A NEW GRADE
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.bodyParametersNeeded(['average'], 'string'),
 		GradeController.create
     ]);
     // UPDATE GRADE
     app.patch(`${routePrefix}/:grade_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('grade_id', 'integer'),
         GradeMiddleware.gradeExistAsParam("grade_id"),
         GradeController.update
@@ -45,7 +45,7 @@ export default (app: App): void => {
     // DELETE GRADE
     app.delete(`${routePrefix}/:grade_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('grade_id', 'integer'),
         GradeMiddleware.gradeExistAsParam("grade_id"),
         GradeController.remove

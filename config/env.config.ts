@@ -24,13 +24,13 @@ export default {
         success: 'green'
     },
     permissionLevel: {
-        User: 1,
-        Professor: 2,
-        FullProfessor: 3,
-        Company: 4,
-        Assistant: 5,
-        CampusManager: 6,
-        CampusBoosterAdmin: 7
+        Student: "STUDENT",
+        Professor: "PROFESSOR",
+        FullProfessor: "FULL_PROFESSOR",
+        Company: "COMPANY",
+        Assistant: "ASSISTANT",
+        CampusManager: "CAMPUS_MANAGER",
+        CampusBoosterAdmin: "CAMPUS_BOOSTER_ADMIN"
     },
     mailing: {
         config: {

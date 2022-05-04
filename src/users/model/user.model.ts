@@ -80,8 +80,8 @@ export default class User extends S.Model implements UserModel {
 	public validated!: boolean;
 
 	@S.AllowNull(false)
-	@S.Default(permissionLevel.User)
-	@S.Column(S.DataType.SMALLINT)
+	@S.Default(permissionLevel.Student)
+	@S.Column(S.DataType.STRING(255))
 	public role!: typeof permissionLevel[keyof typeof permissionLevel];
 
 	// ---------------------

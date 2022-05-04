@@ -6,7 +6,7 @@ import * as AttendanceController from './controller/attendance.controller';
 import * as AttendanceMiddleware from './middleware/attendance.middleware';
 import config from '../../config/env.config';
 const { 
-	permissionLevel: { User }, 
+	permissionLevel: { Student }, 
     customRegex: { regInt } 
 } = config;
 
@@ -16,13 +16,13 @@ export default (app: App): void => {
     // GET ALL ATTENDANCES
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		AttendanceController.getAll
     ]);
     // GET ATTENDANCE BY ID
     app.get(`${routePrefix}/:attendance_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('attendance_id', 'integer'),
         AttendanceMiddleware.attendanceExistAsParam("attendance_id"),
         AttendanceController.getById
@@ -30,13 +30,13 @@ export default (app: App): void => {
     // CREATE A NEW ATTENDANCE
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		AttendanceController.create
     ]);
     // UPDATE ATTENDANCE
     app.patch(`${routePrefix}/:attendance_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('attendance_id', 'integer'),
         AttendanceMiddleware.attendanceExistAsParam("attendance_id"),
         AttendanceController.update
@@ -44,7 +44,7 @@ export default (app: App): void => {
     // DELETE ATTENDANCE
     app.delete(`${routePrefix}/:attendance_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('attendance_id', 'integer'),
         AttendanceMiddleware.attendanceExistAsParam("attendance_id"),
         AttendanceController.remove

@@ -6,7 +6,7 @@ import * as CourseContentController from './controller/course-content.controller
 import * as CourseContentMiddleware from './middleware/course-content.middleware';
 import config from '../../config/env.config';
 const { 
-	permissionLevel: { User }, 
+	permissionLevel: { Student }, 
     customRegex: { regInt } 
 } = config;
 
@@ -16,13 +16,13 @@ export default (app: App): void => {
     // GET ALL COURSE CONTENTS
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		CourseContentController.getAll
     ]);
     // GET COURSE CONTENT BY ID
     app.get(`${routePrefix}/:coursecontent_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('coursecontent_id', 'integer'),
         CourseContentMiddleware.coursecontentExistAsParam("coursecontent_id"),
         CourseContentController.getById
@@ -30,14 +30,14 @@ export default (app: App): void => {
     // CREATE A NEW COURSE CONTENT
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.bodyParametersNeeded(['name','link'], 'string'),
 		CourseContentController.create
     ]);
     // UPDATE COURSE CONTENT
     app.patch(`${routePrefix}/:coursecontent_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('coursecontent_id', 'integer'),
         CourseContentMiddleware.coursecontentExistAsParam("coursecontent_id"),
         CourseContentController.update
@@ -45,7 +45,7 @@ export default (app: App): void => {
     // DELETE COURSE CONTENT
     app.delete(`${routePrefix}/:coursecontent_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('coursecontent_id', 'integer'),
         CourseContentMiddleware.coursecontentExistAsParam("coursecontent_id"),
         CourseContentController.remove
