@@ -10,7 +10,7 @@ import * as CampusMiddleware from '../campus/middleware/campus.middleware';
 import config from '../../config/env.config';
 const { 
 	customRegex: { regInt },
-    permissionLevel: { User, CampusManager }
+  permissionLevel: roles
 } = config;
 
 const routePrefix = config.route_prefix + '/users';
@@ -25,7 +25,7 @@ export default (app: App): void => {
     // GET ALL USERS
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.minimumRoleRequired(User),
+        PermissionMiddleware.rolesAllowed(Object.keys(roles)),
 		UserController.getAll
     ]);
     // GET USER BY ID
@@ -39,7 +39,7 @@ export default (app: App): void => {
     // CREATE A NEW USER
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.minimumRoleRequired(CampusManager),
+        PermissionMiddleware.rolesAllowed([roles.CampusManager, roles.CampusBoosterAdmin]),
 		RequestMiddleware.bodyParametersNeeded(['azureId','firstName','lastName', 'birthday'], 'string'),
         RequestMiddleware.bodyParametersNeeded('email', 'email'),
         RequestMiddleware.bodyParametersNeeded([
