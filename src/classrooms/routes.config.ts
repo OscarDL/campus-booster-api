@@ -7,7 +7,7 @@ import * as ClassroomMiddleware from './middleware/classroom.middleware';
 import * as CampusMiddleware from '../campus/middleware/campus.middleware';
 import config from '../../config/env.config';
 const { 
-	permissionLevel: { User, CampusManager, CampusBoosterAdmin }, 
+	permissionLevel: { Student, CampusManager, CampusBoosterAdmin }, 
     customRegex: { regInt } 
 } = config;
 
@@ -17,13 +17,13 @@ export default (app: App): void => {
     // GET ALL CLASSES
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		ClassroomController.getAll
     ]);
     // GET CLASSE BY ID
     app.get(`${routePrefix}/:classroom_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('classroom_id', 'integer'),
         ClassroomMiddleware.classroomExistAsParam("classroom_id"),
         ClassroomController.getById
@@ -39,7 +39,7 @@ export default (app: App): void => {
     // UPDATE CLASSE
     app.patch(`${routePrefix}/:classroom_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('classroom_id', 'integer'),
         ClassroomMiddleware.classroomExistAsParam("classroom_id"),
         ClassroomController.update
@@ -47,7 +47,7 @@ export default (app: App): void => {
     // DELETE CLASSE
     app.delete(`${routePrefix}/:classroom_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('classroom_id', 'integer'),
         ClassroomMiddleware.classroomExistAsParam("classroom_id"),
         ClassroomController.remove

@@ -8,7 +8,7 @@ import * as ClassroomMiddleware from '../classrooms/middleware/classroom.middlew
 import * as CourseMiddleware from '../courses/middleware/course.middleware';
 import config from '../../config/env.config';
 const { 
-	permissionLevel: { User, FullProfessor, CampusManager }, 
+	permissionLevel: { Student, FullProfessor }, 
     customRegex: { regInt } 
 } = config;
 
@@ -18,34 +18,34 @@ export default (app: App): void => {
     // GET ALL CLASSROOMHASCOURSES
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.minimumRoleRequired(User), 
-		ClassroomHasCourseController.getAll
+        PermissionMiddleware.iMustBe([ Student ]), 
+        ClassroomHasCourseController.getAll
     ]);
     // GET CLASSROOMHASCOURSE BY ID
     app.get(`${routePrefix}/:classroomhascourse_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.minimumRoleRequired(User),
-		RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
+		    PermissionMiddleware.iMustBe([ Student ]), 
+		    RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
         ClassroomHasCourseMiddleware.classroomhascourseExistAsParam("classroomhascourse_id"),
         ClassroomHasCourseController.getById
     ]);
     // CREATE A NEW CLASSROOMHASCOURSE
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.minimumRoleRequired(FullProfessor),
+		    PermissionMiddleware.minimumRoleRequired(FullProfessor),
         RequestMiddleware.bodyParametersNeeded([
             "courseId",
             "classroomId"
         ], "integer"),
         CourseMiddleware.courseExistAsBody("courseId"),
         ClassroomMiddleware.classroomExistAsBody("classroomId"),
-		ClassroomHasCourseController.create
+		    ClassroomHasCourseController.create
     ]);
     // UPDATE CLASSROOMHASCOURSE
     app.patch(`${routePrefix}/:classroomhascourse_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.minimumRoleRequired(FullProfessor),
-		RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
+		    PermissionMiddleware.minimumRoleRequired(FullProfessor),
+		    RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
         ClassroomHasCourseMiddleware.classroomhascourseExistAsParam("classroomhascourse_id"),
         RequestMiddleware.bodyParameterHoped("classroomId", "integer"),
         RequestMiddleware.bodyParameterHoped("courseId", "integer"),
@@ -56,8 +56,8 @@ export default (app: App): void => {
     // DELETE CLASSROOMHASCOURSE
     app.delete(`${routePrefix}/:classroomhascourse_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.minimumRoleRequired(CampusManager),
-		RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
+		    PermissionMiddleware.minimumRoleRequired(CampusManager),
+		    RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
         ClassroomHasCourseMiddleware.classroomhascourseExistAsParam("classroomhascourse_id"),
         ClassroomHasCourseController.remove
     ]);

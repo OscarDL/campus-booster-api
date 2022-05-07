@@ -6,7 +6,7 @@ import * as BalanceController from './controller/balance.controller';
 import * as BalanceMiddleware from './middleware/balance.middleware';
 import config from '../../config/env.config';
 const { 
-	permissionLevel: { User }, 
+	permissionLevel: { Student }, 
     customRegex: { regInt } 
 } = config;
 
@@ -16,13 +16,13 @@ export default (app: App): void => {
     // GET ALL BALANCES
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		BalanceController.getAll
     ]);
     // GET BALANCE BY ID
     app.get(`${routePrefix}/:balance_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('balance_id', 'integer'),
         BalanceMiddleware.balanceExistAsParam("balance_id"),
         BalanceController.getById
@@ -30,14 +30,14 @@ export default (app: App): void => {
     // CREATE A NEW BALANCE
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.bodyParametersNeeded(['date_req','date_ope'], 'string'),
 		BalanceController.create
     ]);
     // UPDATE BALANCE
     app.patch(`${routePrefix}/:balance_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('balance_id', 'integer'),
         BalanceMiddleware.balanceExistAsParam("balance_id"),
         BalanceController.update
@@ -45,7 +45,7 @@ export default (app: App): void => {
     // DELETE BALANCE
     app.delete(`${routePrefix}/:balance_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ User ]), 
+		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('balance_id', 'integer'),
         BalanceMiddleware.balanceExistAsParam("balance_id"),
         BalanceController.remove

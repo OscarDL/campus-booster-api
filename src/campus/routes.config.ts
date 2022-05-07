@@ -6,7 +6,7 @@ import * as CampusController from './controller/campus.controller';
 import * as CampusMiddleware from './middleware/campus.middleware';
 import config from '../../config/env.config';
 const { 
-	permissionLevel: { User, CampusManager }, 
+	permissionLevel: { Student },
     customRegex: { regInt } 
 } = config;
 
@@ -16,13 +16,13 @@ export default (app: App): void => {
     // GET ALL CAMPUSS
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.minimumRoleRequired(User), 
+        PermissionMiddleware.iMustBe([ Student ]), 
         CampusController.getAll
     ]);
     // GET CAMPUS BY ID
     app.get(`${routePrefix}/:campusId${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.minimumRoleRequired(User),
+        PermissionMiddleware.iMustBe([ Student ]), 
         RequestMiddleware.paramParametersNeeded('campusId', 'integer'),
         CampusMiddleware.campusExistAsParam("campusId"),
         CampusController.getById
@@ -30,14 +30,14 @@ export default (app: App): void => {
     // CREATE A NEW CAMPUS
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.minimumRoleRequired(CampusManager),
+        PermissionMiddleware.iMustBe([ Student ]),
         RequestMiddleware.bodyParametersNeeded(['name','city','address'], 'string'),
         CampusController.create
     ]);
     // UPDATE CAMPUS
     app.patch(`${routePrefix}/:campusId${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.minimumRoleRequired(CampusManager),
+        PermissionMiddleware.iMustBe([ Student ]), 
         RequestMiddleware.paramParametersNeeded('campusId', 'integer'),
         CampusMiddleware.campusExistAsParam('campusId'),
         CampusController.update
@@ -45,7 +45,7 @@ export default (app: App): void => {
     // DELETE CAMPUS
     app.delete(`${routePrefix}/:campusId${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.minimumRoleRequired(CampusManager), 
+        PermissionMiddleware.iMustBe([ Student ]), 
         RequestMiddleware.paramParametersNeeded('campusId', 'integer'),
         CampusMiddleware.campusExistAsParam('campusId'),
         CampusController.remove

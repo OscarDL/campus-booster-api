@@ -3,14 +3,16 @@ import config from '../../../config/env.config';
 const { permissionLevel } = config;
 import boom from '@hapi/boom';
 
+type Role = typeof permissionLevel[keyof typeof permissionLevel];
+type Roles = Array<typeof permissionLevel[keyof typeof permissionLevel]>;
 
-export function minimumRoleRequired(required_role: number = 0): Fn {
+export function rolesAllowed(roles: Roles): Fn {
     return (req: Req, res: Res, next: Next): Resp => {
         try {
             if(!req.user) throw new Error('Login required.');
             if(req.user?.active) {
                 const userRole = req.user?.role;
-                if (userRole && userRole >= required_role && userRole <= permissionLevel.CampusBoosterAdmin && Object.values(permissionLevel).includes(userRole)) {
+                if (userRole && roles.includes(userRole)) {
                     req.isAdmin = ([ permissionLevel.CampusManager, permissionLevel.CampusBoosterAdmin ].includes(userRole)) ? true : false;
                     return next();
                 } else {
@@ -122,7 +124,7 @@ export function onlySuperAdmin(req: Req, res: Res, next: Next): Resp {
     }
 }
 
-export function iMustBe(roles: number | number[]): Fn {
+export function iMustBe(roles: Role | Roles): Fn {
     return (req: Req, res: Res, next: Next): Resp => {
         try {
             if(!req.user) throw new Error('Login required.');
