@@ -21,6 +21,16 @@ export default (() => ({
     all: ({
         attributes: { 
             exclude: []
-        }
+        },
+        include: [
+            {
+                model: User.unscoped(),
+                required: true,
+            },
+            {
+                model: Classroom.unscoped(),
+                required: true,
+            },
+        ]
     }) as ScopesOptions,
 }));
