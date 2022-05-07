@@ -12,11 +12,12 @@ export function rolesAllowed(roles: Roles): Fn {
             if(!req.user) throw new Error('Login required.');
             if(req.user?.active) {
                 const userRole = req.user?.role;
+                console.log(userRole, roles)
                 if (userRole && roles.includes(userRole)) {
                     req.isAdmin = ([ permissionLevel.CampusManager, permissionLevel.CampusBoosterAdmin ].includes(userRole)) ? true : false;
                     return next();
                 } else {
-                    if(!userRole) {
+                    if(!req.user?.active) {
                         return next(boom.forbidden(`banned`));
                     } else {
                         return next(boom.badRequest('missing_access_rights'));
