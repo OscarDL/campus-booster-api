@@ -6,7 +6,12 @@ export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         return res.status(200).json(
             await CampusService.findById(
-                req.params.campusId
+                req.params.campusId,
+                {},
+                [
+                    "withClassrooms",
+                    "withUsers"
+                ]
             )
         );
     } catch (err: any) {
@@ -21,7 +26,11 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
             await CampusService.findAll(
                 {
                     limit: req.query?.limit
-                }
+                },
+                [
+                    "withClassrooms",
+                    "withUsers"
+                ]
             )
         );
     } catch (err: any) {

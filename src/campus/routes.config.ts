@@ -6,7 +6,7 @@ import * as CampusController from './controller/campus.controller';
 import * as CampusMiddleware from './middleware/campus.middleware';
 import config from '../../config/env.config';
 const { 
-	permissionLevel: { Student }, 
+	permissionLevel: { Student },
     customRegex: { regInt } 
 } = config;
 
@@ -30,7 +30,7 @@ export default (app: App): void => {
     // CREATE A NEW CAMPUS
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.iMustBe([ Student ]), 
+        PermissionMiddleware.iMustBe([ Student ]),
         RequestMiddleware.bodyParametersNeeded(['name','city','address'], 'string'),
         CampusController.create
     ]);
