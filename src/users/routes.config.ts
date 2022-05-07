@@ -24,7 +24,7 @@ export default (app: App): void => {
     // GET ALL USERS
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed(Object.keys(roles)),
+        PermissionMiddleware.rolesAllowed(Object.values(roles)),
 		UserController.getAll
     ]);
     // GET USER BY ID

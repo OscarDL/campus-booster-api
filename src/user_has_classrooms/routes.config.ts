@@ -8,7 +8,7 @@ import * as UserMiddleware from '../users/middleware/user.middleware';
 import * as ClassroomMiddleware from '../classrooms/middleware/classroom.middleware';
 import config from '../../config/env.config';
 const { 
-	  permissionLevel: { Student, FullProfessor, CampusManager }, 
+	  permissionLevel: roles, 
     customRegex: { regInt } 
 } = config;
 
@@ -18,13 +18,13 @@ export default (app: App): void => {
     // GET ALL USER HASCLASSROOMS
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed([ Student ]), 
+        PermissionMiddleware.rolesAllowed(Object.values(roles)), 
         UserHasClassroomController.getAll
     ]);
     // GET USER HASCLASSROOM BY ID
     app.get(`${routePrefix}/:userhasclassroom_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed([ Student ]), 
+        PermissionMiddleware.rolesAllowed(Object.values(roles)), 
 		    RequestMiddleware.paramParametersNeeded('userhasclassroom_id', 'integer'),
         UserHasClassroomMiddleware.userhasclassroomExistAsParam("userhasclassroom_id"),
         UserHasClassroomController.getById
@@ -32,7 +32,7 @@ export default (app: App): void => {
     // CREATE A NEW USER HASCLASSROOM
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.rolesAllowed([ FullProfessor ]),
+		    PermissionMiddleware.rolesAllowed([roles.FullProfessor, roles.Assistant, roles.CampusManager, roles.CampusBoosterAdmin]),
         RequestMiddleware.bodyParametersNeeded([
             "classroomId",
             "userId"
@@ -44,7 +44,7 @@ export default (app: App): void => {
     // UPDATE USER HASCLASSROOM
     app.patch(`${routePrefix}/:userhasclassroom_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.rolesAllowed([ FullProfessor ]), 
+		    PermissionMiddleware.rolesAllowed([roles.FullProfessor, roles.Assistant, roles.CampusManager, roles.CampusBoosterAdmin]), 
 		    RequestMiddleware.paramParametersNeeded('userhasclassroom_id', 'integer'),
         UserHasClassroomMiddleware.userhasclassroomExistAsParam("userhasclassroom_id"),
         RequestMiddleware.bodyParameterHoped('userId', 'integer'),
@@ -56,7 +56,7 @@ export default (app: App): void => {
     // DELETE USER HASCLASSROOM
     app.delete(`${routePrefix}/:userhasclassroom_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.rolesAllowed([ CampusManager ]),
+		    PermissionMiddleware.rolesAllowed([roles.Assistant, roles.CampusManager, roles.CampusBoosterAdmin]),
 		    RequestMiddleware.paramParametersNeeded('userhasclassroom_id', 'integer'),
         UserHasClassroomMiddleware.userhasclassroomExistAsParam("userhasclassroom_id"),
         UserHasClassroomController.remove

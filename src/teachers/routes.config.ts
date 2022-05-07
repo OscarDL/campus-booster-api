@@ -8,7 +8,7 @@ import * as UserMiddleware from '../users/middleware/user.middleware';
 import * as ClassroomHasCourseMiddleware from '../classroom_has_courses/middleware/classroomhascourse.middleware';
 import config from '../../config/env.config';
 const { 
-	permissionLevel: { Student, CampusManager, FullProfessor }, 
+	permissionLevel: roles, 
     customRegex: { regInt } 
 } = config;
 
@@ -18,13 +18,13 @@ export default (app: App): void => {
     // GET ALL TEACHERS
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed([ Student ]), 
+        PermissionMiddleware.rolesAllowed(Object.values(roles)), 
         TeacherController.getAll
     ]);
     // GET TEACHER BY ID
     app.get(`${routePrefix}/:teacher_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed([ Student ]), 
+        PermissionMiddleware.rolesAllowed(Object.values(roles)), 
         RequestMiddleware.paramParametersNeeded('teacher_id', 'integer'),
         TeacherMiddleware.teacherExistAsParam("teacher_id"),
         TeacherController.getById
@@ -32,7 +32,7 @@ export default (app: App): void => {
     // CREATE A NEW TEACHER
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ FullProfessor ]),
+		PermissionMiddleware.rolesAllowed([roles.FullProfessor, roles.Assistant, roles.CampusManager, roles.CampusBoosterAdmin]),
         RequestMiddleware.bodyParametersNeeded([
             "userId",
             "classroomHasCourseId"
@@ -44,7 +44,7 @@ export default (app: App): void => {
     // UPDATE TEACHER
     app.patch(`${routePrefix}/:teacher_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ FullProfessor ]),
+		PermissionMiddleware.rolesAllowed([roles.FullProfessor, roles.Assistant, roles.CampusManager, roles.CampusBoosterAdmin]),
 		RequestMiddleware.paramParametersNeeded('teacher_id', 'integer'),
         TeacherMiddleware.teacherExistAsParam("teacher_id"),
         RequestMiddleware.bodyParameterHoped("userId", "integer"),
@@ -56,7 +56,7 @@ export default (app: App): void => {
     // DELETE TEACHER
     app.delete(`${routePrefix}/:teacher_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.rolesAllowed([ CampusManager ]), 
+		    PermissionMiddleware.rolesAllowed([roles.FullProfessor, roles.Assistant, roles.CampusManager, roles.CampusBoosterAdmin]), 
 		    RequestMiddleware.paramParametersNeeded('teacher_id', 'integer'),
         TeacherMiddleware.teacherExistAsParam("teacher_id"),
         TeacherController.remove

@@ -7,46 +7,48 @@ import * as ToolMiddleware from './middleware/tool.middleware';
 import config from '../../config/env.config';
 import { categories } from './model/tool.interface';
 const { 
-	permissionLevel: { CampusManager, Student }, 
+	permissionLevel: roles, 
     customRegex: { regInt } 
 } = config;
 
+const routePrefix = config.route_prefix + '/tools';
+
 export default (app: App): void => {
     // GET ALL TOOLS
-    app.get('/tools', [
+    app.get(routePrefix + '/', [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ Student ]), 
+		PermissionMiddleware.rolesAllowed(Object.values(roles)), 
 		ToolController.getAll
     ]);
     // GET TOOL BY ID
-    app.get(`/tool/:tool_id${regInt}`, [
+    app.get(routePrefix + `/:tool_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ Student ]), 
+		PermissionMiddleware.rolesAllowed(Object.values(roles)), 
 		RequestMiddleware.paramParametersNeeded('tool_id', 'integer'),
         ToolMiddleware.toolExistAsParam("tool_id"),
         ToolController.getById
     ]);
     // CREATE A NEW TOOL
-    app.post('/tool', [
+    app.post(routePrefix + '/', [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ CampusManager ]),
+		PermissionMiddleware.rolesAllowed([roles.CampusBoosterAdmin]),
 		RequestMiddleware.bodyParametersNeeded(['img','url','title'], 'string'),
         RequestMiddleware.bodyParametersNeeded('category', 'enum', [...categories]),
         RequestMiddleware.bodyParameterHoped('description', 'string'),
 		ToolController.create
     ]);
     // UPDATE TOOL
-    app.patch(`/tool/:tool_id${regInt}`, [
+    app.patch(routePrefix + `/:tool_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ CampusManager ]),
+		PermissionMiddleware.rolesAllowed([roles.CampusBoosterAdmin]),
 		RequestMiddleware.paramParametersNeeded('tool_id', 'integer'),
         ToolMiddleware.toolExistAsParam("tool_id"),
         ToolController.update
     ]);
     // DELETE TOOL
-    app.delete(`/tool/:tool_id${regInt}`, [
+    app.delete(routePrefix + `/:tool_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ CampusManager ]), 
+		PermissionMiddleware.rolesAllowed([roles.CampusBoosterAdmin]), 
 		RequestMiddleware.paramParametersNeeded('tool_id', 'integer'),
         ToolMiddleware.toolExistAsParam("tool_id"),
         ToolController.remove
