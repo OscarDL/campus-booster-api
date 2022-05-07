@@ -10,7 +10,6 @@ import Course from './../../courses/model/course.model';
 @S.Table({
   timestamps: true,
   underscored: true,
-  tableName: 'course-contents',
   schema: 'public'
 })
 export default class CourseContent extends S.Model implements CourseContentModel {

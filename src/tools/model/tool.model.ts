@@ -9,7 +9,6 @@ import ToolScope from './tool.scope';
 @S.Table({
   timestamps: true,
   underscored: true,
-  tableName: 'tools',
   schema: 'public'
 })
 export default class Tool extends S.Model implements ToolModel {

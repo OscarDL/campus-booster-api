@@ -18,13 +18,13 @@ export default (app: App): void => {
     // GET ALL USER HASCLASSROOMS
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.minimumRoleRequired(Student), 
+        PermissionMiddleware.rolesAllowed([ Student ]), 
         UserHasClassroomController.getAll
     ]);
     // GET USER HASCLASSROOM BY ID
     app.get(`${routePrefix}/:userhasclassroom_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.minimumRoleRequired(Student), 
+        PermissionMiddleware.rolesAllowed([ Student ]), 
 		    RequestMiddleware.paramParametersNeeded('userhasclassroom_id', 'integer'),
         UserHasClassroomMiddleware.userhasclassroomExistAsParam("userhasclassroom_id"),
         UserHasClassroomController.getById
@@ -32,7 +32,7 @@ export default (app: App): void => {
     // CREATE A NEW USER HASCLASSROOM
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.minimumRoleRequired(FullProfessor),
+		    PermissionMiddleware.rolesAllowed([ FullProfessor ]),
         RequestMiddleware.bodyParametersNeeded([
             "classroomId",
             "userId"
@@ -44,7 +44,7 @@ export default (app: App): void => {
     // UPDATE USER HASCLASSROOM
     app.patch(`${routePrefix}/:userhasclassroom_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.minimumRoleRequired(FullProfessor), 
+		    PermissionMiddleware.rolesAllowed([ FullProfessor ]), 
 		    RequestMiddleware.paramParametersNeeded('userhasclassroom_id', 'integer'),
         UserHasClassroomMiddleware.userhasclassroomExistAsParam("userhasclassroom_id"),
         RequestMiddleware.bodyParameterHoped('userId', 'integer'),
@@ -56,7 +56,7 @@ export default (app: App): void => {
     // DELETE USER HASCLASSROOM
     app.delete(`${routePrefix}/:userhasclassroom_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.minimumRoleRequired(CampusManager),
+		    PermissionMiddleware.rolesAllowed([ CampusManager ]),
 		    RequestMiddleware.paramParametersNeeded('userhasclassroom_id', 'integer'),
         UserHasClassroomMiddleware.userhasclassroomExistAsParam("userhasclassroom_id"),
         UserHasClassroomController.remove

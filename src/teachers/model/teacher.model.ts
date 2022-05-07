@@ -13,7 +13,6 @@ import Grade from './../../grades/model/grade.model';
 @S.Table({
   timestamps: true,
   underscored: true,
-  tableName: 'teachers',
   schema: 'public'
 })
 export default class Teacher extends S.Model implements TeacherModel {

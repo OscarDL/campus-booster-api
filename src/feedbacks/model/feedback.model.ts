@@ -12,7 +12,6 @@ import ClassroomHasCourse from './../../classroom_has_courses/model/classroomhas
 @S.Table({
   timestamps: true,
   underscored: true,
-  tableName: 'feedbacks',
   schema: 'public'
 })
 export default class Feedback extends S.Model implements FeedbackModel {
