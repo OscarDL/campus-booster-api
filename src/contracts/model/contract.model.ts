@@ -11,7 +11,6 @@ import Teacher from './../../teachers/model/teacher.model';
 @S.Table({
   timestamps: true,
   underscored: true,
-  tableName: 'contracts',
   schema: 'public'
 })
 export default class Contract extends S.Model implements ContractModel {

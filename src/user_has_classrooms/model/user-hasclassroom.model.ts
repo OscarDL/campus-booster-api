@@ -11,7 +11,6 @@ import Classroom from './../../classrooms/model/classroom.model';
 @S.Table({
   timestamps: true,
   underscored: true,
-  tableName: 'user-has-classrooms',
   schema: 'public'
 })
 export default class UserHasClassroom extends S.Model implements UserHasClassroomModel {

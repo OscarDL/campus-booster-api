@@ -7,7 +7,7 @@ import * as ToolMiddleware from './middleware/tool.middleware';
 import config from '../../config/env.config';
 import { categories } from './model/tool.interface';
 const { 
-	permissionLevel: { CampusManager, User }, 
+	permissionLevel: { CampusManager, Student }, 
     customRegex: { regInt } 
 } = config;
 
@@ -15,13 +15,13 @@ export default (app: App): void => {
     // GET ALL TOOLS
     app.get('/tools', [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.minimumRoleRequired(User), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
 		ToolController.getAll
     ]);
     // GET TOOL BY ID
     app.get(`/tool/:tool_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.minimumRoleRequired(User), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('tool_id', 'integer'),
         ToolMiddleware.toolExistAsParam("tool_id"),
         ToolController.getById
@@ -29,7 +29,7 @@ export default (app: App): void => {
     // CREATE A NEW TOOL
     app.post('/tool', [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.minimumRoleRequired(CampusManager),
+		PermissionMiddleware.rolesAllowed([ CampusManager ]),
 		RequestMiddleware.bodyParametersNeeded(['img','url','title'], 'string'),
         RequestMiddleware.bodyParametersNeeded('category', 'enum', [...categories]),
         RequestMiddleware.bodyParameterHoped('description', 'string'),
@@ -38,7 +38,7 @@ export default (app: App): void => {
     // UPDATE TOOL
     app.patch(`/tool/:tool_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.minimumRoleRequired(CampusManager),
+		PermissionMiddleware.rolesAllowed([ CampusManager ]),
 		RequestMiddleware.paramParametersNeeded('tool_id', 'integer'),
         ToolMiddleware.toolExistAsParam("tool_id"),
         ToolController.update
@@ -46,7 +46,7 @@ export default (app: App): void => {
     // DELETE TOOL
     app.delete(`/tool/:tool_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.minimumRoleRequired(CampusManager), 
+		PermissionMiddleware.rolesAllowed([ CampusManager ]), 
 		RequestMiddleware.paramParametersNeeded('tool_id', 'integer'),
         ToolMiddleware.toolExistAsParam("tool_id"),
         ToolController.remove

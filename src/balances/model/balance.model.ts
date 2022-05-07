@@ -11,7 +11,6 @@ import User from './../../users/model/user.model';
 @S.Table({
   timestamps: true,
   underscored: true,
-  tableName: 'balances',
   schema: 'public'
 })
 export default class Balance extends S.Model implements BalanceModel {

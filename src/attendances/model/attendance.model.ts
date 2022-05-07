@@ -11,7 +11,6 @@ import User from './../../users/model/user.model';
 @S.Table({
   timestamps: true,
   underscored: true,
-  tableName: 'attendances',
   schema: 'public'
 })
 export default class Attendance extends S.Model implements AttendanceModel {

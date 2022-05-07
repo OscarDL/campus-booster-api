@@ -10,7 +10,6 @@ import Balance from './../../balances/model/balance.model';
 @S.Table({
   timestamps: true,
   underscored: true,
-  tableName: 'balance-status',
   schema: 'public'
 })
 export default class BalanceStatus extends S.Model implements BalanceStatusModel {
