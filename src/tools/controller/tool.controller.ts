@@ -1,6 +1,7 @@
 import { Req, Res, Next, Resp } from '../../../types/express';
 import * as ToolService from '../service/tool.service';
 import boom from '@hapi/boom';
+import s3 from '../../../services/aws/s3';
 
 export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
@@ -32,6 +33,9 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
 
 export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        if(req.file) {
+            req.body.img = (req.file as any).key;
+        }
         return res.status(201).json(
             await ToolService.create(
                 req.body as any
@@ -45,9 +49,14 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
 
 export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        const tool = await ToolService.findById(req.params.tool_id);
+        if(req.file) {
+            req.body.img = (req.file as any).key;
+            if(tool?.img) await s3.remove(tool.img);
+        }
         return res.status(203).json(
             await ToolService.update(
-                req.params.tool_id, 
+                tool?.id, 
                 req.body
             )
         );
@@ -59,11 +68,15 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
 
 export async function remove(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        const tool = await ToolService.findById(req.params.tool_id);
+        if(tool?.img) {
+            await s3.remove(tool.img);
+        }
         return res.status(204).json(
             await ToolService.remove(
                 {
                     where: {
-                        id: req.params.tool_id
+                        id: tool?.id
                     }
                 }
             )

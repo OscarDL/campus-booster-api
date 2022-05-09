@@ -7,6 +7,8 @@ import AzureService from '../../../services/azure';
 const Azure = new AzureService();
 Azure.OAuth();
 
+//Azure.getUserAvatar('oscar.dilenarda@campusbooster.eu').then(console.log)
+
 export async function decryptToken(req: Req, res: Res, next: Next): Promise<Resp> {
   try {
     const user = await Azure.getUser(req.body.azureId);
