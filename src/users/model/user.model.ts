@@ -2,7 +2,7 @@
 // DOC : https://www.npmjs.com/package/sequelize-typescript
 // Generate by Ulysse Dupont
 import * as S from 'sequelize-typescript';
-import { EMAIL_REGEX, UserModel } from './user.interface';
+import { EMAIL_REGEX, UserAttributes, UserModel } from './user.interface';
 import UserScope from './user.scope';
 import config from '../../../config/env.config';
 const { permissionLevel } = config;
@@ -14,7 +14,10 @@ import Attendance from './../../attendances/model/attendance.model';
 import Grade from './../../grades/model/grade.model';
 import Balance from './../../balances/model/balance.model';
 import UserHasClassroom from './../../user_has_classrooms/model/user-hasclassroom.model';
-
+import AzureService from '../../../services/azure';
+import fs from 'fs';
+const Azure = new AzureService();
+Azure.OAuth();
 
 @S.Scopes(UserScope)
 @S.Table({
@@ -83,14 +86,35 @@ export default class User extends S.Model implements UserModel {
 	@S.Column(S.DataType.STRING(255))
 	public role!: typeof permissionLevel[keyof typeof permissionLevel];
 
-	// ---------------------
-	// @BEFORE CREATE/UPDATE
-	// ---------------------
+	public dataValues!: UserAttributes;
 
 	@S.BeforeCreate
 	@S.BeforeUpdate
-	static async encryptAzureID(instance: User) {
+	static async encryptAzureID(instance: User): Promise<void> {
 		if(instance?.azureId) instance.azureId = await bcrypt.hash(instance.azureId, 12);
+	}
+
+	@S.AfterCreate
+	@S.AfterFind
+	@S.AfterUpdate
+	@S.AfterUpsert
+	static async loadAzureAvatar(instance: (User | User[])): Promise<void> {
+		try {
+			if(Array.isArray(instance)) {
+				for (let i = 0; i < instance.length; i++) {
+					const user = instance[i];
+					const azureUser = await Azure.getUser(user.email);
+					user.dataValues.avatarBinary = azureUser ? await Azure.getUserAvatar(azureUser.id): null;
+				}
+			} else {
+				const azureUser = await Azure.getUser(instance.email);
+				instance.dataValues.avatarBinary = azureUser ? await Azure.getUserAvatar(azureUser.id): null;
+			}
+		} catch (err) {
+			if(err instanceof Error) {
+				console.log(err.message.red.bold);
+			}
+		}
 	}
 
 	@S.ForeignKey(() => Campus)
