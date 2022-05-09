@@ -27,7 +27,6 @@ import { authSocketMidddleware } from './services/socket';
 import { i18n } from './services/i18n';
 import '@dulysse1/better-node';
 
-
 let server;
 theme(config.colors);
 const app = express();
@@ -134,6 +133,7 @@ app.use(compression());
 app.use(cookieParser());
 app.use(responseTime());
 app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded());
 
 
 // Socket.io instance
@@ -162,10 +162,8 @@ authSocketMidddleware(io);
 socketConfig(io);
 routeConfig(app);
 
-
 app.use(ExpressMiddleware.NotFound());
 app.use(ExpressMiddleware.ErrorHandler());
-
 
 function onError(error: any, port: number): never {
     if (error.syscall !== 'listen') {

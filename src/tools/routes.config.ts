@@ -13,9 +13,13 @@ const {
 
 const routePrefix = config.route_prefix + '/tools';
 
+import s3 from '../../services/aws/s3';
+const upload = s3.upload('tools');
+const uploadSingle = upload.single('file');
+
 export default (app: App): void => {
     // GET ALL TOOLS
-    app.get(routePrefix + '/', [
+    app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.rolesAllowed(Object.values(roles)), 
 		ToolController.getAll
@@ -29,10 +33,11 @@ export default (app: App): void => {
         ToolController.getById
     ]);
     // CREATE A NEW TOOL
-    app.post(routePrefix + '/', [
+    app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.rolesAllowed([roles.CampusBoosterAdmin]),
-		RequestMiddleware.bodyParametersNeeded(['img','url','title'], 'string'),
+        uploadSingle,
+		RequestMiddleware.bodyParametersNeeded(['url','title'], 'string'),
         RequestMiddleware.bodyParametersNeeded('category', 'enum', [...categories]),
         RequestMiddleware.bodyParameterHoped('description', 'string'),
 		ToolController.create
@@ -43,6 +48,11 @@ export default (app: App): void => {
 		PermissionMiddleware.rolesAllowed([roles.CampusBoosterAdmin]),
 		RequestMiddleware.paramParametersNeeded('tool_id', 'integer'),
         ToolMiddleware.toolExistAsParam("tool_id"),
+        uploadSingle,
+        RequestMiddleware.bodyParameterHoped('url', 'string'),
+        RequestMiddleware.bodyParameterHoped('title', 'string'),
+        RequestMiddleware.bodyParameterHoped('category', 'enum', [...categories]),
+        RequestMiddleware.bodyParameterHoped('description', 'string'),
         ToolController.update
     ]);
     // DELETE TOOL

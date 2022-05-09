@@ -22,5 +22,9 @@
 	},
 	"section_missing": "Vous devez spécifier une section dans votre corps de requête.",
 	"campusId_missing": "Vous devez spécifier un campusId dans votre corps de requête.",
-	"refreshToken_missing": "Vous devez spécifier un refreshToken dans votre corps de requête."
+	"refreshToken_missing": "Vous devez spécifier un refreshToken dans votre corps de requête.",
+	"url_missing": "url_missing",
+	"title_missing": "title_missing",
+	"category_missing": "category_missing",
+	"An internal server error occurred": "An internal server error occurred"
 }

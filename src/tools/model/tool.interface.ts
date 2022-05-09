@@ -8,6 +8,7 @@ export interface ToolAttributes {
 	url: string;
 	title: string;
 	description?: string;
+	b64?: string;
 	category: Category;
 	readonly created_at?: Date;
 	readonly updated_at?: Date;

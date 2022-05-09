@@ -90,4 +90,22 @@ export default class AzureService {
       return null;
     }
   }
+
+  /**
+   * ### Get Azure AD user avatar by email
+   * @param email The email of user
+   * @returns {Promise<Az.GetUserResponse>} a promise of the user avatar from Azure AD.
+   */
+  public async getUserAvatar(email: string): Promise<Az.GetUserResponse> {
+    try {      
+      await this.refreshToken();
+      if(!this._TOKEN) throw new Error('You should call OAuth method.');
+      return await fetch.callApi('GET', `${auth.apiConfig.uri}/v1.0/users/${email}/photo`, this._TOKEN);
+    } catch (err: any) {
+      if(err instanceof Error) {
+        console.log(err.message.red);
+      }
+      return null;
+    }
+  }
 }

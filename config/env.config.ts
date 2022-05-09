@@ -54,6 +54,12 @@ export default {
         ENCRYPTION_KEY: process.env.ENCRYPTION_KEY || 'E)H@MbQeThWmZq4t7w!z%C*F-JaNdRfU',
         IV_LENGTH: 16,
     },
+    aws: {
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        region: process.env.AWS_REGION,
+        bucket: process.env.AWS_BUCKET
+    },
     customRegex: {
         regInt: '([0-9]{0,9})',
         regHex: '([0-9a-fA-F]{0,30})',

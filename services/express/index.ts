@@ -1,6 +1,6 @@
 import boom from '@hapi/boom';
 import { AsyncFn, Req, Res, Next, Resp, Fn } from '../../types/express';
-
+import s3 from '../aws/s3';
 
 export function ExpressErrorHandler(err: any): AsyncFn {
     return async(req: Req, res: Res, next: Next) : Promise<Resp> => {
@@ -27,7 +27,10 @@ export default abstract class ExpressMiddlewares {
     }
 
     static ErrorHandler(): any {
-        return (err: any, req: Req, res: Res, next: Next): Resp => {
+        return async (err: any, req: Req, res: Res, next: Next): Promise<Resp> => {
+            if(err && req.file) {
+                await s3.remove((req.file as any).key);
+            }
             if (err.isBoom) {
                 return res.end(res.status(err.output.statusCode).__(err.output.payload.message));
             } else {

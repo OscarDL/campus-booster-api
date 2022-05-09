@@ -9,15 +9,10 @@ import * as CampusMiddleware from '../campus/middleware/campus.middleware';
 import config from '../../config/env.config';
 const { 
 	customRegex: { regInt },
-  permissionLevel: roles
+    permissionLevel: roles
 } = config;
 
 const routePrefix = config.route_prefix + '/users';
-
-import multer from '../../services/cloudinary';
-const uploader = multer("attendances");
-const uploadSingle = uploader.single("file");
-
 
 export default (app: App): void => {
 
