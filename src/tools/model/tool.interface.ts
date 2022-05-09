@@ -4,7 +4,7 @@ export const categories = <const> [ "general", "development", "infrastructure", 
 export type Category = typeof categories[number];
 export interface ToolAttributes {
   readonly id: number;
-	img: string;
+	img: string | null;
 	url: string;
 	title: string;
 	description?: string;

@@ -18,7 +18,7 @@ export default class Tool extends S.Model implements ToolModel {
 	@S.Column(S.DataType.INTEGER)
 	public id!: number;
 
-	@S.AllowNull(false)
+	@S.AllowNull(true)
 	@S.Column(S.DataType.STRING(255))
 	public img!: string;
 
@@ -47,14 +47,18 @@ export default class Tool extends S.Model implements ToolModel {
 			if(Array.isArray(instance)) {
 				for (let i = 0; i < instance.length; i++) {
 					const tool = instance[i];
-					const awsFile = await s3.download(tool.img);
-					const b64 = Buffer.from(awsFile.Body as any).toString('base64');
-					(tool as any).dataValues.b64 = `data:${awsFile.ContentType ?? 'images/png'};base64, ${b64}`;
+					if(tool.img) {
+						const awsFile = await s3.download(tool.img);
+						const b64 = Buffer.from(awsFile.Body as any).toString('base64');
+						(tool as any).dataValues.b64 = `data:${awsFile.ContentType ?? 'images/png'};base64, ${b64}`;
+					}
 				}
 			} else {
-				const awsFile = await s3.download(instance.img);
-				const b64 = Buffer.from(awsFile.Body as any).toString('base64');
-				(instance as any).dataValues.b64 = `data:${awsFile.ContentType ?? 'images/png'};base64, ${b64}`;
+				if(instance.img) {
+					const awsFile = await s3.download(instance.img);
+					const b64 = Buffer.from(awsFile.Body as any).toString('base64');
+					(instance as any).dataValues.b64 = `data:${awsFile.ContentType ?? 'images/png'};base64, ${b64}`;
+				}
 			}
 		} catch (err) {
 			if(err instanceof Error) {
