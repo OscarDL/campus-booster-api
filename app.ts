@@ -133,7 +133,7 @@ app.use(compression());
 app.use(cookieParser());
 app.use(responseTime());
 app.use(express.json({ limit: '100mb' }));
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 
 
 // Socket.io instance
