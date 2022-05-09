@@ -93,14 +93,17 @@ export default class AzureService {
 
   /**
    * ### Get Azure AD user avatar by email
-   * @param email The email of user
-   * @returns {Promise<Az.GetUserResponse>} a promise of the user avatar from Azure AD.
+   * @param userId The id of user
+   * @returns {Promise<string>} a promise of the user avatar as string binary.
    */
-  public async getUserAvatar(email: string): Promise<Az.GetUserResponse> {
+  public async getUserAvatar(userId: string): Promise<string | null> {
     try {      
       await this.refreshToken();
       if(!this._TOKEN) throw new Error('You should call OAuth method.');
-      return await fetch.callApi('GET', `${auth.apiConfig.uri}/v1.0/users/${email}/photo`, this._TOKEN);
+      //const metadata = await fetch.callApi<Az.GetUserPhotoMetadataResponse>('GET', `${auth.apiConfig.uri}/v1.0/users/${userId}/photo`, this._TOKEN);
+      const binary = await fetch.callApi<any>('GET', `${auth.apiConfig.uri}/v1.0/users/${userId}/photo/$value`, this._TOKEN);
+      //return `data:${metadata?.['@odata.mediaContentType'] ?? 'images/png'};base64, ${Buffer.from(binary, "binary").toString('base64')}`;
+      return binary;
     } catch (err: any) {
       if(err instanceof Error) {
         console.log(err.message.red);

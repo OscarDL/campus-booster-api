@@ -3,6 +3,7 @@ namespace Az {
   export type GetGroupMemberResponse = RequestResponse<GroupMember[]>;
   export type GetUsersResponse = RequestResponse<User[]>;
   export type GetUserResponse = User | null;
+  export type GetUserPhotoMetadataResponse = UserPhotoMetadata |null;
 }
 interface RequestResponse<T> {
   value: T;
@@ -67,5 +68,13 @@ interface User {
   surname: string;
   userPrincipalName: string;
   id: string;
+}
+export interface UserPhotoMetadata {
+  '@odata.context': string;
+  '@odata.mediaContentType': string;
+  '@odata.mediaEtag': string;
+  id: string;
+  height: number;
+  width: number;
 }
 export default Az;

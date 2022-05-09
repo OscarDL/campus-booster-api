@@ -42,7 +42,7 @@ export default class Tool extends S.Model implements ToolModel {
 	@S.AfterCreate
 	@S.AfterUpdate
 	@S.AfterUpsert
-	static async loadS3Image(instance: (Tool | Tool[])) {
+	static async loadS3Image(instance: (Tool | Tool[])): Promise<void> {
 		try {
 			if(Array.isArray(instance)) {
 				for (let i = 0; i < instance.length; i++) {
@@ -57,7 +57,9 @@ export default class Tool extends S.Model implements ToolModel {
 				(instance as any).dataValues.b64 = `data:${awsFile.ContentType ?? 'images/png'};base64, ${b64}`;
 			}
 		} catch (err) {
-			console.log(`${err}`.error.bold);
+			if(err instanceof Error) {
+				console.log(err.message.red.bold);
+			}
 		}
 	}
 }
