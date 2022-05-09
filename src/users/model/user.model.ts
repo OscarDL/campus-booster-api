@@ -104,11 +104,11 @@ export default class User extends S.Model implements UserModel {
 				for (let i = 0; i < instance.length; i++) {
 					const user = instance[i];
 					const azureUser = await Azure.getUser(user.email);
-					user.dataValues.avatarBinary = azureUser ? await Azure.getUserAvatar(azureUser.id): null;
+					user.dataValues.avatar = azureUser ? await Azure.getUserAvatar(azureUser.id): null;
 				}
 			} else {
 				const azureUser = await Azure.getUser(instance.email);
-				instance.dataValues.avatarBinary = azureUser ? await Azure.getUserAvatar(azureUser.id): null;
+				instance.dataValues.avatar = azureUser ? await Azure.getUserAvatar(azureUser.id): null;
 			}
 		} catch (err) {
 			if(err instanceof Error) {

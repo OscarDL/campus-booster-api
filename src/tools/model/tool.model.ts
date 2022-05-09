@@ -31,6 +31,7 @@ export default class Tool extends S.Model implements ToolModel {
 	public title!: string;
 
 	@S.AllowNull(true)
+  @S.Default('')
 	@S.Column(S.DataType.STRING(1024))
 	public description!: string;
 
@@ -49,15 +50,15 @@ export default class Tool extends S.Model implements ToolModel {
 					const tool = instance[i];
 					if(tool.img) {
 						const awsFile = await s3.download(tool.img);
-						const b64 = Buffer.from(awsFile.Body as any).toString('base64');
-						(tool as any).dataValues.b64 = `data:${awsFile.ContentType ?? 'images/png'};base64, ${b64}`;
+						const imgBase64 = Buffer.from(awsFile.Body as any).toString('base64');
+						(tool as any).dataValues.imgBase64 = `data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`;
 					}
 				}
 			} else {
 				if(instance.img) {
 					const awsFile = await s3.download(instance.img);
-					const b64 = Buffer.from(awsFile.Body as any).toString('base64');
-					(instance as any).dataValues.b64 = `data:${awsFile.ContentType ?? 'images/png'};base64, ${b64}`;
+					const imgBase64 = Buffer.from(awsFile.Body as any).toString('base64');
+					(instance as any).dataValues.imgBase64 = `data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`;
 				}
 			}
 		} catch (err) {

@@ -15,13 +15,13 @@ export const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.
 export interface UserAttributes {
 	readonly id?: number;
 	azureId?: string;
+  avatar?: string | null;
 	firstName: string;
 	lastName: string;
 	birthday: Date;
 	email: string;
 	active?: boolean;
 	validated?: boolean;
-	avatarBinary?: string | null;
 	role?: typeof permissionLevel[keyof typeof permissionLevel];
 	readonly created_at?: Date;
 	readonly updated_at?: Date;

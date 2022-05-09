@@ -7,9 +7,9 @@ export interface ToolAttributes {
 	img: string | null;
 	url: string;
 	title: string;
-	description?: string;
-	b64?: string;
 	category: Category;
+	imgBase64?: string;
+	description?: string;
 	readonly created_at?: Date;
 	readonly updated_at?: Date;
 };
