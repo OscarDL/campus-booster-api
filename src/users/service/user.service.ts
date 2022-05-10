@@ -31,7 +31,7 @@ const { User } = models;
 */
 export function findAll(
     options?: FindOptions<UserAttributes> | null,
-    scope?: (UserScopesAttributes | UserScopesAttributes[])
+    scope: (UserScopesAttributes | UserScopesAttributes[]) = "defaultScope"
 ): Promise<UserModel[]> {
     return User.scope(scope).findAll(options!);
 }
@@ -59,7 +59,7 @@ export function findAll(
 */
 export function findOne(
     options?: FindOptions<UserAttributes> | null,
-    scope?: (UserScopesAttributes | UserScopesAttributes[])
+    scope: (UserScopesAttributes | UserScopesAttributes[]) = "defaultScope"
 ): Promise<UserModel | null> {
     return User.scope(scope).findOne(options!);
 }
@@ -97,7 +97,7 @@ export function findOne(
 export function findById(
     id: number | any, 
     options?: FindOptions<UserAttributes> | null,
-    scope?: (UserScopesAttributes | UserScopesAttributes[])
+    scope: (UserScopesAttributes | UserScopesAttributes[]) = "defaultScope"
 ): Promise<UserModel | null> {
     return User.scope(scope).findByPk(id, options!);
 }
@@ -120,7 +120,7 @@ export function findById(
 */
 export function create(
     data: UserCreationAttributes,
-    scope?: (UserScopesAttributes | UserScopesAttributes[])
+    scope: (UserScopesAttributes | UserScopesAttributes[]) = "defaultScope"
 ): Promise<UserModel> {
     return User.scope(scope).create(data);
 }
@@ -152,7 +152,7 @@ export function create(
 */
 export function createMany(
     data: UserCreationAttributes[],
-    scope?: (UserScopesAttributes | UserScopesAttributes[])
+    scope: (UserScopesAttributes | UserScopesAttributes[]) = "defaultScope"
 ): Promise<UserModel[]> {
     return User.scope(scope).bulkCreate(data);
 }
@@ -185,7 +185,7 @@ export function createMany(
 export function update(
     id: number | any, 
     data: Partial<UserAttributes>,
-    scope?: (UserScopesAttributes | UserScopesAttributes[])
+    scope: (UserScopesAttributes | UserScopesAttributes[]) = "defaultScope"
 ): Promise<UserModel> {
     return new Promise((resolve, reject) => {
         User.scope(scope).findByPk(id)
@@ -237,7 +237,7 @@ export function update(
 export function updateMany(
     options: UpdateOptions<UserAttributes>, 
     data: Partial<UserAttributes>,
-    scope?: (UserScopesAttributes | UserScopesAttributes[])
+    scope: (UserScopesAttributes | UserScopesAttributes[]) = "defaultScope"
 ): Promise<[ affectedCount: number ]> {
     return User.scope(scope).update(data, options);
 }

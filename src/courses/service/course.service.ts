@@ -31,7 +31,7 @@ const { Course } = models;
 */
 export function findAll(
     options?: FindOptions<CourseAttributes> | null,
-    scope?: (CourseScopesAttributes | CourseScopesAttributes[])
+    scope: (CourseScopesAttributes | CourseScopesAttributes[]) = "defaultScope"
 ): Promise<CourseModel[]> {
     return Course.scope(scope).findAll(options!);
 }
@@ -59,7 +59,7 @@ export function findAll(
 */
 export function findOne(
     options?: FindOptions<CourseAttributes> | null,
-    scope?: (CourseScopesAttributes | CourseScopesAttributes[])
+    scope: (CourseScopesAttributes | CourseScopesAttributes[]) = "defaultScope"
 ): Promise<CourseModel | null> {
     return Course.scope(scope).findOne(options!);
 }
@@ -97,7 +97,7 @@ export function findOne(
 export function findById(
     id: number | any, 
     options?: FindOptions<CourseAttributes> | null,
-    scope?: (CourseScopesAttributes | CourseScopesAttributes[])
+    scope: (CourseScopesAttributes | CourseScopesAttributes[]) = "defaultScope"
 ): Promise<CourseModel | null> {
     return Course.scope(scope).findByPk(id, options!);
 }
@@ -120,7 +120,7 @@ export function findById(
 */
 export function create(
     data: CourseCreationAttributes,
-    scope?: (CourseScopesAttributes | CourseScopesAttributes[])
+    scope: (CourseScopesAttributes | CourseScopesAttributes[]) = "defaultScope"
 ): Promise<CourseModel> {
     return Course.scope(scope).create(data);
 }
@@ -152,7 +152,7 @@ export function create(
 */
 export function createMany(
     data: CourseCreationAttributes[],
-    scope?: (CourseScopesAttributes | CourseScopesAttributes[])
+    scope: (CourseScopesAttributes | CourseScopesAttributes[]) = "defaultScope"
 ): Promise<CourseModel[]> {
     return Course.scope(scope).bulkCreate(data);
 }
@@ -185,7 +185,7 @@ export function createMany(
 export function update(
     id: number | any, 
     data: Partial<CourseAttributes>,
-    scope?: (CourseScopesAttributes | CourseScopesAttributes[])
+    scope: (CourseScopesAttributes | CourseScopesAttributes[]) = "defaultScope"
 ): Promise<CourseModel> {
     return new Promise((resolve, reject) => {
         Course.scope(scope).findByPk(id)
@@ -237,7 +237,7 @@ export function update(
 export function updateMany(
     options: UpdateOptions<CourseAttributes>, 
     data: Partial<CourseAttributes>,
-    scope?: (CourseScopesAttributes | CourseScopesAttributes[])
+    scope: (CourseScopesAttributes | CourseScopesAttributes[]) = "defaultScope"
 ): Promise<[ affectedCount: number ]> {
     return Course.scope(scope).update(data, options);
 }

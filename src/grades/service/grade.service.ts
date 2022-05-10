@@ -31,7 +31,7 @@ const { Grade } = models;
 */
 export function findAll(
     options?: FindOptions<GradeAttributes> | null,
-    scope?: (GradeScopesAttributes | GradeScopesAttributes[])
+    scope: (GradeScopesAttributes | GradeScopesAttributes[]) = "defaultScope"
 ): Promise<GradeModel[]> {
     return Grade.scope(scope).findAll(options!);
 }
@@ -59,7 +59,7 @@ export function findAll(
 */
 export function findOne(
     options?: FindOptions<GradeAttributes> | null,
-    scope?: (GradeScopesAttributes | GradeScopesAttributes[])
+    scope: (GradeScopesAttributes | GradeScopesAttributes[]) = "defaultScope"
 ): Promise<GradeModel | null> {
     return Grade.scope(scope).findOne(options!);
 }
@@ -97,7 +97,7 @@ export function findOne(
 export function findById(
     id: number | any, 
     options?: FindOptions<GradeAttributes> | null,
-    scope?: (GradeScopesAttributes | GradeScopesAttributes[])
+    scope: (GradeScopesAttributes | GradeScopesAttributes[]) = "defaultScope"
 ): Promise<GradeModel | null> {
     return Grade.scope(scope).findByPk(id, options!);
 }
@@ -120,7 +120,7 @@ export function findById(
 */
 export function create(
     data: GradeCreationAttributes,
-    scope?: (GradeScopesAttributes | GradeScopesAttributes[])
+    scope: (GradeScopesAttributes | GradeScopesAttributes[]) = "defaultScope"
 ): Promise<GradeModel> {
     return Grade.scope(scope).create(data);
 }
@@ -152,7 +152,7 @@ export function create(
 */
 export function createMany(
     data: GradeCreationAttributes[],
-    scope?: (GradeScopesAttributes | GradeScopesAttributes[])
+    scope: (GradeScopesAttributes | GradeScopesAttributes[]) = "defaultScope"
 ): Promise<GradeModel[]> {
     return Grade.scope(scope).bulkCreate(data);
 }
@@ -185,7 +185,7 @@ export function createMany(
 export function update(
     id: number | any, 
     data: Partial<GradeAttributes>,
-    scope?: (GradeScopesAttributes | GradeScopesAttributes[])
+    scope: (GradeScopesAttributes | GradeScopesAttributes[]) = "defaultScope"
 ): Promise<GradeModel> {
     return new Promise((resolve, reject) => {
         Grade.scope(scope).findByPk(id)
@@ -237,7 +237,7 @@ export function update(
 export function updateMany(
     options: UpdateOptions<GradeAttributes>, 
     data: Partial<GradeAttributes>,
-    scope?: (GradeScopesAttributes | GradeScopesAttributes[])
+    scope: (GradeScopesAttributes | GradeScopesAttributes[]) = "defaultScope"
 ): Promise<[affectedCount: number]> {
     return Grade.scope(scope).update(data, options);
 }

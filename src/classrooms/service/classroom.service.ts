@@ -31,7 +31,7 @@ const { Class } = models;
 */
 export function findAll(
     options?: FindOptions<ClassroomAttributes> | null,
-    scope?: (ClassroomScopesAttributes | ClassroomScopesAttributes[])
+    scope: (ClassroomScopesAttributes | ClassroomScopesAttributes[]) = "defaultScope"
 ): Promise<ClassroomModel[]> {
     return Class.scope(scope).findAll(options!);
 }
@@ -59,7 +59,7 @@ export function findAll(
 */
 export function findOne(
     options?: FindOptions<ClassroomAttributes> | null,
-    scope?: (ClassroomScopesAttributes | ClassroomScopesAttributes[])
+    scope: (ClassroomScopesAttributes | ClassroomScopesAttributes[]) = "defaultScope"
 ): Promise<ClassroomModel | null> {
     return Class.scope(scope).findOne(options!);
 }
@@ -97,7 +97,7 @@ export function findOne(
 export function findById(
     id: number | any, 
     options?: FindOptions<ClassroomAttributes> | null,
-    scope?: (ClassroomScopesAttributes | ClassroomScopesAttributes[])
+    scope: (ClassroomScopesAttributes | ClassroomScopesAttributes[]) = "defaultScope"
 ): Promise<ClassroomModel | null> {
     return Class.scope(scope).findByPk(id, options!);
 }
@@ -120,7 +120,7 @@ export function findById(
 */
 export function create(
     data: ClassroomCreationAttributes,
-    scope?: (ClassroomScopesAttributes | ClassroomScopesAttributes[])
+    scope: (ClassroomScopesAttributes | ClassroomScopesAttributes[]) = "defaultScope"
 ): Promise<ClassroomModel> {
     return Class.scope(scope).create(data);
 }
@@ -152,7 +152,7 @@ export function create(
 */
 export function createMany(
     data: ClassroomCreationAttributes[],
-    scope?: (ClassroomScopesAttributes | ClassroomScopesAttributes[])
+    scope: (ClassroomScopesAttributes | ClassroomScopesAttributes[]) = "defaultScope"
 ): Promise<ClassroomModel[]> {
     return Class.scope(scope).bulkCreate(data);
 }
@@ -185,7 +185,7 @@ export function createMany(
 export function update(
     id: number | any, 
     data: Partial<ClassroomAttributes>,
-    scope?: (ClassroomScopesAttributes | ClassroomScopesAttributes[])
+    scope: (ClassroomScopesAttributes | ClassroomScopesAttributes[]) = "defaultScope"
 ): Promise<ClassroomModel> {
     return new Promise((resolve, reject) => {
         Class.scope(scope).findByPk(id)
@@ -237,7 +237,7 @@ export function update(
 export function updateMany(
     options: UpdateOptions<ClassroomAttributes>, 
     data: Partial<ClassroomAttributes>,
-    scope?: (ClassroomScopesAttributes | ClassroomScopesAttributes[])
+    scope: (ClassroomScopesAttributes | ClassroomScopesAttributes[]) = "defaultScope"
 ): Promise<[ affectedCount: number ]> {
     return Class.scope(scope).update(data, options);
 }

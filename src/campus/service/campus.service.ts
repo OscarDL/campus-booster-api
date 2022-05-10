@@ -31,7 +31,7 @@ const { Campus } = models;
 */
 export function findAll(
     options?: FindOptions<CampusAttributes> | null,
-    scope?: (CampusScopesAttributes | CampusScopesAttributes[])
+    scope: (CampusScopesAttributes | CampusScopesAttributes[]) = "defaultScope"
 ): Promise<CampusModel[]> {
     return Campus.scope(scope).findAll(options!);
 }
@@ -59,7 +59,7 @@ export function findAll(
 */
 export function findOne(
     options?: FindOptions<CampusAttributes> | null,
-    scope?: (CampusScopesAttributes | CampusScopesAttributes[])
+    scope: (CampusScopesAttributes | CampusScopesAttributes[]) = "defaultScope"
 ): Promise<CampusModel | null> {
     return Campus.scope(scope).findOne(options!);
 }
@@ -97,7 +97,7 @@ export function findOne(
 export function findById(
     id: number | any, 
     options?: FindOptions<CampusAttributes> | null,
-    scope?: (CampusScopesAttributes | CampusScopesAttributes[])
+    scope: (CampusScopesAttributes | CampusScopesAttributes[]) = "defaultScope"
 ): Promise<CampusModel | null> {
     return Campus.scope(scope).findByPk(id, options!);
 }
@@ -120,7 +120,7 @@ export function findById(
 */
 export function create(
     data: CampusCreationAttributes,
-    scope?: (CampusScopesAttributes | CampusScopesAttributes[])
+    scope: (CampusScopesAttributes | CampusScopesAttributes[]) = "defaultScope"
 ): Promise<CampusModel> {
     return Campus.scope(scope).create(data);
 }
@@ -152,7 +152,7 @@ export function create(
 */
 export function createMany(
     data: CampusCreationAttributes[],
-    scope?: (CampusScopesAttributes | CampusScopesAttributes[])
+    scope: (CampusScopesAttributes | CampusScopesAttributes[]) = "defaultScope"
 ): Promise<CampusModel[]> {
     return Campus.scope(scope).bulkCreate(data);
 }
@@ -185,7 +185,7 @@ export function createMany(
 export function update(
     id: number | any, 
     data: Partial<CampusAttributes>,
-    scope?: (CampusScopesAttributes | CampusScopesAttributes[])
+    scope: (CampusScopesAttributes | CampusScopesAttributes[]) = "defaultScope"
 ): Promise<CampusModel> {
     return new Promise((resolve, reject) => {
         Campus.scope(scope).findByPk(id)
@@ -237,7 +237,7 @@ export function update(
 export function updateMany(
     options: UpdateOptions<CampusAttributes>, 
     data: Partial<CampusAttributes>,
-    scope?: (CampusScopesAttributes | CampusScopesAttributes[])
+    scope: (CampusScopesAttributes | CampusScopesAttributes[]) = "defaultScope"
 ): Promise<[ affectedCount: number ]> {
     return Campus.scope(scope).update(data, options);
 }

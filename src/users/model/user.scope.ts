@@ -6,7 +6,13 @@ export default (() => ({
     defaultScope: ({
         attributes: { 
             exclude: UserProtectedFields
-        }
+        },
+        include: [
+            {
+                model: Campus.unscoped(),
+                required: false
+            }
+        ]
     }) as ScopesOptions,
     all: ({
         attributes: { 
@@ -16,13 +22,9 @@ export default (() => ({
             {
                 model: Campus.unscoped(),
                 required: false
-            }
-        ]
-    }) as ScopesOptions,
-    withCampus: ({
-        include: [
+            },
             {
-                model: Campus.unscoped(),
+                model: UserHasClassroom,
                 required: false
             }
         ]

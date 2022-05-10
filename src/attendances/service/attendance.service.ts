@@ -31,7 +31,7 @@ const { Attendance } = models;
 */
 export function findAll(
     options?: FindOptions<AttendanceAttributes> | null,
-    scope?: (AttendanceScopesAttributes | AttendanceScopesAttributes[])
+    scope: (AttendanceScopesAttributes | AttendanceScopesAttributes[]) = "defaultScope"
 ): Promise<AttendanceModel[]> {
     return Attendance.scope(scope).findAll(options!);
 }
@@ -59,7 +59,7 @@ export function findAll(
 */
 export function findOne(
     options?: FindOptions<AttendanceAttributes> | null,
-    scope?: (AttendanceScopesAttributes | AttendanceScopesAttributes[])
+    scope: (AttendanceScopesAttributes | AttendanceScopesAttributes[]) = "defaultScope"
 ): Promise<AttendanceModel | null> {
     return Attendance.scope(scope).findOne(options!);
 }
@@ -97,7 +97,7 @@ export function findOne(
 export function findById(
     id: number | any, 
     options?: FindOptions<AttendanceAttributes> | null,
-    scope?: (AttendanceScopesAttributes | AttendanceScopesAttributes[])
+    scope: (AttendanceScopesAttributes | AttendanceScopesAttributes[]) = "defaultScope"
 ): Promise<AttendanceModel | null> {
     return Attendance.scope(scope).findByPk(id, options!);
 }
@@ -120,7 +120,7 @@ export function findById(
 */
 export function create(
     data: AttendanceCreationAttributes,
-    scope?: (AttendanceScopesAttributes | AttendanceScopesAttributes[])
+    scope: (AttendanceScopesAttributes | AttendanceScopesAttributes[]) = "defaultScope"
 ): Promise<AttendanceModel> {
     return Attendance.scope(scope).create(data);
 }
@@ -152,7 +152,7 @@ export function create(
 */
 export function createMany(
     data: AttendanceCreationAttributes[],
-    scope?: (AttendanceScopesAttributes | AttendanceScopesAttributes[])
+    scope: (AttendanceScopesAttributes | AttendanceScopesAttributes[]) = "defaultScope"
 ): Promise<AttendanceModel[]> {
     return Attendance.scope(scope).bulkCreate(data);
 }
@@ -185,7 +185,7 @@ export function createMany(
 export function update(
     id: number | any, 
     data: Partial<AttendanceAttributes>,
-    scope?: (AttendanceScopesAttributes | AttendanceScopesAttributes[])
+    scope: (AttendanceScopesAttributes | AttendanceScopesAttributes[]) = "defaultScope"
 ): Promise<AttendanceModel> {
     return new Promise((resolve, reject) => {
         Attendance.scope(scope).findByPk(id)
@@ -237,7 +237,7 @@ export function update(
 export function updateMany(
     options: UpdateOptions<AttendanceAttributes>, 
     data: Partial<AttendanceAttributes>,
-    scope?: (AttendanceScopesAttributes | AttendanceScopesAttributes[])
+    scope: (AttendanceScopesAttributes | AttendanceScopesAttributes[]) = "defaultScope"
 ): Promise<[ affectedCount: number ]> {
     return Attendance.scope(scope).update(data, options);
 }

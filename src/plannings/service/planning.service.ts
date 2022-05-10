@@ -31,7 +31,7 @@ const { Planning } = models;
 */
 export function findAll(
     options?: FindOptions<PlanningAttributes> | null,
-    scope?: (PlanningScopesAttributes | PlanningScopesAttributes[])
+    scope: (PlanningScopesAttributes | PlanningScopesAttributes[]) = "defaultScope"
 ): Promise<PlanningModel[]> {
     return Planning.scope(scope).findAll(options!);
 }
@@ -59,7 +59,7 @@ export function findAll(
 */
 export function findOne(
     options?: FindOptions<PlanningAttributes> | null,
-    scope?: (PlanningScopesAttributes | PlanningScopesAttributes[])
+    scope: (PlanningScopesAttributes | PlanningScopesAttributes[]) = "defaultScope"
 ): Promise<PlanningModel | null> {
     return Planning.scope(scope).findOne(options!);
 }
@@ -97,7 +97,7 @@ export function findOne(
 export function findById(
     id: number | any, 
     options?: FindOptions<PlanningAttributes> | null,
-    scope?: (PlanningScopesAttributes | PlanningScopesAttributes[])
+    scope: (PlanningScopesAttributes | PlanningScopesAttributes[]) = "defaultScope"
 ): Promise<PlanningModel | null> {
     return Planning.scope(scope).findByPk(id, options!);
 }
@@ -120,7 +120,7 @@ export function findById(
 */
 export function create(
     data: PlanningCreationAttributes,
-    scope?: (PlanningScopesAttributes | PlanningScopesAttributes[])
+    scope: (PlanningScopesAttributes | PlanningScopesAttributes[]) = "defaultScope"
 ): Promise<PlanningModel> {
     return Planning.scope(scope).create(data);
 }
@@ -152,7 +152,7 @@ export function create(
 */
 export function createMany(
     data: PlanningCreationAttributes[],
-    scope?: (PlanningScopesAttributes | PlanningScopesAttributes[])
+    scope: (PlanningScopesAttributes | PlanningScopesAttributes[]) = "defaultScope"
 ): Promise<PlanningModel[]> {
     return Planning.scope(scope).bulkCreate(data);
 }
@@ -185,7 +185,7 @@ export function createMany(
 export function update(
     id: number | any, 
     data: Partial<PlanningAttributes>,
-    scope?: (PlanningScopesAttributes | PlanningScopesAttributes[])
+    scope: (PlanningScopesAttributes | PlanningScopesAttributes[]) = "defaultScope"
 ): Promise<PlanningModel> {
     return new Promise((resolve, reject) => {
         Planning.scope(scope).findByPk(id)
@@ -237,7 +237,7 @@ export function update(
 export function updateMany(
     options: UpdateOptions<PlanningAttributes>, 
     data: Partial<PlanningAttributes>,
-    scope?: (PlanningScopesAttributes | PlanningScopesAttributes[])
+    scope: (PlanningScopesAttributes | PlanningScopesAttributes[]) = "defaultScope"
 ): Promise<[ affectedCount: number ]> {
     return Planning.scope(scope).update(data, options);
 }

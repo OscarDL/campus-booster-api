@@ -31,7 +31,7 @@ const { Feedback } = models;
 */
 export function findAll(
     options?: FindOptions<FeedbackAttributes> | null,
-    scope?: (FeedbackScopesAttributes | FeedbackScopesAttributes[])
+    scope: (FeedbackScopesAttributes | FeedbackScopesAttributes[]) = "defaultScope"
 ): Promise<FeedbackModel[]> {
     return Feedback.scope(scope).findAll(options!);
 }
@@ -59,7 +59,7 @@ export function findAll(
 */
 export function findOne(
     options?: FindOptions<FeedbackAttributes> | null,
-    scope?: (FeedbackScopesAttributes | FeedbackScopesAttributes[])
+    scope: (FeedbackScopesAttributes | FeedbackScopesAttributes[]) = "defaultScope"
 ): Promise<FeedbackModel | null> {
     return Feedback.scope(scope).findOne(options!);
 }
@@ -97,7 +97,7 @@ export function findOne(
 export function findById(
     id: number | any, 
     options?: FindOptions<FeedbackAttributes> | null,
-    scope?: (FeedbackScopesAttributes | FeedbackScopesAttributes[])
+    scope: (FeedbackScopesAttributes | FeedbackScopesAttributes[]) = "defaultScope"
 ): Promise<FeedbackModel | null> {
     return Feedback.scope(scope).findByPk(id, options!);
 }
@@ -120,7 +120,7 @@ export function findById(
 */
 export function create(
     data: FeedbackCreationAttributes,
-    scope?: (FeedbackScopesAttributes | FeedbackScopesAttributes[])
+    scope: (FeedbackScopesAttributes | FeedbackScopesAttributes[]) = "defaultScope"
 ): Promise<FeedbackModel> {
     return Feedback.scope(scope).create(data);
 }
@@ -152,7 +152,7 @@ export function create(
 */
 export function createMany(
     data: FeedbackCreationAttributes[],
-    scope?: (FeedbackScopesAttributes | FeedbackScopesAttributes[])
+    scope: (FeedbackScopesAttributes | FeedbackScopesAttributes[]) = "defaultScope"
 ): Promise<FeedbackModel[]> {
     return Feedback.scope(scope).bulkCreate(data);
 }
@@ -185,7 +185,7 @@ export function createMany(
 export function update(
     id: number | any, 
     data: Partial<FeedbackAttributes>,
-    scope?: (FeedbackScopesAttributes | FeedbackScopesAttributes[])
+    scope: (FeedbackScopesAttributes | FeedbackScopesAttributes[]) = "defaultScope"
 ): Promise<FeedbackModel> {
     return new Promise((resolve, reject) => {
         Feedback.scope(scope).findByPk(id)
@@ -237,7 +237,7 @@ export function update(
 export function updateMany(
     options: UpdateOptions<FeedbackAttributes>, 
     data: Partial<FeedbackAttributes>,
-    scope?: (FeedbackScopesAttributes | FeedbackScopesAttributes[])
+    scope: (FeedbackScopesAttributes | FeedbackScopesAttributes[]) = "defaultScope"
 ): Promise<[ affectedCount: number ]> {
     return Feedback.scope(scope).update(data, options);
 }

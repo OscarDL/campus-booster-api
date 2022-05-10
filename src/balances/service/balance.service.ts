@@ -59,7 +59,7 @@ export function findAll(
 */
 export function findOne(
     options?: FindOptions<BalanceAttributes> | null,
-    scope?: (BalanceScopesAttributes | BalanceScopesAttributes[])
+    scope: (BalanceScopesAttributes | BalanceScopesAttributes[]) = "defaultScope"
 ): Promise<BalanceModel | null> {
     return Balance.scope(scope).findOne(options!);
 }
@@ -97,7 +97,7 @@ export function findOne(
 export function findById(
     id: number | any, 
     options?: FindOptions<BalanceAttributes> | null,
-    scope?: (BalanceScopesAttributes | BalanceScopesAttributes[])
+    scope: (BalanceScopesAttributes | BalanceScopesAttributes[]) = "defaultScope"
 ): Promise<BalanceModel | null> {
     return Balance.scope(scope).findByPk(id, options!);
 }
@@ -120,7 +120,7 @@ export function findById(
 */
 export function create(
     data: BalanceCreationAttributes,
-    scope?: (BalanceScopesAttributes | BalanceScopesAttributes[])
+    scope: (BalanceScopesAttributes | BalanceScopesAttributes[]) = "defaultScope"
 ): Promise<BalanceModel> {
     return Balance.scope(scope).create(data);
 }
@@ -152,7 +152,7 @@ export function create(
 */
 export function createMany(
     data: BalanceCreationAttributes[],
-    scope?: (BalanceScopesAttributes | BalanceScopesAttributes[])
+    scope: (BalanceScopesAttributes | BalanceScopesAttributes[]) = "defaultScope"
 ): Promise<BalanceModel[]> {
     return Balance.scope(scope).bulkCreate(data);
 }
@@ -185,7 +185,7 @@ export function createMany(
 export function update(
     id: number | any, 
     data: Partial<BalanceAttributes>,
-    scope?: (BalanceScopesAttributes | BalanceScopesAttributes[])
+    scope: (BalanceScopesAttributes | BalanceScopesAttributes[]) = "defaultScope"
 ): Promise<BalanceModel> {
     return new Promise((resolve, reject) => {
         Balance.scope(scope).findByPk(id)
@@ -237,7 +237,7 @@ export function update(
 export function updateMany(
     options: UpdateOptions<BalanceAttributes>, 
     data: Partial<BalanceAttributes>,
-    scope?: (BalanceScopesAttributes | BalanceScopesAttributes[])
+    scope: (BalanceScopesAttributes | BalanceScopesAttributes[]) = "defaultScope"
 ): Promise<[affectedCount: number]> {
     return Balance.scope(scope).update(data, options);
 }

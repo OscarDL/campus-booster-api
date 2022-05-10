@@ -62,6 +62,11 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
         if(req.file) {
             req.body.avatarKey = (req.file as any).key;
             if(user?.avatarKey) await s3.remove(user.avatarKey);
+        } else {
+            if(user?.avatarKey && !req.body.avatarKey) {
+                await s3.remove(user.avatarKey);
+                req.body.avatarKey = null;
+            }
         }
         return res.status(203).json(
             await UserService.update(
