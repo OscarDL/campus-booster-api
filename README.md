@@ -1,6 +1,7 @@
+<img src="https://www.supinfo.com/wp-content/uploads/2020/11/Capture-décran-2020-11-27-à-16.02.29.png" alt="Logo" width="200px">
+
 # Private API Campus Booster
 
-<img src="https://www.supinfo.com/wp-content/uploads/2020/11/Capture-décran-2020-11-27-à-16.02.29.png" alt="Logo" width="200px">
 Node.js typescript REST API
 
 ### Open the project
@@ -12,15 +13,25 @@ Node.js typescript REST API
 Make sure you have Node.js on your device: [install node.js](https://nodejs.org/en/download) \
 After Git clone,\
 Go to project command line root\
-Execute :
+#####USE NPM
 ```shell
 npm install
 ```
-### How to run?
-After installation,
-Execute :
+#####USE PNPM
 ```shell
-npm test
+#you have pnpm
+pnpm install
+#you don't
+npm run migration
+```
+### How to run?
+#####USE NPM
+```shell
+npm start
+```
+#####USE PNPM
+```shell
+pnpm strart
 ```
 If it's work you should see in logs
 ```shell
@@ -47,38 +58,31 @@ Some examples of requests:
 Request:
 
 ```json
-
-"path": "/auth"
+"path": "/api/v1/auth/login"
 "method": "POST",
 "query": null
-"header": 
-{
-  "API_KEY": ""
-}
 "body": 
 {
-  "email": "your.email@domain.com",
-  "password": "your-password"
+  "azureId": "<YOUR_AZURE_USER_ID>"
 }
-
 ```
 
 Response:
 
 ```json
-
-{
-  "accessToken": "your_access_token",
-  "refreshToken": "your_refresh_token",
+"cookies": {
+  "accessToken": "<ACCESS_TOKEN>"
+}
+"data": {
+  "refreshToken": "<REFRESH_TOKEN>",
   "user": {...}
 }
-
 ```
 
 
 ## DATABASE SCHEMA:
 
-![MLD]()
+![MLD]('')
 
 ## AVAILABLE SERVICES:
 
