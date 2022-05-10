@@ -6,6 +6,8 @@ import { AttendanceModel } from './attendance.interface';
 import AttendanceScope from './attendance.scope';
 import Planning from './../../plannings/model/planning.model';
 import User from './../../users/model/user.model';
+import s3 from '../../../services/aws/s3';
+import { AttendanceAttributes } from './attendance.interface';
 
 @S.Scopes(AttendanceScope)
 @S.Table({
@@ -26,7 +28,53 @@ export default class Attendance extends S.Model implements AttendanceModel {
 	@S.AllowNull(true)
 	@S.Default(false)
 	@S.Column(S.DataType.BOOLEAN)
-	public missing!: string;
+	public missing!: boolean;
+
+	@S.AllowNull(true)
+	@S.Default([])
+	@S.IsArray
+	@S.Column({
+		field: 'file_keys',
+		type: S.DataType.ARRAY(
+			S.DataType.STRING(1024)
+		)
+	})
+	public fileKeys!: string[];
+
+	public dataValues!: AttendanceAttributes;
+
+	@S.AfterCreate
+	@S.AfterFind
+	@S.AfterUpdate
+	@S.AfterUpsert
+	static async loadS3Files(instance: (Attendance | Attendance[])): Promise<void> {
+		try {
+			if(Array.isArray(instance)) {
+				for (let i = 0; i < instance.length; i++) {
+					const attendance = instance[i];
+					attendance.dataValues.fileBase64 = await Attendance.loadInstanceFiles(attendance);
+				}
+			} else {
+				instance.dataValues.fileBase64 = await Attendance.loadInstanceFiles(instance);
+			}
+		} catch (err) {
+			if(err instanceof Error) {
+				console.log(err.message.red.bold);
+			}
+		}
+	}
+
+	static async loadInstanceFiles(instance: Attendance): Promise<string[]> {
+		const files = new Array();
+		for (let i = 0; i < instance.fileKeys.length; i++) {
+			const fileKey = instance.fileKeys[i];
+			if(fileKey) {
+				const file = await s3.download(fileKey);
+				if(file) await files.push(file.Body); 
+			}
+		}
+		return files;
+	}
 
 	@S.ForeignKey(() => Planning)
 	@S.Column({

@@ -7,7 +7,7 @@ export function attendanceExistAsQuery(name: string): AsyncFn {
         try {
             if(req.query[name]) {
                 const attendance = await findById(req.query[name]);
-                return (!attendance) ? next(boom.badRequest(`Attendance does not exist!`)) : next();
+                return (!attendance) ? next(boom.badRequest(`Attendance_not_found`)) : next();
             }
             return next();
         } catch (err: any) {
@@ -22,7 +22,7 @@ export function attendanceExistAsBody(name: string): AsyncFn {
         try {
             if(req.body[name]) {
                 const attendance = await findById(req.body[name]);
-                return (!attendance) ? next(boom.badRequest(`Attendance does not exist!`)) : next();
+                return (!attendance) ? next(boom.badRequest(`Attendance_not_found`)) : next();
             }
             return next();
         } catch (err: any) {
@@ -37,7 +37,7 @@ export function attendanceExistAsParam(name: string): AsyncFn {
         try {
             if(req.params[name]) { 
                 const attendance = await findById(req.params[name]);
-                return (!attendance) ? next(boom.badRequest(`Attendance does not exist!`)) : next();
+                return (!attendance) ? next(boom.badRequest(`Attendance_not_found`)) : next();
             }
             return next();
         } catch (err: any) {

@@ -5,13 +5,15 @@ import { UserModel } from "./../../users/model/user.interface";
 export interface AttendanceAttributes {
   readonly id: number;
 	reason?: string;
-	missing?: string;
+	missing?: boolean;
 	readonly created_at?: Date;
 	readonly updated_at?: Date;
 	planningId?: number;
 	Planning?: PlanningModel;
 	userId?: number;
 	User?: UserModel;
+	fileKeys?: string[];
+	fileBase64?: string[];
 };
 export interface AttendanceCreationAttributes extends Optional<AttendanceAttributes, 'id'> {}
 export interface AttendanceModel extends Model<AttendanceAttributes, AttendanceCreationAttributes>, Partial<AttendanceAttributes> {

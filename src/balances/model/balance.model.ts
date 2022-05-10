@@ -2,9 +2,8 @@
 // DOC : https://www.npmjs.com/package/sequelize-typescript
 // Generate by Ulysse Dupont
 import * as S from 'sequelize-typescript';
-import { BalanceModel } from './balance.interface';
+import { BalanceModel, BalanceStatus } from './balance.interface';
 import BalanceScope from './balance.scope';
-import BalanceStatus from './../../balance-status/model/balance-status.model';
 import User from './../../users/model/user.model';
 
 @S.Scopes(BalanceScope)
@@ -41,17 +40,13 @@ export default class Balance extends S.Model implements BalanceModel {
 	@S.Column(S.DataType.FLOAT)
 	public debit!: number;
 
+	@S.AllowNull(false)
+	@S.Column(S.DataType.STRING(255))
+	public status!: BalanceStatus;
+
 	@S.AllowNull(true)
 	@S.Column(S.DataType.FLOAT)
 	public credit!: number;
-
-	@S.HasMany(() => BalanceStatus, { 
-		foreignKey: {
-      field: 'balance_id'
-    },
-		onDelete: 'CASCADE'
-	})
-	public BalanceStatus!: BalanceStatus[];
 
 	@S.ForeignKey(() => User)
 	@S.Column({

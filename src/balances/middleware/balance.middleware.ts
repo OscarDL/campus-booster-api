@@ -7,7 +7,7 @@ export function balanceExistAsQuery(name: string): AsyncFn {
         try {
             if(req.query[name]) {
                 const balance = await findById(req.query[name]);
-                return (!balance) ? next(boom.badRequest(`Balance does not exist!`)) : next();
+                return (!balance) ? next(boom.badRequest(`Balance_not_found`)) : next();
             }
             return next();
         } catch (err: any) {
@@ -22,7 +22,7 @@ export function balanceExistAsBody(name: string): AsyncFn {
         try {
             if(req.body[name]) {
                 const balance = await findById(req.body[name]);
-                return (!balance) ? next(boom.badRequest(`Balance does not exist!`)) : next();
+                return (!balance) ? next(boom.badRequest(`Balance_not_found`)) : next();
             }
             return next();
         } catch (err: any) {
@@ -37,7 +37,7 @@ export function balanceExistAsParam(name: string): AsyncFn {
         try {
             if(req.params[name]) { 
                 const balance = await findById(req.params[name]);
-                return (!balance) ? next(boom.badRequest(`Balance does not exist!`)) : next();
+                return (!balance) ? next(boom.badRequest(`Balance_not_found`)) : next();
             }
             return next();
         } catch (err: any) {

@@ -1,6 +1,7 @@
 import { Req, Res, Next, Resp } from '../../../types/express';
 import * as UserService from '../service/user.service';
 import boom from '@hapi/boom';
+import s3 from '../../../services/aws/s3';
 
 export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
@@ -33,6 +34,9 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
 
 export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        if(req.file) {
+            req.body.avatarKey = (req.file as any).key;
+        }
         return res.status(201).json(
             await UserService.create(
                 {
@@ -42,6 +46,7 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                     email: req.body.email,
                     birthday: req.body.birthday,
                     campusId: req.body.campusId,
+                    avatarKey: req.body.avatarKey
                 }
             )
         );
@@ -53,9 +58,14 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
 
 export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        const user = await UserService.findById(req.params.user_id);
+        if(req.file) {
+            req.body.avatarKey = (req.file as any).key;
+            if(user?.avatarKey) await s3.remove(user.avatarKey);
+        }
         return res.status(203).json(
             await UserService.update(
-                req.params.user_id, 
+                user?.id, 
                 req.body
             )
         );
@@ -67,11 +77,15 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
 
 export async function remove(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        const user = await UserService.findById(req.params.user_id);
+        if(user?.avatarKey) {
+            await s3.remove(user.avatarKey);
+        }
         return res.status(204).json(
             await UserService.remove(
                 {
                     where: {
-                        id: req.params.user_id
+                        id: user?.id
                     }
                 }
             )

@@ -12,6 +12,10 @@ const {
     permissionLevel: roles
 } = config;
 
+import s3 from '../../services/aws/s3';
+const upload = s3.upload("users");
+const singleUpload = upload.single("file");
+
 const routePrefix = config.route_prefix + '/users';
 
 export default (app: App): void => {
@@ -34,6 +38,7 @@ export default (app: App): void => {
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed([roles.CampusManager, roles.CampusBoosterAdmin]),
+        singleUpload,
 		RequestMiddleware.bodyParametersNeeded(['azureId','firstName','lastName', 'birthday'], 'string'),
         RequestMiddleware.bodyParametersNeeded('email', 'email'),
         RequestMiddleware.bodyParametersNeeded([
@@ -48,6 +53,7 @@ export default (app: App): void => {
         PermissionMiddleware.onlySameUserOrAdmin,
 		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
+        singleUpload,
         RequestMiddleware.bodyParameterHoped('campusId', 'integer'),
         CampusMiddleware.campusExistAsBody('campusId'),
         UserController.update

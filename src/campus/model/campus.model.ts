@@ -11,7 +11,8 @@ import Classroom from './../../classrooms/model/classroom.model';
 @S.Table({
   timestamps: true,
   underscored: true,
-  schema: 'public'
+  schema: 'public',
+	tableName: 'campus'
 })
 export default class Campus extends S.Model implements CampusModel {
   @S.PrimaryKey

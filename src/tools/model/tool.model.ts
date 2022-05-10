@@ -2,9 +2,10 @@
 // DOC : https://www.npmjs.com/package/sequelize-typescript
 // Generate by Ulysse Dupont
 import * as S from 'sequelize-typescript';
-import { categories, Category, ToolModel } from './tool.interface';
+import { Category, ToolModel } from './tool.interface';
 import ToolScope from './tool.scope';
 import s3 from './../../../services/aws/s3';
+import { ToolAttributes } from './tool.interface';
 
 @S.Scopes(ToolScope)
 @S.Table({
@@ -39,6 +40,8 @@ export default class Tool extends S.Model implements ToolModel {
 	@S.Column(S.DataType.STRING(32)) 
 	public category!: Category;
 
+	public dataValues!: ToolAttributes;
+
 	@S.AfterFind
 	@S.AfterCreate
 	@S.AfterUpdate
@@ -51,14 +54,14 @@ export default class Tool extends S.Model implements ToolModel {
 					if(tool.img) {
 						const awsFile = await s3.download(tool.img);
 						const imgBase64 = Buffer.from(awsFile.Body as any).toString('base64');
-						(tool as any).dataValues.imgBase64 = `data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`;
+						tool.dataValues.imgBase64 = `data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`;
 					}
 				}
 			} else {
 				if(instance.img) {
 					const awsFile = await s3.download(instance.img);
 					const imgBase64 = Buffer.from(awsFile.Body as any).toString('base64');
-					(instance as any).dataValues.imgBase64 = `data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`;
+					instance.dataValues.imgBase64 = `data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`;
 				}
 			}
 		} catch (err) {

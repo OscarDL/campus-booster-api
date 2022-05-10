@@ -53,6 +53,11 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
         if(req.file) {
             req.body.img = (req.file as any).key;
             if(tool?.img) await s3.remove(tool.img);
+        } else {
+            if(tool?.img && !req.body.img) {
+                await s3.remove(tool.img);
+                req.body.img = null;
+            }
         }
         return res.status(203).json(
             await ToolService.update(
