@@ -13,6 +13,9 @@ export function rolesAllowed(roles: Roles): Fn {
             if(req.user?.active) {
                 const userRole = req.user?.role;
                 if (userRole && roles.includes(userRole)) {
+                    if(!req.user?.active) {
+                        return next(boom.forbidden(`banned`));
+                    }
                     req.isAdmin = ([ permissionLevel.CampusManager, permissionLevel.CampusBoosterAdmin ].includes(userRole)) ? true : false;
                     return next();
                 } else {

@@ -20,7 +20,27 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
         return res.status(200).json(
             await BalanceService.findAll(
                 {
-                    limit: req.query?.limit
+                    limit: req.query?.limit,
+                    offset: req.query?.offset
+                }
+            )
+        );
+    } catch (err: any) {
+        console.log(`${err}`.error);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
+export async function getUser(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        return res.status(200).json(
+            await BalanceService.findAll(
+                {
+                    limit: req.query?.limit,
+                    offset: req.query?.offset,
+                    where: {
+                        userId: req.params.user_id
+                    }
                 }
             )
         );
@@ -34,7 +54,12 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
         return res.status(201).json(
             await BalanceService.create(
-                req.body as any
+                Object.assign(
+                    req.body,
+                    {
+                        userId: req.params.user_id
+                    }
+                ) as any
             )
         );
     } catch (err: any) {

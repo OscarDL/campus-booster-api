@@ -1,7 +1,8 @@
 import { Model, Optional } from "sequelize";
 import BalanceScope from './balance.scope';
 import { UserModel } from "./../../users/model/user.interface";
-import { BalanceStatusModel } from './../../balance-status/model/balance-status.interface';
+export const balanceStatus = <const> [ "pending", "validate", "canceled" ];
+export type BalanceStatus = typeof balanceStatus[number];
 export interface BalanceAttributes {
   readonly id: number;
 	dateReq: Date;
@@ -9,9 +10,9 @@ export interface BalanceAttributes {
 	description?: string;
 	debit?: number;
 	credit?: number;
+	status: BalanceStatus;
 	readonly created_at?: Date;
 	readonly updated_at?: Date;
-	BalanceStatus?: BalanceStatusModel[];
 	userId: number;
 	User?: UserModel;
 };

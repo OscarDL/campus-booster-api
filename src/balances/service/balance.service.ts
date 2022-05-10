@@ -31,7 +31,7 @@ const { Balance } = models;
 */
 export function findAll(
     options?: FindOptions<BalanceAttributes> | null,
-    scope?: (BalanceScopesAttributes | BalanceScopesAttributes[])
+    scope: (BalanceScopesAttributes | BalanceScopesAttributes[]) = "defaultScope"
 ): Promise<BalanceModel[]> {
     return Balance.scope(scope).findAll(options!);
 }

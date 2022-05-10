@@ -44,7 +44,7 @@ export async function JWTNeeded(req: Req, res: Res, next: Next): Promise<Resp> {
       config.jwtOptions as VerifyOptions
     ) as ReqJWT;
     req.user = await UserService.findById(req.jwt.id, {}, 'all');
-
+    
     return (req.user) ? next() : next(boom.unauthorized('expired_token'));
   } catch (err: any) {
     console.log(`${err}`.error);

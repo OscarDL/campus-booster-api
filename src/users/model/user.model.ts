@@ -14,10 +14,7 @@ import Attendance from './../../attendances/model/attendance.model';
 import Grade from './../../grades/model/grade.model';
 import Balance from './../../balances/model/balance.model';
 import UserHasClassroom from './../../user_has_classrooms/model/user-hasclassroom.model';
-import AzureService from '../../../services/azure';
-import fs from 'fs';
-const Azure = new AzureService();
-Azure.OAuth();
+import s3 from '../../../services/aws/s3';
 
 @S.Scopes(UserScope)
 @S.Table({
@@ -25,7 +22,6 @@ Azure.OAuth();
   underscored: true,
   schema: 'public'
 })
-
 export default class User extends S.Model implements UserModel {
 	@S.PrimaryKey
   @S.AutoIncrement
@@ -71,6 +67,13 @@ export default class User extends S.Model implements UserModel {
 	@S.Column(S.DataType.DATE)
 	public birthday!: Date;
 
+	@S.AllowNull(true)
+	@S.Column({
+    field: 'avatar_key',
+    type: S.DataType.STRING(1024)
+  })
+	public avatarKey!: string;
+
 	@S.AllowNull(false)
 	@S.Default(true)
 	@S.Column(S.DataType.BOOLEAN)
@@ -98,19 +101,26 @@ export default class User extends S.Model implements UserModel {
 	@S.AfterFind
 	@S.AfterUpdate
 	@S.AfterUpsert
-	static async loadAzureAvatar(instance: (User | User[])): Promise<void> {
+	static async loadS3Image(instance: (User | User[])): Promise<void> {
 		try {
 			if(Array.isArray(instance)) {
 				for (let i = 0; i < instance.length; i++) {
 					const user = instance[i];
-					const azureUser = await Azure.getUser(user.email);
-					user.dataValues.avatar = azureUser ? await Azure.getUserAvatar(azureUser.id): null;
+					if(user.avatarKey) {
+						const awsFile = await s3.download(user.avatarKey);
+						const imgBase64 = Buffer.from(awsFile.Body as any).toString('base64');
+						user.dataValues.avatarBase64 = `data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`;
+					}
 				}
 			} else {
-				const azureUser = await Azure.getUser(instance.email);
-				instance.dataValues.avatar = azureUser ? await Azure.getUserAvatar(azureUser.id): null;
+				if(instance.avatarKey) {
+					const awsFile = await s3.download(instance.avatarKey);
+					const imgBase64 = Buffer.from(awsFile.Body as any).toString('base64');
+					instance.dataValues.avatarBase64 = `data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`;
+				}
 			}
 		} catch (err) {
+			console.log(err);
 			if(err instanceof Error) {
 				console.log(err.message.red.bold);
 			}

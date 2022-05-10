@@ -7,7 +7,7 @@ export function gradeExistAsQuery(name: string): AsyncFn {
         try {
             if(req.query[name]) {
                 const grade = await findById(req.query[name]);
-                return (!grade) ? next(boom.badRequest(`Grade does not exist!`)) : next();
+                return (!grade) ? next(boom.badRequest(`Grade_not_found`)) : next();
             }
             return next();
         } catch (err: any) {
@@ -22,7 +22,7 @@ export function gradeExistAsBody(name: string): AsyncFn {
         try {
             if(req.body[name]) {
                 const grade = await findById(req.body[name]);
-                return (!grade) ? next(boom.badRequest(`Grade does not exist!`)) : next();
+                return (!grade) ? next(boom.badRequest(`Grade_not_found`)) : next();
             }
             return next();
         } catch (err: any) {
@@ -37,7 +37,7 @@ export function gradeExistAsParam(name: string): AsyncFn {
         try {
             if(req.params[name]) { 
                 const grade = await findById(req.params[name]);
-                return (!grade) ? next(boom.badRequest(`Grade does not exist!`)) : next();
+                return (!grade) ? next(boom.badRequest(`Grade_not_found`)) : next();
             }
             return next();
         } catch (err: any) {

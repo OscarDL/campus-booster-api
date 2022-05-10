@@ -7,7 +7,7 @@ export function toolExistAsQuery(name: string): AsyncFn {
         try {
             if(req.query[name]) {
                 const tool = await findById(req.query[name]);
-                return (!tool) ? next(boom.badRequest(`Tool does not exist!`)) : next();
+                return (!tool) ? next(boom.badRequest(`Tool_not_found`)) : next();
             }
             return next();
         } catch (err: any) {
@@ -22,7 +22,7 @@ export function toolExistAsBody(name: string): AsyncFn {
         try {
             if(req.body[name]) {
                 const tool = await findById(req.body[name]);
-                return (!tool) ? next(boom.badRequest(`Tool does not exist!`)) : next();
+                return (!tool) ? next(boom.badRequest(`Tool_not_found`)) : next();
             }
             return next();
         } catch (err: any) {
@@ -37,7 +37,7 @@ export function toolExistAsParam(name: string): AsyncFn {
         try {
             if(req.params[name]) { 
                 const tool = await findById(req.params[name]);
-                return (!tool) ? next(boom.badRequest(`Tool does not exist!`)) : next();
+                return (!tool) ? next(boom.badRequest(`Tool_not_found`)) : next();
             }
             return next();
         } catch (err: any) {

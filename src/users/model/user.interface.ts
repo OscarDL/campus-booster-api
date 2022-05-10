@@ -33,6 +33,8 @@ export interface UserAttributes {
 	Attendances?: AttendanceModel[];
 	Grades?: GradeModel[];
 	Balances?: BalanceModel[];
+	avatarKey?: string | null;
+	avatarBase64?: string | null;
 };
 
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}

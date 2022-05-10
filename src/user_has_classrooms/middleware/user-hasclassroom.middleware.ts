@@ -7,7 +7,7 @@ export function userhasclassroomExistAsQuery(name: string): AsyncFn {
         try {
             if(req.query[name]) {
                 const userhasclassroom = await findById(req.query[name]);
-                return (!userhasclassroom) ? next(boom.badRequest(`UserHasClassroom does not exist!`)) : next();
+                return (!userhasclassroom) ? next(boom.badRequest(`UserHasClassroom_not_found`)) : next();
             }
             return next();
         } catch (err: any) {
@@ -22,7 +22,7 @@ export function userhasclassroomExistAsBody(name: string): AsyncFn {
         try {
             if(req.body[name]) {
                 const userhasclassroom = await findById(req.body[name]);
-                return (!userhasclassroom) ? next(boom.badRequest(`UserHasClassroom does not exist!`)) : next();
+                return (!userhasclassroom) ? next(boom.badRequest(`UserHasClassroom_not_found`)) : next();
             }
             return next();
         } catch (err: any) {
@@ -37,7 +37,7 @@ export function userhasclassroomExistAsParam(name: string): AsyncFn {
         try {
             if(req.params[name]) { 
                 const userhasclassroom = await findById(req.params[name]);
-                return (!userhasclassroom) ? next(boom.badRequest(`UserHasClassroom does not exist!`)) : next();
+                return (!userhasclassroom) ? next(boom.badRequest(`UserHasClassroom_not_found`)) : next();
             }
             return next();
         } catch (err: any) {

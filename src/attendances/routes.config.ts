@@ -4,11 +4,16 @@ import * as PermissionMiddleware from "../authorization/middlewares/auth.permiss
 import * as RequestMiddleware from '../authorization/middlewares/request.validation';
 import * as AttendanceController from './controller/attendance.controller';
 import * as AttendanceMiddleware from './middleware/attendance.middleware';
+import * as PlanningMiddleware from '../plannings/middleware/planning.middleware';
 import config from '../../config/env.config';
 const { 
 	permissionLevel: { Student }, 
     customRegex: { regInt } 
 } = config;
+
+import s3 from '../../services/aws/s3';
+const upload = s3.upload("proof of absence");
+const uploadMany = upload.array("files", 5);
 
 const routePrefix = config.route_prefix + '/attendances';
 
@@ -31,6 +36,11 @@ export default (app: App): void => {
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.iMustBe([ Student ]), 
+        uploadMany,
+        RequestMiddleware.bodyParameterHoped('reason', 'string'),
+        RequestMiddleware.bodyParameterHoped('missing', 'boolean'),
+        RequestMiddleware.bodyParametersNeeded('planningId', "integer"),
+        PlanningMiddleware.planningExistAsBody('planningId'),
 		AttendanceController.create
     ]);
     // UPDATE ATTENDANCE
@@ -39,6 +49,10 @@ export default (app: App): void => {
 		PermissionMiddleware.iMustBe([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('attendance_id', 'integer'),
         AttendanceMiddleware.attendanceExistAsParam("attendance_id"),
+        uploadMany,
+        RequestMiddleware.bodyParametersNeeded('fileKeys', "array"),
+        RequestMiddleware.bodyParameterHoped('planningId', "integer"),
+        PlanningMiddleware.planningExistAsBody('planningId'),
         AttendanceController.update
     ]);
     // DELETE ATTENDANCE

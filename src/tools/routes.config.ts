@@ -22,6 +22,7 @@ export default (app: App): void => {
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.rolesAllowed(Object.values(roles)), 
+        RequestMiddleware.bodyParametersNeeded('test', 'boolean'),
 		ToolController.getAll
     ]);
     // GET TOOL BY ID
@@ -50,6 +51,7 @@ export default (app: App): void => {
         ToolMiddleware.toolExistAsParam("tool_id"),
         uploadSingle,
         RequestMiddleware.bodyParameterHoped('url', 'string'),
+        RequestMiddleware.bodyParameterHoped('img', 'string'),
         RequestMiddleware.bodyParameterHoped('title', 'string'),
         RequestMiddleware.bodyParameterHoped('category', 'enum', [...categories]),
         RequestMiddleware.bodyParameterHoped('description', 'string'),
