@@ -31,7 +31,7 @@ const { Teacher } = models;
 */
 export function findAll(
     options?: FindOptions<TeacherAttributes> | null,
-    scope?: (TeacherScopesAttributes | TeacherScopesAttributes[])
+    scope: (TeacherScopesAttributes | TeacherScopesAttributes[]) = "defaultScope"
 ): Promise<TeacherModel[]> {
     return Teacher.scope(scope).findAll(options!);
 }
@@ -59,7 +59,7 @@ export function findAll(
 */
 export function findOne(
     options?: FindOptions<TeacherAttributes> | null,
-    scope?: (TeacherScopesAttributes | TeacherScopesAttributes[])
+    scope: (TeacherScopesAttributes | TeacherScopesAttributes[]) = "defaultScope"
 ): Promise<TeacherModel | null> {
     return Teacher.scope(scope).findOne(options!);
 }
@@ -97,7 +97,7 @@ export function findOne(
 export function findById(
     id: number | any, 
     options?: FindOptions<TeacherAttributes> | null,
-    scope?: (TeacherScopesAttributes | TeacherScopesAttributes[])
+    scope: (TeacherScopesAttributes | TeacherScopesAttributes[]) = "defaultScope"
 ): Promise<TeacherModel | null> {
     return Teacher.scope(scope).findByPk(id, options!);
 }
@@ -120,7 +120,7 @@ export function findById(
 */
 export function create(
     data: TeacherCreationAttributes,
-    scope?: (TeacherScopesAttributes | TeacherScopesAttributes[])
+    scope: (TeacherScopesAttributes | TeacherScopesAttributes[]) = "defaultScope"
 ): Promise<TeacherModel> {
     return Teacher.scope(scope).create(data);
 }
@@ -152,7 +152,7 @@ export function create(
 */
 export function createMany(
     data: TeacherCreationAttributes[],
-    scope?: (TeacherScopesAttributes | TeacherScopesAttributes[])
+    scope: (TeacherScopesAttributes | TeacherScopesAttributes[]) = "defaultScope"
 ): Promise<TeacherModel[]> {
     return Teacher.scope(scope).bulkCreate(data);
 }
@@ -185,7 +185,7 @@ export function createMany(
 export function update(
     id: number | any, 
     data: Partial<TeacherAttributes>,
-    scope?: (TeacherScopesAttributes | TeacherScopesAttributes[])
+    scope: (TeacherScopesAttributes | TeacherScopesAttributes[]) = "defaultScope"
 ): Promise<TeacherModel> {
     return new Promise((resolve, reject) => {
         Teacher.scope(scope).findByPk(id)
@@ -237,7 +237,7 @@ export function update(
 export function updateMany(
     options: UpdateOptions<TeacherAttributes>, 
     data: Partial<TeacherAttributes>,
-    scope?: (TeacherScopesAttributes | TeacherScopesAttributes[])
+    scope: (TeacherScopesAttributes | TeacherScopesAttributes[]) = "defaultScope"
 ): Promise<[ affectedCount: number ]> {
     return Teacher.scope(scope).update(data, options);
 }

@@ -22,7 +22,6 @@ export default (app: App): void => {
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.rolesAllowed(Object.values(roles)), 
-        RequestMiddleware.bodyParametersNeeded('test', 'boolean'),
 		ToolController.getAll
     ]);
     // GET TOOL BY ID

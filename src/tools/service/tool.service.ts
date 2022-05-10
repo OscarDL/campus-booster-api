@@ -31,7 +31,7 @@ const { Tool } = models;
 */
 export function findAll(
     options?: FindOptions<ToolAttributes> | null,
-    scope?: (ToolScopesAttributes | ToolScopesAttributes[])
+    scope: (ToolScopesAttributes | ToolScopesAttributes[]) = "defaultScope"
 ): Promise<ToolModel[]> {
     return Tool.scope(scope).findAll(options!);
 }
@@ -59,7 +59,7 @@ export function findAll(
 */
 export function findOne(
     options?: FindOptions<ToolAttributes> | null,
-    scope?: (ToolScopesAttributes | ToolScopesAttributes[])
+    scope: (ToolScopesAttributes | ToolScopesAttributes[]) = "defaultScope"
 ): Promise<ToolModel | null> {
     return Tool.scope(scope).findOne(options!);
 }
@@ -97,7 +97,7 @@ export function findOne(
 export function findById(
     id: number | any, 
     options?: FindOptions<ToolAttributes> | null,
-    scope?: (ToolScopesAttributes | ToolScopesAttributes[])
+    scope: (ToolScopesAttributes | ToolScopesAttributes[]) = "defaultScope"
 ): Promise<ToolModel | null> {
     return Tool.scope(scope).findByPk(id, options!);
 }
@@ -120,7 +120,7 @@ export function findById(
 */
 export function create(
     data: ToolCreationAttributes,
-    scope?: (ToolScopesAttributes | ToolScopesAttributes[])
+    scope: (ToolScopesAttributes | ToolScopesAttributes[]) = "defaultScope"
 ): Promise<ToolModel> {
     return Tool.scope(scope).create(data);
 }
@@ -152,7 +152,7 @@ export function create(
 */
 export function createMany(
     data: ToolCreationAttributes[],
-    scope?: (ToolScopesAttributes | ToolScopesAttributes[])
+    scope: (ToolScopesAttributes | ToolScopesAttributes[]) = "defaultScope"
 ): Promise<ToolModel[]> {
     return Tool.scope(scope).bulkCreate(data);
 }
@@ -185,7 +185,7 @@ export function createMany(
 export function update(
     id: number | any, 
     data: Partial<ToolAttributes>,
-    scope?: (ToolScopesAttributes | ToolScopesAttributes[])
+    scope: (ToolScopesAttributes | ToolScopesAttributes[]) = "defaultScope"
 ): Promise<ToolModel> {
     return new Promise((resolve, reject) => {
         Tool.scope(scope).findByPk(id)
@@ -237,7 +237,7 @@ export function update(
 export function updateMany(
     options: UpdateOptions<ToolAttributes>, 
     data: Partial<ToolAttributes>,
-    scope?: (ToolScopesAttributes | ToolScopesAttributes[])
+    scope: (ToolScopesAttributes | ToolScopesAttributes[]) = "defaultScope"
 ): Promise<[affectedCount: number]> {
     return Tool.scope(scope).update(data, options);
 }
