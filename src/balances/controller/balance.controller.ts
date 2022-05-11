@@ -55,10 +55,7 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
         return res.status(201).json(
             await BalanceService.create(
                 Object.assign(
-                    req.body,
-                    {
-                        userId: req.params.user_id
-                    }
+                    req.body
                 ) as any
             )
         );

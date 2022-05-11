@@ -12,7 +12,7 @@ const {
 } = config;
 
 import s3 from '../../services/aws/s3';
-const upload = s3.upload("proof of absence");
+const upload = s3.uploadDocument("proof of absence");
 const uploadMany = upload.array("files", 5);
 
 const routePrefix = config.route_prefix + '/attendances';
@@ -21,13 +21,13 @@ export default (app: App): void => {
     // GET ALL ATTENDANCES
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ Student ]), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
 		AttendanceController.getAll
     ]);
     // GET ATTENDANCE BY ID
     app.get(`${routePrefix}/:attendance_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ Student ]), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('attendance_id', 'integer'),
         AttendanceMiddleware.attendanceExistAsParam("attendance_id"),
         AttendanceController.getById
@@ -35,7 +35,7 @@ export default (app: App): void => {
     // CREATE A NEW ATTENDANCE
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ Student ]), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
         uploadMany,
         RequestMiddleware.bodyParameterHoped('reason', 'string'),
         RequestMiddleware.bodyParameterHoped('missing', 'boolean'),
@@ -46,7 +46,7 @@ export default (app: App): void => {
     // UPDATE ATTENDANCE
     app.patch(`${routePrefix}/:attendance_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ Student ]), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('attendance_id', 'integer'),
         AttendanceMiddleware.attendanceExistAsParam("attendance_id"),
         uploadMany,
@@ -58,7 +58,7 @@ export default (app: App): void => {
     // DELETE ATTENDANCE
     app.delete(`${routePrefix}/:attendance_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ Student ]), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('attendance_id', 'integer'),
         AttendanceMiddleware.attendanceExistAsParam("attendance_id"),
         AttendanceController.remove

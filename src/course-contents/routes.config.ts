@@ -16,13 +16,13 @@ export default (app: App): void => {
     // GET ALL COURSE CONTENTS
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ Student ]), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
 		CourseContentController.getAll
     ]);
     // GET COURSE CONTENT BY ID
     app.get(`${routePrefix}/:coursecontent_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ Student ]), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('coursecontent_id', 'integer'),
         CourseContentMiddleware.coursecontentExistAsParam("coursecontent_id"),
         CourseContentController.getById
@@ -30,14 +30,14 @@ export default (app: App): void => {
     // CREATE A NEW COURSE CONTENT
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ Student ]), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
 		RequestMiddleware.bodyParametersNeeded(['name','link'], 'string'),
 		CourseContentController.create
     ]);
     // UPDATE COURSE CONTENT
     app.patch(`${routePrefix}/:coursecontent_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ Student ]), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('coursecontent_id', 'integer'),
         CourseContentMiddleware.coursecontentExistAsParam("coursecontent_id"),
         CourseContentController.update
@@ -45,7 +45,7 @@ export default (app: App): void => {
     // DELETE COURSE CONTENT
     app.delete(`${routePrefix}/:coursecontent_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ Student ]), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('coursecontent_id', 'integer'),
         CourseContentMiddleware.coursecontentExistAsParam("coursecontent_id"),
         CourseContentController.remove

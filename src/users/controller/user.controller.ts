@@ -65,7 +65,7 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
         } else {
             if(user?.avatarKey && !req.body.avatarKey) {
                 await s3.remove(user.avatarKey);
-                req.body.avatarKey = null;
+                req.body.avatarKey = '';
             }
         }
         return res.status(203).json(

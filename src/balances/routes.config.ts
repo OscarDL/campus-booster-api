@@ -9,18 +9,18 @@ import * as UserMiddleware from '../users/middleware/user.middleware';
 import config from '../../config/env.config';
 import { balanceStatus } from './model/balance.interface';
 const { 
-	permissionLevel: { Assistant, CampusManager, CampusBoosterAdmin }, 
+	permissionLevel: roles, 
     customRegex: { regInt } 
 } = config;
 
-const ADMIN = [ Assistant, CampusManager, CampusBoosterAdmin ];
+const ADMIN = [ roles.Assistant, roles.CampusManager, roles.CampusBoosterAdmin ];
 const routePrefix = config.route_prefix + '/balances';
 
 export default (app: App): void => {
     // GET ALL BALANCES
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe(ADMIN), 
+		PermissionMiddleware.rolesAllowed(ADMIN), 
         RequestMiddleware.queryParameterHoped('limit', 'integer'),
         RequestMiddleware.queryParameterHoped('offset', 'float'),
 		BalanceController.getAll
@@ -28,7 +28,7 @@ export default (app: App): void => {
     // GET USER BALANCES
     app.get(routePrefix + `/user/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.onlySameUserOrAdmin,
+        PermissionMiddleware.rolesAllowed(ADMIN.concat(roles.Student)),
         RequestMiddleware.queryParameterHoped('limit', 'integer'),
         RequestMiddleware.queryParameterHoped('offset', 'float'),
         RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
@@ -38,18 +38,17 @@ export default (app: App): void => {
     // GET BALANCE BY ID
     app.get(`${routePrefix}/:balance_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe(ADMIN), 
+		PermissionMiddleware.rolesAllowed(ADMIN), 
 		RequestMiddleware.paramParametersNeeded('balance_id', 'integer'),
         BalanceMiddleware.balanceExistAsParam("balance_id"),
         BalanceController.getById
     ]);
     // CREATE A NEW BALANCE
-    app.post(routePrefix + `/user/:user_id${regInt}`, [
+    app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(ADMIN),
-        RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
-        UserMiddleware.userExistAsParam('user_id'),
-		RequestMiddleware.bodyParametersNeeded(['dateReq','dateOpe'], 'string'),
+    RequestMiddleware.bodyParametersNeeded('userId', 'integer'),
+		    RequestMiddleware.bodyParametersNeeded(['dateReq','dateOpe'], 'string'),
         RequestMiddleware.bodyParametersNeeded("status", "enum", [...balanceStatus]),
         RequestMiddleware.bodyParameterHoped('description', "string"),
         RequestMiddleware.bodyParameterHoped('debit', "string"),
@@ -59,7 +58,7 @@ export default (app: App): void => {
     // UPDATE BALANCE
     app.patch(`${routePrefix}/:balance_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe(ADMIN), 
+		PermissionMiddleware.rolesAllowed(ADMIN), 
 		RequestMiddleware.paramParametersNeeded('balance_id', 'integer'),
         BalanceMiddleware.balanceExistAsParam("balance_id"),
         RequestMiddleware.bodyParameterHoped('dateReq', 'string'),
@@ -73,7 +72,7 @@ export default (app: App): void => {
     // DELETE BALANCE
     app.delete(`${routePrefix}/:balance_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe(ADMIN), 
+		PermissionMiddleware.rolesAllowed(ADMIN), 
 		RequestMiddleware.paramParametersNeeded('balance_id', 'integer'),
         BalanceMiddleware.balanceExistAsParam("balance_id"),
         BalanceController.remove
