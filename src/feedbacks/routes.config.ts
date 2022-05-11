@@ -16,13 +16,13 @@ export default (app: App): void => {
     // GET ALL FEEDBACKS
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ Student ]), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
 		FeedbackController.getAll
     ]);
     // GET FEEDBACK BY ID
     app.get(`${routePrefix}/:feedback_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ Student ]), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('feedback_id', 'integer'),
         FeedbackMiddleware.feedbackExistAsParam("feedback_id"),
         FeedbackController.getById
@@ -30,14 +30,14 @@ export default (app: App): void => {
     // CREATE A NEW FEEDBACK
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ Student ]), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
 		RequestMiddleware.bodyParametersNeeded(['presentation','pedagogy','technicalCompetence','fluencyInSpeaking'], 'string'),
 		FeedbackController.create
     ]);
     // UPDATE FEEDBACK
     app.patch(`${routePrefix}/:feedback_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ Student ]), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('feedback_id', 'integer'),
         FeedbackMiddleware.feedbackExistAsParam("feedback_id"),
         FeedbackController.update
@@ -45,7 +45,7 @@ export default (app: App): void => {
     // DELETE FEEDBACK
     app.delete(`${routePrefix}/:feedback_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ Student ]), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('feedback_id', 'integer'),
         FeedbackMiddleware.feedbackExistAsParam("feedback_id"),
         FeedbackController.remove

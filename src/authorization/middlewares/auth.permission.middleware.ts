@@ -126,29 +126,3 @@ export function onlySuperAdmin(req: Req, res: Res, next: Next): Resp {
         return next(boom.unauthorized('invalid_session'));
     }
 }
-
-export function iMustBe(roles: Role | Roles): Fn {
-    return (req: Req, res: Res, next: Next): Resp => {
-        try {
-            if(!req.user) throw new Error('Login required.');
-            if(req.user?.active) {
-                const userRole = req.user?.role;
-                if (userRole && Array.isArray(roles) ? roles.includes(userRole) : userRole === roles) {
-                    req.isAdmin = ([ permissionLevel.CampusManager, permissionLevel.CampusBoosterAdmin ].includes(userRole!)) ? true : false;
-                    return next();
-                } else {
-                    if(!userRole) {
-                        return next(boom.forbidden(`banned`));
-                    } else {
-                        return next(boom.badRequest('missing_access_rights'));
-                    }
-                }    
-            } else {
-                return next(boom.notAcceptable('validate_account'));
-            }
-        } catch (e: any) {
-            console.log(`${e}`.error);
-            return next(boom.unauthorized('invalid_session')); 
-        }
-    }
-}

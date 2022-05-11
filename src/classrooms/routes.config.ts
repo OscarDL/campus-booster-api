@@ -14,40 +14,40 @@ const {
 const routePrefix = config.route_prefix + '/classrooms'; 
 
 export default (app: App): void => {
-    // GET ALL CLASSES
+    // GET ALL CLASSROOMS
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ Student ]), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
 		ClassroomController.getAll
     ]);
-    // GET CLASSE BY ID
+    // GET CLASSROOM BY ID
     app.get(`${routePrefix}/:classroom_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ Student ]), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('classroom_id', 'integer'),
         ClassroomMiddleware.classroomExistAsParam("classroom_id"),
         ClassroomController.getById
     ]);
-    // CREATE A NEW CLASSE
+    // CREATE A NEW CLASSROOM
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ CampusManager, CampusBoosterAdmin ]), 
+		PermissionMiddleware.rolesAllowed([ CampusManager, CampusBoosterAdmin ]), 
 		RequestMiddleware.bodyParametersNeeded(['section', 'campusId'], 'integer'),
         CampusMiddleware.campusExistAsBody('campusId'),
 		ClassroomController.create
     ]);
-    // UPDATE CLASSE
+    // UPDATE CLASSROOM
     app.patch(`${routePrefix}/:classroom_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ Student ]), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('classroom_id', 'integer'),
         ClassroomMiddleware.classroomExistAsParam("classroom_id"),
         ClassroomController.update
     ]);
-    // DELETE CLASSE
+    // DELETE CLASSROOM
     app.delete(`${routePrefix}/:classroom_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.iMustBe([ Student ]), 
+		PermissionMiddleware.rolesAllowed([ Student ]), 
 		RequestMiddleware.paramParametersNeeded('classroom_id', 'integer'),
         ClassroomMiddleware.classroomExistAsParam("classroom_id"),
         ClassroomController.remove
