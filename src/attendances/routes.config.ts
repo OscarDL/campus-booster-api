@@ -12,7 +12,7 @@ const {
 } = config;
 
 import s3 from '../../services/aws/s3';
-const upload = s3.upload("proof of absence");
+const upload = s3.uploadDocument("proof of absence");
 const uploadMany = upload.array("files", 5);
 
 const routePrefix = config.route_prefix + '/attendances';

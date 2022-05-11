@@ -1,11 +1,17 @@
 import multer from "multer";
 import aws from 'aws-sdk';
 /**
- * Upload a file into AWS private Bucket
+ * Upload an image file into AWS private Bucket
  * @param directory The name of your AWS directory to store the document
  * @returns {multer.Multer} a multer object initialize
  */
-export declare function upload(directory: string): multer.Multer;
+export declare function uploadImage(directory: string): multer.Multer;
+/**
+ * Upload a document file into AWS private Bucket
+ * @param directory The name of your AWS directory to store the document
+ * @returns {multer.Multer} a multer object initialize
+ */
+export declare function uploadDocument(directory: string): multer.Multer;
 /**
  * Download a file into AWS private Bucket
  * @param fileKey The key of your file :

@@ -13,7 +13,7 @@ const {
 } = config;
 
 import s3 from '../../services/aws/s3';
-const upload = s3.upload("users");
+const upload = s3.uploadImage("users");
 const singleUpload = upload.single("file");
 
 const routePrefix = config.route_prefix + '/users';

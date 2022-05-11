@@ -14,7 +14,7 @@ const {
 const routePrefix = config.route_prefix + '/tools';
 
 import s3 from '../../services/aws/s3';
-const upload = s3.upload('tools');
+const upload = s3.uploadImage('tools');
 const uploadSingle = upload.single('file');
 
 export default (app: App): void => {
