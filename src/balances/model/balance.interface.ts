@@ -5,11 +5,11 @@ export const balanceStatus = <const> [ "pending", "validate", "canceled" ];
 export type BalanceStatus = typeof balanceStatus[number];
 export interface BalanceAttributes {
   readonly id: number;
-	dateReq: Date;
-	dateOpe: Date;
-	description?: string;
-	debit?: number;
-	credit?: number;
+	dateRequested: Date;
+	dateConfirmed: Date;
+	description: string;
+	debit: number;
+	credit: number;
 	status: BalanceStatus;
 	readonly created_at?: Date;
 	readonly updated_at?: Date;

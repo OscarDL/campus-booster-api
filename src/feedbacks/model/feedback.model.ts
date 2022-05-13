@@ -17,7 +17,7 @@ import ClassroomHasCourse from './../../classroom_has_courses/model/classroomhas
 export default class Feedback extends S.Model implements FeedbackModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.BIGINT)
+	@S.Column(S.DataType.INTEGER)
 	public id!: number;
 
 	@S.AllowNull(false)
