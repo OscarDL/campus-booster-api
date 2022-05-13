@@ -20,12 +20,15 @@
 		"invalid_hash": "Invalid connection hash.",
 		"missing_user_id": "Missing user identification parameter."
 	},
-	"refreshToken_missing": "You should specify a 'refreshToken' in your request.",
-	"url_missing": "You should specify a 'url' in your request.",
-	"title_missing": "You should specify a 'title' in your request.",
-	"category_missing": "You should specify a 'category' in your request.",
-	"dateReq_missing": "You should specify a 'dateReq' in your request.",
-	"dateOpe_missing": "You should specify a 'dateOpe' in your request.",
-	"status_missing": "You should specify a 'status' in your request.",
-	"status_format": "Your entered status is not part of the status options."
+	"refreshToken_missing": "You should specify \"refreshToken\" in your request.",
+	"url_missing": "You should specify \"url\" in your request.",
+	"title_missing": "You should specify \"title\" in your request.",
+	"category_missing": "You should specify \"category\" in your request.",
+	"dateRequested_missing": "You should specify \"dateRequested\" in your request.",
+	"dateConfirmed_missing": "You should specify \"dateConfirmed\" in your request.",
+	"status_missing": "You should specify \"status\" in your request.",
+	"status_format": "Your entered status is not part of the status options.",
+	"invalid_image_format": "Image format \"%s\" is not allowed.",
+	"invalid_document_format": "Document format \"%s\" is not allowed.",
+	"azureId_missing": "You should specify \"azureId\" in your request."
 }

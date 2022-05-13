@@ -17,7 +17,7 @@ import Classroom from './../../classrooms/model/classroom.model';
 export default class Campus extends S.Model implements CampusModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.BIGINT)
+	@S.Column(S.DataType.INTEGER)
 	public id!: number;
 
 	@S.AllowNull(false)

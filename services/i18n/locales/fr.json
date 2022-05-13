@@ -20,15 +20,17 @@
 		"invalid_hash": "Hash de connexion invalide.",
 		"missing_user_id": "Paramètre d'identification de l'utilisateur manquant."
 	},
-	"section_missing": "Vous devez spécifier un(e) 'section' dans votre requête.",
-	"campusId_missing": "Vous devez spécifier un(e) 'campusId' dans votre requête.",
-	"refreshToken_missing": "Vous devez spécifier un(e) 'refreshToken' dans votre requête.",
-	"url_missing": "Vous devez spécifier un(e) 'url' dans votre requête.",
-	"title_missing": "Vous devez spécifier un(e) 'title' dans votre requête.",
-	"category_missing": "Vous devez spécifier un(e) 'category' dans votre requête.",
-	"dateReq_missing": "Vous devez spécifier un(e) 'dateReq' dans votre requête.",
-	"dateOpe_missing": "Vous devez spécifier un(e) 'dateOpe' dans votre requête.",
-	"status_missing": "Vous devez spécifier un(e) 'status' dans votre requête.",
+	"section_missing": "Vous devez spécifier \"section\" dans votre requête.",
+	"campusId_missing": "Vous devez spécifier \"campusId\" dans votre requête.",
+	"refreshToken_missing": "Vous devez spécifier \"refreshToken\" dans votre requête.",
+	"url_missing": "Vous devez spécifier \"url\" dans votre requête.",
+	"title_missing": "Vous devez spécifier \"title\" dans votre requête.",
+	"category_missing": "Vous devez spécifier \"category\" dans votre requête.",
+	"dateReq_missing": "Vous devez spécifier \"dateReq\" dans votre requête.",
+	"dateOpe_missing": "Vous devez spécifier \"dateOpe\" dans votre requête.",
+	"status_missing": "Vous devez spécifier \"status\" dans votre requête.",
 	"status_format": "Votre status entré ne fait pas parti des options de status.",
-	"test_missing": "Vous devez spécifier un(e) 'test' dans votre requête."
+	"test_missing": "Vous devez spécifier \"test\" dans votre requête.",
+	"invalid_image_format": "Format de l'image \"%s\" non autorisé.",
+	"invalid_document_format": "Format du document \"%s\" non autorisé."
 }
