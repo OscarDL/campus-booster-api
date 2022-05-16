@@ -7,11 +7,11 @@ export function coursecontentExistAsQuery(name: string): AsyncFn {
         try {
             if(req.query[name]) {
                 const coursecontent = await findById(req.query[name]);
-                return (!coursecontent) ? next(boom.badRequest(`CourseContent_not_found`)) : next();
+                return (!coursecontent) ? next(boom.badRequest(`resource_not_found`, [ "CourseContent", req.query[name]])) : next();
             }
             return next();
         } catch (err: any) {
-            console.log(`${err}`.error);
+            console.log(`${err}`.red.bold);
             return next(err.isBoom ? err : boom.internal(err.name));
         }
     }
@@ -22,11 +22,11 @@ export function coursecontentExistAsBody(name: string): AsyncFn {
         try {
             if(req.body[name]) {
                 const coursecontent = await findById(req.body[name]);
-                return (!coursecontent) ? next(boom.badRequest(`CourseContent_not_found`)) : next();
+                return (!coursecontent) ? next(boom.badRequest(`resource_not_found`, [ "CourseContent", req.body[name]])) : next();
             }
             return next();
         } catch (err: any) {
-            console.log(`${err}`.error);
+            console.log(`${err}`.red.bold);
             return next(err.isBoom ? err : boom.internal(err.name));
         }
     }
@@ -37,11 +37,11 @@ export function coursecontentExistAsParam(name: string): AsyncFn {
         try {
             if(req.params[name]) { 
                 const coursecontent = await findById(req.params[name]);
-                return (!coursecontent) ? next(boom.badRequest(`CourseContent_not_found`)) : next();
+                return (!coursecontent) ? next(boom.badRequest(`resource_not_found`, [ "CourseContent", req.params[name]])) : next();
             }
             return next();
         } catch (err: any) {
-            console.log(`${err}`.error);
+            console.log(`${err}`.red.bold);
             return next(err.isBoom ? err : boom.internal(err.name));
         }
     }

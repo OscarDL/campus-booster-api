@@ -8,9 +8,9 @@ export default (() => ({
         },
         include: [
             {
-                model: User,
+                model: User.unscoped(),
                 required: true,
-                attributes: [ "id", "first_name", "last_name", "email" ]
+                attributes: [ "id", "firstName", "lastName", "email" ]
             }
         ]
     }) as ScopesOptions,

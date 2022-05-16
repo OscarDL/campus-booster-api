@@ -29,7 +29,7 @@ export function rolesAllowed(roles: Roles): Fn {
                 return next(boom.notAcceptable('validate_account'));
             }
         } catch (e: any) {
-            console.log(`${e}`.error);
+            console.log(`${e}`.red.bold);
             return next(boom.unauthorized('invalid_session')); 
         }
     }
@@ -57,14 +57,14 @@ export function onlySameUserOrAdmin(req: Req, res: Res, next: Next): Resp {
                         }
                     }
                 } else {
-                    return next(boom.badRequest('params.missing_user_id'));
+                    return next(boom.badRequest('params_missing_user_id'));
                 }
             }   
         } else {
             return next(boom.notAcceptable('validate_account'));
         }
     } catch (e: any) {
-        console.log(`${e}`.error);
+        console.log(`${e}`.red.bold);
         return next(boom.unauthorized('invalid_session'));
     }
 }
@@ -91,14 +91,14 @@ export function onlySameUserOrSuperAdmin(req: Req, res: Res, next: Next): Resp {
                         }
                     }
                 } else {
-                    return next(boom.badRequest('params.missing_user_id'));
+                    return next(boom.badRequest('params_missing_user_id'));
                 }
             }
         } else {
             return next(boom.notAcceptable('validate_account'));
         }
     } catch (e: any) {
-        console.log(`${e}`.error);
+        console.log(`${e}`.red.bold);
         return next(boom.unauthorized('invalid_session'));
     }
 }
@@ -122,7 +122,7 @@ export function onlySuperAdmin(req: Req, res: Res, next: Next): Resp {
             return next(boom.notAcceptable('validate_account'));
         }
     } catch (e: any) {
-        console.log(`${e}`.error);
+        console.log(`${e}`.red.bold);
         return next(boom.unauthorized('invalid_session'));
     }
 }

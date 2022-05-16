@@ -41,12 +41,12 @@ export function authSocketMidddleware (io: IServer): void {
                         return next(boom.unauthorized('unauthorized'));
                     }
                 } catch (err: any) {
-                    console.log(`${err}`.error);
+                    console.log(`${err}`.red.bold);
                     return next(boom.unauthorized(err));
                 }
             }
         } catch (err: any) {
-            console.log(`${err}`.error);
+            console.log(`${err}`.red.bold);
             return next(boom.badRequest(err));
         }
     });

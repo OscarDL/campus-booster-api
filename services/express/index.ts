@@ -8,7 +8,7 @@ export function ExpressErrorHandler(err: any): AsyncFn {
         const Infos: string[] = Errors[1].split(':');
         const fileName = Infos[0].split('/').pop();
         const [ col, line ] = [ Infos[1], Infos[2] ];
-        console.log(`${err}`.error);
+        console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));
     }
 }
@@ -31,8 +31,37 @@ export default abstract class ExpressMiddlewares {
             if(err && req.file) {
                 await s3.remove((req.file as any).key);
             }
+            if(err && req.files) {
+                const files = req.files as Express.Multer.File[];
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    await s3.remove((file as any).key);
+                }
+            }
             if (err.isBoom) {
-                return res.end(res.status(err.output.statusCode).__(err.output.payload.message));
+                if(err.data) {
+                    if(Array.isArray(err.data)) {
+                        return res.end(
+                            res.status(err.output.statusCode).__(
+                                err.output.payload.message,
+                                ...err.data
+                            )
+                        );
+                    } else {
+                        return res.end(
+                            res.status(err.output.statusCode).__(
+                                err.output.payload.message,
+                                err.data
+                            )
+                        );
+                    }
+                } else {
+                    return res.end(
+                        res.status(err.output.statusCode).__(
+                            err.output.payload.message
+                        )
+                    );
+                }
             } else {
                 if(err instanceof Error) {
                     console.log(err.message.red.bold);

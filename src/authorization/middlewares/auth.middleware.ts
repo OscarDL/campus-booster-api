@@ -35,7 +35,7 @@ export async function decryptToken(req: Req, res: Res, next: Next): Promise<Resp
 
     const validAzureId = await bcrypt.compare(req.body.azureId, req.user.azureId!);
 
-    if (!validAzureId) return next(boom.badRequest(`params.invalid_hash`));
+    if (!validAzureId) return next(boom.badRequest(`params_invalid_hash`));
 
     req.user.azureId = undefined;
     next();

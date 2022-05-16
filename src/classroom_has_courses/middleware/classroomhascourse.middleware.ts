@@ -7,11 +7,11 @@ export function classroomhascourseExistAsQuery(name: string): AsyncFn {
         try {
             if(req.query[name]) {
                 const classroomhascourse = await findById(req.query[name]);
-                return (!classroomhascourse) ? next(boom.badRequest(`ClassroomHasCourse_not_found`)) : next();
+                return (!classroomhascourse) ? next(boom.badRequest(`resource_not_found`, [ "ClassroomHasCourse", req.query[name]])) : next();
             }
             return next();
         } catch (err: any) {
-            console.log(`${err}`.error);
+            console.log(`${err}`.red.bold);
             return next(err.isBoom ? err : boom.internal(err.name));
         }
     }
@@ -22,11 +22,11 @@ export function classroomhascourseExistAsBody(name: string): AsyncFn {
         try {
             if(req.body[name]) {
                 const classroomhascourse = await findById(req.body[name]);
-                return (!classroomhascourse) ? next(boom.badRequest(`ClassroomHasCourse_not_found`)) : next();
+                return (!classroomhascourse) ? next(boom.badRequest(`resource_not_found`, [ "ClassroomHasCourse", req.body[name]])) : next();
             }
             return next();
         } catch (err: any) {
-            console.log(`${err}`.error);
+            console.log(`${err}`.red.bold);
             return next(err.isBoom ? err : boom.internal(err.name));
         }
     }
@@ -37,11 +37,11 @@ export function classroomhascourseExistAsParam(name: string): AsyncFn {
         try {
             if(req.params[name]) { 
                 const classroomhascourse = await findById(req.params[name]);
-                return (!classroomhascourse) ? next(boom.badRequest(`ClassroomHasCourse_not_found`)) : next();
+                return (!classroomhascourse) ? next(boom.badRequest(`resource_not_found`, [ "ClassroomHasCourse", req.params[name]])) : next();
             }
             return next();
         } catch (err: any) {
-            console.log(`${err}`.error);
+            console.log(`${err}`.red.bold);
             return next(err.isBoom ? err : boom.internal(err.name));
         }
     }

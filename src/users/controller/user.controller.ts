@@ -11,7 +11,7 @@ export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
             )
         );
     } catch (err: any) {
-        console.log(`${err}`.error);
+        console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));
     }
 }
@@ -27,7 +27,7 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
             )
         );
     } catch (err: any) {
-        console.log(`${err}`.error);
+        console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));
     }
 }
@@ -51,7 +51,7 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
             )
         );
     } catch (err: any) {
-        console.log(`${err}`.error);
+        console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));
     }
 }
@@ -65,7 +65,7 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
         } else {
             if(user?.avatarKey && !req.body.avatarKey) {
                 await s3.remove(user.avatarKey);
-                req.body.avatarKey = '';
+                req.body.avatarKey = null;
             }
         }
         return res.status(203).json(
@@ -75,7 +75,7 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
             )
         );
     } catch (err: any) {
-        console.log(`${err}`.error);
+        console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));
     }
 }
@@ -96,7 +96,7 @@ export async function remove(req: Req, res: Res, next: Next): Promise<Resp>  {
             )
         );
     } catch (err: any) {
-        console.log(`${err}`.error);
+        console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));
     }
 }

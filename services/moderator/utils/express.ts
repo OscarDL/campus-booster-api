@@ -19,7 +19,7 @@ module ExpressModerator {
                 }
                 return next();
             } catch (err: any) {
-                console.log(`${err}`.error);
+                console.log(`${err}`.red.bold);
                 return next(err.isBoom ? err : boom.internal(err.name));
             }
         }
@@ -42,7 +42,7 @@ module ExpressModerator {
                 }
                 return next();
             } catch (err: any) {
-                console.log(`${err}`.error);
+                console.log(`${err}`.red.bold);
                 return next(err.isBoom ? err : boom.internal(err.name));
             }
         }
