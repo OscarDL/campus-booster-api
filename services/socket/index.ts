@@ -11,7 +11,7 @@ import * as UserService from '../../src/users/service/user.service';
  * @param io - Socket.io server
  * @return void
  */
-export function authSocketMidddleware (io: IServer): void {
+export function authSocketMiddleware (io: IServer): void {
     io.use( async (socket: ISocket, next) => {
         try {
             const token = socket.handshake.auth?.token?.split(' ') || [];

@@ -6,7 +6,7 @@
     "start": "pnpm build && node ./build/app.js",
     "start:dev": "nodemon",
     "build": "rimraf ./build && tsc && ts-node ./utils/uglify.ts",
-    "migration": "npm install -g pnpm && ts-node ./utils/rmNodeModules.ts && pnpm import && pnpm install",
+    "migration": "npm i && npm install -g pnpm && rimraf ./node_modules && pnpm import && pnpm install",
     "test": "ts-mocha ./tests/*.test.ts --timeout 10000"
   },
   "author": "Ulysse Dupont",
