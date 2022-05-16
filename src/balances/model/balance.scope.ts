@@ -13,10 +13,5 @@ export default (() => ({
                 attributes: [ "id", "firstName", "lastName", "email" ]
             }
         ]
-    }) as ScopesOptions,
-    all: ({
-        attributes: { 
-            exclude: []
-        }
-    }) as ScopesOptions,
+    }) as ScopesOptions
 }));

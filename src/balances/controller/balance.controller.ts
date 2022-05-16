@@ -52,12 +52,13 @@ export async function getUser(req: Req, res: Res, next: Next): Promise<Resp> {
 
 export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        const balance = await BalanceService.create(
+            Object.assign(
+                req.body
+            ) as any
+        );
         return res.status(201).json(
-            await BalanceService.create(
-                Object.assign(
-                    req.body
-                ) as any
-            )
+            await BalanceService.findById(balance?.id)   
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);
@@ -67,11 +68,12 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
 
 export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        const balance = await BalanceService.update(
+            req.params.balance_id, 
+            req.body
+        );
         return res.status(203).json(
-            await BalanceService.update(
-                req.params.balance_id, 
-                req.body
-            )
+            await BalanceService.findById(balance?.id)   
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);

@@ -23,23 +23,21 @@ import routeConfig from './config/routes.config';
 import socketConfig from './config/sockets.config';
 import ExpressMiddleware from './services/express';
 import { Next, Req, Res, Resp } from './types/express';
-import { authSocketMidddleware } from './services/socket';
+import { authSocketMiddleware } from './services/socket';
 import { i18n } from './services/i18n';
 import '@dulysse1/better-node';
+import { exec } from "node:child_process";
 
 let server;
 theme(config.colors);
 const app = express();
 
+async function execShell(cmd: string): Promise<string> {
+    return new Promise((resolve, reject) => exec(cmd, (err, out) => err ? reject(err) : resolve(out)));
+}
 
-if (process.env.NODE_ENV === 'development') {
-
-    const port = Number(process.env.PORT);
-    const key = fs.readFileSync('key.pem', 'utf8');
-    const cert = fs.readFileSync('cert.pem', 'utf8');
-
+function devHttpsServer(key: string, cert: string, port: number): void {
     server = https.createServer({key, cert}, app);
-    
     server.listen(port, () => {
         console.log(`\n⮕  App listening on port ${port}`.info);
         console.log(`\n⮕  Local server: https://localhost:${port}`.rgb(249, 218, 65));
@@ -50,20 +48,39 @@ if (process.env.NODE_ENV === 'development') {
             console.log(`\n⮕  Network server: https://${IP_ADDRESS}:${port}`.rgb(249, 174, 65));
         }
     });
-
     server.on('error', (error) => onError(error, port));
-
-} else {
-
-    const clientPath = path.join(__dirname, path.sep, '..', path.sep, 'client', 'build');
-
-    app.use(express.static(clientPath));
-    app.get('*', (_, res) => res.sendFile(path.join(clientPath, 'index.html')));
-
-    server = http.createServer(app);
-
 }
 
+if (process.env.NODE_ENV === 'development') {
+
+    const port = Number(process.env.PORT);
+    let key, cert;
+    try {
+        key = fs.readFileSync('key.pem', 'utf8');
+        cert = fs.readFileSync('cert.pem', 'utf8');
+    } catch (err) {
+        void 0;
+    }
+    if(!key || !cert) {
+        console.log("Https certificate creation...".blue);
+        execShell("mkcert -key-file key.pem -cert-file cert.pem localhost").then(out => {
+            key = fs.readFileSync('key.pem', 'utf8');
+            cert = fs.readFileSync('cert.pem', 'utf8');
+            console.log(out.info);
+            devHttpsServer(key, cert, port);
+        }).catch(() => {
+            console.log("mkcert HTTPS localhost error.".red.bold);
+            process.exit(1);
+        });
+    } else {
+        devHttpsServer(key, cert, port);
+    }
+} else {
+    const clientPath = path.join(__dirname, path.sep, '..', path.sep, 'client', 'build');
+    app.use(express.static(clientPath));
+    app.get('*', (_, res) => res.sendFile(path.join(clientPath, 'index.html')));
+    server = http.createServer(app);
+}
 
 // app security config
 const corsOpts: cors.CorsOptions = {
@@ -158,7 +175,7 @@ app.use((req: Req, res: Res, next: Next): Resp  => {
 
 
 // load all routes (express & socket.io)
-authSocketMidddleware(io);
+authSocketMiddleware(io);
 socketConfig(io);
 routeConfig(app);
 
