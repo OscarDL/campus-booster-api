@@ -1,41 +1,28 @@
 import mailer from 'nodemailer';
+import Mail from 'nodemailer/lib/mailer';
 import config from '../../config/env.config';
 const { mailing, app_name, app_uri } = config;
 
-import * as ForgetpasswordPage from './templates/ResetPassword';
+// TEMPLATE CONFIG
 import * as ValidateAccountPage from './templates/ConfirmEmail';
-import Mail from 'nodemailer/lib/mailer';
 
 const Config = <const> [
     {
-        type: 'forget-password',
-        options: {} as MailerServiceNamespace.OptionsForgotPassword,
-        config: (options: MailerServiceNamespace.OptionsForgotPassword): Mail.Options => {
-            return {
-                from: mailing.config.auth.user,
-                to: options.email,
-                subject: `Update your password ${app_name}`,
-                html: ForgetpasswordPage.template(options.email, options.username, options.token, options.origin),
-                text: `${app_uri}/auth/reset_password?redirectUri=${options.origin}&email=${options.email}&token=${options.token}`,
-                attachments: ForgetpasswordPage.attachments
-            }
-        }
-    },
-    {
         type: 'validate-account',
-        options: {} as MailerServiceNamespace.OptionsValidateAccount,
-        config: (options: MailerServiceNamespace.OptionsValidateAccount): Mail.Options => {
+        config: (options: M.OptionsValidateAccount): Mail.Options => {
             return {
                 from: mailing.config.auth.user,
                 to: options.email,
                 subject: `Validate your account ${app_name}`,
-                html: ValidateAccountPage.template(options.email, options.username, options.token, options.origin),
-                text: `${app_uri}/auth/validate_account?redirectUri=${options.origin}&email=${options.email}&token=${options.token}`,
+                html: ValidateAccountPage.template(options.email, options.username, options.password),
+                text: options.password,
                 attachments: ValidateAccountPage.attachments
             }
         }
     }
 ];
+
+
 
 /**
  * Node mailer custom service
@@ -49,14 +36,14 @@ const Config = <const> [
  *  https://security.google.com/settings/security/activity?hl=en&pli=1
  */
 export default class MailerService<
-    C extends typeof Config,
-    T extends C[number]['type'],
-    O extends C[number]['options']
+    T extends typeof Config,
+    K extends T[number]['type'],
+    C extends T[number]['config']
 > {
     protected _transporter!: mailer.Transporter;
     constructor() { this._init_(); }
     protected _init_(): void {
-        this._transporter = mailer.createTransport(mailing.config);
+        this._transporter = mailer.createTransport(mailing.config as any);
     }
     /**
      * Sends an email using custom config
@@ -85,9 +72,9 @@ export default class MailerService<
      * ```
      * @returns A promise boolean
      */
-    public async custom(type: T, options: O): Promise<boolean> {
+    public async custom(type: K, options: M.UnpackFirstParam<C>): Promise<boolean> {
         try {
-            const m: MailerServiceNamespace.MailerResponse = await this._transporter.sendMail(
+            const m: M.MailerResponse = await this._transporter.sendMail(
                 Config.find(c => c?.type === type)?.config(options as any)!
             );
             return m?.accepted?.includes(options.email)!;
@@ -124,7 +111,7 @@ export default class MailerService<
         rejected?: string[];
     }> {
         try {
-            const m: MailerServiceNamespace.MailerResponse = await this._transporter.sendMail(
+            const m: M.MailerResponse = await this._transporter.sendMail(
                 Object.assign<Mail.Options, Mail.Options>(options, { from: mailing.config.auth.user })
             );
             return { accepted: m?.accepted, rejected: m?.rejected };
@@ -134,22 +121,18 @@ export default class MailerService<
         }
     }
 }
-namespace MailerServiceNamespace {
-    
+namespace M {
     export interface OptionsForgotPassword {
         email: string; 
         username: string;
         token: string;
         origin: string;
     };
-
     export interface OptionsValidateAccount {
         email: string; 
         username: string;
-        token: string;
-        origin: string;
+        password: string;
     };
-
     export interface MailerResponse {
         accepted?: string[];
         rejected?: string[];
@@ -163,4 +146,5 @@ namespace MailerServiceNamespace {
         };
         messageId?: string;
     };
+    export type UnpackFirstParam<T> = T extends (p: infer P, ...next: any) => any ? P : never;
 }

@@ -1,7 +1,7 @@
 import config from '../../../../config/env.config';
 
 
-export function template(to: string, username: string, token: string, origin: string): string {
+export function template(to: string, username: string, password: string): string {
     return `
         <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
         <html xmlns='http://www.w3.org/1999/xhtml' xmlns:o='urn:schemas-microsoft-com:office:office' style='width:100%;font-family:helvetica, 'helvetica neue', arial, verdana, sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;padding:0;Margin:0'>
@@ -152,7 +152,7 @@ export function template(to: string, username: string, token: string, origin: st
                             <td align='center' style='padding:0;Margin:0;padding-top:25px;padding-left:40px;padding-right:40px'><p style='Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:helvetica, 'helvetica neue', arial, verdana, sans-serif;line-height:24px;color:#666666;font-size:16px'>If did not make this request, just ignore this email. Otherwise, please click the button below to validate your email:</p></td> 
                             </tr> 
                             <tr style='border-collapse:collapse'> 
-                            <td align='center' style='Margin:0;padding-left:10px;padding-right:10px;padding-top:40px;padding-bottom:40px'><span class='es-button-border-1 es-button-border' style='border-style:solid;border-color:#FF954D;background:#FFFFFF;border-width:2px;display:inline-block;border-radius:10px;width:auto'><a href='${config.app_uri}/auth/validate_account?redirectUri=${origin}&email=${to}&token=${token}' class='es-button' target='_blank' style='mso-style-priority:100 !important;text-decoration:none;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;color:#FF954D;font-size:14px;border-style:solid;border-color:#FFFFFF;border-width:15px 20px 15px 20px;display:inline-block;background:#FFFFFF;border-radius:10px;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-weight:bold;font-style:normal;line-height:17px;width:auto;text-align:center'>CONTINUE</a></span></td> 
+                            <td align='center' style='Margin:0;padding-left:10px;padding-right:10px;padding-top:40px;padding-bottom:40px'><span class='es-button-border-1 es-button-border' style='border-style:solid;border-color:#FF954D;background:#FFFFFF;border-width:2px;display:inline-block;border-radius:10px;width:auto'>${password}</span></td> 
                             </tr> 
                             <tr style='border-collapse:collapse'> 
                             <td align='left' style='padding:0;Margin:0;padding-bottom:10px;padding-left:40px'><p style='Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:helvetica, 'helvetica neue', arial, verdana, sans-serif;line-height:24px;color:#666666;font-size:16px'>Kind Regards,<br>${config.author}.</p></td> 

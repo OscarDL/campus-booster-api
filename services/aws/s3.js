@@ -5,6 +5,7 @@ const multerS3 = require('multer-s3-transform');
 const config = require('../../config/env.config').default;
 const moment = require('moment');
 const boom = require('@hapi/boom');
+const mime = require("mime-types");
 
 const AUTHORIZED_IMAGE_EXTENSIONS = [
   'image/png',
@@ -25,13 +26,21 @@ const s3 = new aws.S3({
   region: config.aws.region
 });
 
+exports.upload = (fileKey, Body) => {
+  return s3.putObject({ 
+    Bucket: process.env.AWS_BUCKET, 
+    Key: fileKey, 
+    Body: Body, 
+    ContentType: mime.lookup(fileKey) 
+  }).promise();
+};
 
 exports.download = (fileKey) => {
-  return s3.getObject({ Bucket: config.aws.bucket, Key: fileKey }).promise();
+  return s3.getObject({ Bucket: process.env.AWS_BUCKET, Key: fileKey }).promise();
 };
 
 exports.remove = (fileKey) => {
-  return s3.deleteObject({ Bucket: config.aws.bucket, Key: fileKey }).promise();
+  return s3.deleteObject({ Bucket: process.env.AWS_BUCKET, Key: fileKey }).promise();
 };
 
 exports.uploadImage = (directory) => multer({

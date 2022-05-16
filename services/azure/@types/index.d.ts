@@ -4,6 +4,8 @@ namespace Az {
   export type GetUsersResponse = RequestResponse<User[]>;
   export type GetUserResponse = User | null;
   export type GetUserPhotoMetadataResponse = UserPhotoMetadata |null;
+  export type PostUserCreationForm = FormUserCreation;
+  export type PostUserResponse = UserCreationResponse | null;
 }
 interface RequestResponse<T> {
   value: T;
@@ -68,6 +70,31 @@ interface User {
   surname: string;
   userPrincipalName: string;
   id: string;
+}
+interface PasswordProfile {
+  forceChangePasswordNextSignIn: boolean;
+  password: string;
+}
+interface FormUserCreation {
+  accountEnabled: boolean;
+  displayName: string;
+  mailNickname: string;
+  userPrincipalName: string;
+  passwordProfile: PasswordProfile;
+}
+interface UserCreationResponse {
+  '@odata.context': string;
+  id: string;
+  businessPhones: string[];
+  displayName: string;
+  givenName: string;
+  jobTitle: string;
+  mail: string;
+  mobilePhone: string;
+  officeLocation: string;
+  preferredLanguage: string;
+  surname: string;
+  userPrincipalName: string;
 }
 export interface UserPhotoMetadata {
   '@odata.context': string;

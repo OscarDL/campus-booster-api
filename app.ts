@@ -169,7 +169,7 @@ app.use((req: Req, res: Res, next: Next): Resp => {
 
 // set up i18n
 app.use((req: Req, res: Res, next: Next): Resp  => {
-    i18n.init(req, res);
+    i18n.init(req, res, next);
     return next();
 });
 

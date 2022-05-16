@@ -41,8 +41,10 @@ export default (app: App): void => {
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed([roles.CampusManager, roles.CampusBoosterAdmin]),
         singleUpload,
-		RequestMiddleware.bodyParametersNeeded(['azureId','firstName','lastName', 'birthday'], 'string'),
+		RequestMiddleware.bodyParametersNeeded(['firstName','lastName', 'birthday'], 'string'),
         RequestMiddleware.bodyParametersNeeded('email', 'email'),
+        RequestMiddleware.bodyParameterHoped("personalEmail", "email"),
+        UserMiddleware.emailIsNotTaken,
         RequestMiddleware.bodyParametersNeeded([
             'campusId'
         ], 'integer'),
@@ -53,6 +55,7 @@ export default (app: App): void => {
     app.patch(routePrefix + `/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.onlySameUserOrAdmin,
+        RequestMiddleware.bodyParameterBlocked('email'),
 		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
         singleUpload,

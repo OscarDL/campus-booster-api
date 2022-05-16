@@ -2,6 +2,12 @@ import { Req, Res, Next, Resp } from '../../../types/express';
 import * as UserService from '../service/user.service';
 import boom from '@hapi/boom';
 import s3 from '../../../services/aws/s3';
+import AzureService from '../../../services/azure';
+import crypto from "crypto";
+import MailerService from '../../../services/mailing';
+const Mailer = new MailerService();
+const Azure = new AzureService();
+Azure.OAuth();
 
 export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
@@ -37,19 +43,50 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
         if(req.file) {
             req.body.avatarKey = (req.file as any).key;
         }
-        return res.status(201).json(
-            await UserService.create(
+        let userAzure = await Azure.getUser(req.body.email);
+        let isNew = !userAzure;
+        if(!userAzure) {
+            if(!req.body.personalEmail) {
+                return next(boom.badRequest('personal_email_required'));
+            }
+            const randomPass = crypto.randomBytes(12).toString('hex');
+            // SEND PWD TO PERSONAL EMAIL 
+            if(await Mailer.custom("validate-account", {
+                email: req.body.personalEmail,
+                password: randomPass,
+                username: `${req.body.firstName} ${req.body.lastName}`
+            })) {
+                // CREATE AZURE USER
+                userAzure = await Azure.createUser({
+                    accountEnabled: true,
+                    displayName: `${req.body.firstName} ${req.body.lastName}`,
+                    mailNickname: `${req.body.firstName.toLocaleLowerCase()}.${req.body.lastName.toLocaleLowerCase()}`,
+                    passwordProfile: {
+                        password: randomPass,
+                        forceChangePasswordNextSignIn: true
+                    },
+                    userPrincipalName: req.body.email,
+                });
+            } else {
+                return next(boom.badRequest('smtp_error', req.body.personalEmail));
+            }
+        }
+        if(userAzure) {
+            const user = await UserService.create(
                 {
-                    azureId: req.body.azureId,
+                    azureId: userAzure.id,
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
-                    email: req.body.email,
+                    email: userAzure.userPrincipalName,
                     birthday: req.body.birthday,
                     campusId: req.body.campusId,
                     avatarKey: req.body.avatarKey
                 }
-            )
-        );
+            );
+            return res.status(201).json({ user, isNew });
+        } else {
+            return next(boom.badRequest('user_creation'));
+        }
     } catch (err: any) {
         console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));

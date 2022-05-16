@@ -21,5 +21,9 @@
 	"body_format": "Le corps de requête \"%s\" doit être au format \"%s\" dans votre requête.",
 	"query_missing": "Vous devez spécifier le champs \"%s\" dans la requête.",
 	"query_format": "Le champs de requête \"%s\" doit être au format \"%s\".",
-	"resource_not_found": "Nous n'avons pas pu trouver la ressource \"%s\" avec l'identifiant \"%d\"."
+	"resource_not_found": "Nous n'avons pas pu trouver la ressource \"%s\" avec l'identifiant \"%d\".",
+	"email_taken": "L'email \"%s\" est déjà utilisé par un utilisateur de l'application.",
+	"user_creation": "Echec de la création de l'utilisateur.",
+	"smtp_error": "Echec de l'envoie de l'email à \"%s\", contactez l'administrateur.",
+	"personal_email_required": "Cet utilisateur n'existe pas dans l'AD, un email personel est donc requis."
 }
