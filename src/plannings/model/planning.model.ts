@@ -25,7 +25,7 @@ export default class Planning extends S.Model implements PlanningModel {
 	@S.AllowNull(true)
 	@S.Default(false)
 	@S.Column(S.DataType.BOOLEAN)
-	public canceled!: string;
+	public cancelled!: string;
 
 	@S.ForeignKey(() => ClassroomHasCourse)
 	@S.Column({

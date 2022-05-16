@@ -49,11 +49,12 @@ export default (app: App): void => {
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(ADMIN),
         RequestMiddleware.bodyParametersNeeded('userId', 'integer'),
-		RequestMiddleware.bodyParametersNeeded(['dateRequested','dateConfirmed'], 'string'),
+        RequestMiddleware.bodyParametersNeeded('debit', 'float'),
+        RequestMiddleware.bodyParametersNeeded('credit', 'float'),
         RequestMiddleware.bodyParametersNeeded("status", "enum", [...balanceStatus]),
-        RequestMiddleware.bodyParameterHoped('description', "string"),
-        RequestMiddleware.bodyParameterHoped('debit', "string"),
-        RequestMiddleware.bodyParameterHoped('credit', "string"),
+        RequestMiddleware.bodyParametersNeeded('description', "string"),
+		    RequestMiddleware.bodyParametersNeeded('dateRequested', 'string'),
+		    RequestMiddleware.bodyParameterHoped('dateConfirmed', 'string'),
 		BalanceController.create
     ]);
     // UPDATE BALANCE

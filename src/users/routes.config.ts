@@ -25,8 +25,8 @@ export default (app: App): void => {
     // GET ALL USERS
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed(Object.values(roles)),
-		UserController.getAll
+        PermissionMiddleware.rolesAllowed([roles.CampusManager, roles.CampusBoosterAdmin]),
+    UserController.getAll
     ]);
     // GET USER BY ID
     app.get(routePrefix + `/:user_id${regInt}`, [

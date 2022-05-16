@@ -5,9 +5,8 @@ import * as RequestMiddleware from '../authorization/middlewares/request.validat
 import * as PlanningController from './controller/planning.controller';
 import * as PlanningMiddleware from './middleware/planning.middleware';
 import config from '../../config/env.config';
-const { 
-	permissionLevel: { Student }, 
-    customRegex: { regInt } 
+const {
+    customRegex: { regInt }
 } = config;
 
 const routePrefix = config.route_prefix + '/plannings';
@@ -16,13 +15,13 @@ export default (app: App): void => {
     // GET ALL PLANNINGS
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ Student ]), 
+		PermissionMiddleware.onlySameUserOrAdmin, 
 		PlanningController.getAll
     ]);
     // GET PLANNING BY ID
     app.get(`${routePrefix}/:planning_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ Student ]), 
+		PermissionMiddleware.onlySameUserOrAdmin, 
 		RequestMiddleware.paramParametersNeeded('planning_id', 'integer'),
         PlanningMiddleware.planningExistAsParam("planning_id"),
         PlanningController.getById
@@ -30,14 +29,14 @@ export default (app: App): void => {
     // CREATE A NEW PLANNING
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ Student ]), 
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
 		RequestMiddleware.bodyParametersNeeded(['date'], 'string'),
 		PlanningController.create
     ]);
     // UPDATE PLANNING
     app.patch(`${routePrefix}/:planning_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ Student ]), 
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
 		RequestMiddleware.paramParametersNeeded('planning_id', 'integer'),
         PlanningMiddleware.planningExistAsParam("planning_id"),
         PlanningController.update
@@ -45,7 +44,7 @@ export default (app: App): void => {
     // DELETE PLANNING
     app.delete(`${routePrefix}/:planning_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ Student ]), 
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
 		RequestMiddleware.paramParametersNeeded('planning_id', 'integer'),
         PlanningMiddleware.planningExistAsParam("planning_id"),
         PlanningController.remove

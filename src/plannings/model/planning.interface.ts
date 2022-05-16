@@ -4,7 +4,7 @@ import { ClassroomHasCourseModel } from './../../classroom_has_courses/model/cla
 export interface PlanningAttributes {
   readonly id: number;
 	date: string;
-	canceled?: string;
+	cancelled?: string;
 	readonly created_at?: Date;
 	readonly updated_at?: Date;
 	classroomHasCourseId?: number;
