@@ -30,6 +30,25 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
     }
 }
 
+export async function getMine(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        return res.status(200).json(
+            await ClassroomService.findAll(
+                {
+                    limit: req.query?.limit,
+                    offset: req.query?.offset,
+                    where: {
+                        '$UserHasClassrooms.user_id$': req.params.user_id 
+                    } as any
+                }
+            )
+        );
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
 export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
         return res.status(201).json(

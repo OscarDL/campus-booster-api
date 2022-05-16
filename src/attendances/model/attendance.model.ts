@@ -54,7 +54,7 @@ export default class Attendance extends S.Model implements AttendanceModel {
 					const attendance = instance[i];
 					attendance.dataValues.fileBase64 = await Attendance.loadInstanceFiles(attendance);
 				}
-			} else {
+			} else if(instance) {
 				instance.dataValues.fileBase64 = await Attendance.loadInstanceFiles(instance);
 			}
 		} catch (err) {

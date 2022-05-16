@@ -6,7 +6,7 @@ import {
     ClassroomCreationAttributes
 } from '../model/classroom.interface';
 import { models } from '../../../config/models.config'; 
-const { Class } = models;
+const { Classroom } = models;
 /**
 * Find all rows with specified options
 *
@@ -33,7 +33,7 @@ export function findAll(
     options?: FindOptions<ClassroomAttributes> | null,
     scope: (ClassroomScopesAttributes | ClassroomScopesAttributes[]) = "defaultScope"
 ): Promise<ClassroomModel[]> {
-    return Class.scope(scope).findAll(options!);
+    return Classroom.scope(scope).findAll(options!);
 }
 /**
 * Search for a single instance. Returns the first instance found, or null if none can be found.
@@ -61,7 +61,7 @@ export function findOne(
     options?: FindOptions<ClassroomAttributes> | null,
     scope: (ClassroomScopesAttributes | ClassroomScopesAttributes[]) = "defaultScope"
 ): Promise<ClassroomModel | null> {
-    return Class.scope(scope).findOne(options!);
+    return Classroom.scope(scope).findOne(options!);
 }
 /**
 * Find a row by his primary key & more find options
@@ -99,7 +99,7 @@ export function findById(
     options?: FindOptions<ClassroomAttributes> | null,
     scope: (ClassroomScopesAttributes | ClassroomScopesAttributes[]) = "defaultScope"
 ): Promise<ClassroomModel | null> {
-    return Class.scope(scope).findByPk(id, options!);
+    return Classroom.scope(scope).findByPk(id, options!);
 }
 /**
 * Create a new row in bdd with specified attributes
@@ -122,7 +122,7 @@ export function create(
     data: ClassroomCreationAttributes,
     scope: (ClassroomScopesAttributes | ClassroomScopesAttributes[]) = "defaultScope"
 ): Promise<ClassroomModel> {
-    return Class.scope(scope).create(data);
+    return Classroom.scope(scope).create(data);
 }
 /**
 * Create multiple rows in bdd with array of specified attributes
@@ -154,7 +154,7 @@ export function createMany(
     data: ClassroomCreationAttributes[],
     scope: (ClassroomScopesAttributes | ClassroomScopesAttributes[]) = "defaultScope"
 ): Promise<ClassroomModel[]> {
-    return Class.scope(scope).bulkCreate(data);
+    return Classroom.scope(scope).bulkCreate(data);
 }
 /**
 * Update attributes of a row by his primary key
@@ -188,7 +188,7 @@ export function update(
     scope: (ClassroomScopesAttributes | ClassroomScopesAttributes[]) = "defaultScope"
 ): Promise<ClassroomModel> {
     return new Promise((resolve, reject) => {
-        Class.scope(scope).findByPk(id)
+        Classroom.scope(scope).findByPk(id)
         .then((classroom) => {
             if (!classroom) {
                 reject("not found");
@@ -239,7 +239,7 @@ export function updateMany(
     data: Partial<ClassroomAttributes>,
     scope: (ClassroomScopesAttributes | ClassroomScopesAttributes[]) = "defaultScope"
 ): Promise<[ affectedCount: number ]> {
-    return Class.scope(scope).update(data, options);
+    return Classroom.scope(scope).update(data, options);
 }
 /**
 * Delete multiple instances, or set their deletedAt timestamp to the current time if paranoid is enabled.
@@ -263,7 +263,7 @@ export function updateMany(
 export function remove(
     options?: FindOptions<ClassroomAttributes> | null
 ): Promise<number> {
-    return Class.destroy(options!);
+    return Classroom.destroy(options!);
 }
 /**
 * Count the number of records matching the provided where clause.
@@ -290,5 +290,5 @@ export function remove(
 export function count(
     options?: FindOptions<ClassroomAttributes> | null
 ): Promise<number> {
-    return Class.count(options!);
+    return Classroom.count(options!);
 }
