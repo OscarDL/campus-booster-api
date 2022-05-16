@@ -25,7 +25,7 @@ export default class Balance extends S.Model implements BalanceModel {
 	})
 	public dateRequested!: Date;
 
-	@S.AllowNull(false)
+	@S.AllowNull(true)
 	@S.Column({
 		type: S.DataType.DATE,
 		field: 'date_confirmed'

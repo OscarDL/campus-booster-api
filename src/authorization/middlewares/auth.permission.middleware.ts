@@ -1,10 +1,13 @@
 import { Req, Res, Next, Resp, Fn } from '../../../types/express';
 import config from '../../../config/env.config';
-const { permissionLevel } = config;
+const { permissionLevel: roles } = config;
 import boom from '@hapi/boom';
 
-type Role = typeof permissionLevel[keyof typeof permissionLevel];
-type Roles = Array<typeof permissionLevel[keyof typeof permissionLevel]>;
+type Role = typeof roles[keyof typeof roles];
+type Roles = Array<typeof roles[keyof typeof roles]>;
+
+export const ADMIN_ROLES = [roles.Assistant, roles.CampusManager, roles.CampusBoosterAdmin];
+export const SUPER_ADMIN_ROLES = [roles.CampusManager, roles.CampusBoosterAdmin];
 
 export function rolesAllowed(roles: Roles): Fn {
     return (req: Req, res: Res, next: Next): Resp => {
@@ -16,7 +19,7 @@ export function rolesAllowed(roles: Roles): Fn {
                     if(!req.user?.active) {
                         return next(boom.forbidden(`banned`));
                     }
-                    req.isAdmin = ([ permissionLevel.CampusManager, permissionLevel.CampusBoosterAdmin ].includes(userRole)) ? true : false;
+                    req.isAdmin = (ADMIN_ROLES.includes(userRole)) ? true : false;
                     return next();
                 } else {
                     if(!req.user?.active) {
@@ -41,13 +44,13 @@ export function onlySameUserOrAdmin(req: Req, res: Res, next: Next): Resp {
         if(req.user?.active) {
             const userRole = req.user?.role;
             const user_id = req.user?.id;
-            if (userRole && [ permissionLevel.CampusManager, permissionLevel.CampusBoosterAdmin ].includes(userRole)) {
+            if (userRole && ADMIN_ROLES.includes(userRole)) {
                 req.isAdmin = true;
                 return next();
             } else {
                 if(req.params && req.params.user_id) {
                     if(userRole && user_id === Number(req.params.user_id)) {
-                        req.isAdmin = ([ permissionLevel.CampusManager, permissionLevel.CampusBoosterAdmin ].includes(userRole)) ? true : false;
+                        req.isAdmin = (ADMIN_ROLES.includes(userRole)) ? true : false;
                         return next();
                     } else {
                         if(!userRole) {
@@ -75,13 +78,13 @@ export function onlySameUserOrSuperAdmin(req: Req, res: Res, next: Next): Resp {
         if(req.user?.active) {
             const userRole = req.user?.role;
             const user_id = req.user?.id;
-            if (permissionLevel.CampusBoosterAdmin === userRole) {
+            if (userRole && SUPER_ADMIN_ROLES.includes(userRole)) {
                 req.isAdmin = true;
                 return next();
             } else {
                 if(req.params && req.params.user_id) {
                     if(user_id === Number(req.params.user_id)) {
-                        req.isAdmin = (permissionLevel.CampusBoosterAdmin === userRole) ? true : false;
+                        req.isAdmin = (userRole && SUPER_ADMIN_ROLES.includes(userRole)) ? true : false;
                         return next();
                     } else {
                         if(!userRole) {
@@ -108,7 +111,7 @@ export function onlySuperAdmin(req: Req, res: Res, next: Next): Resp {
         if(!req.user) throw new Error('Login required.');
         if(req.user?.active) {
             const userRole = req.user?.role;
-            if (userRole === permissionLevel.CampusBoosterAdmin) {
+            if (userRole === roles.CampusBoosterAdmin) {
                 req.isAdmin = true;
                 return next();
             } else {
