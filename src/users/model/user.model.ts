@@ -113,7 +113,7 @@ export default class User extends S.Model implements UserModel {
 					}
 				}
 			} else {
-				if(instance.avatarKey) {
+				if(instance?.avatarKey) {
 					const awsFile = await s3.download(instance.avatarKey);
 					const imgBase64 = Buffer.from(awsFile.Body as any).toString('base64');
 					instance.dataValues.avatarBase64 = `data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`;
