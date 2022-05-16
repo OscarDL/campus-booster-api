@@ -47,7 +47,7 @@ export async function JWTNeeded(req: Req, res: Res, next: Next): Promise<Resp> {
     
     return (req.user) ? next() : next(boom.unauthorized('expired_token'));
   } catch (err: any) {
-    console.log(`${err}`.error);
+    console.log(`${err}`.red.bold);
     return next(boom.unauthorized('expired_token'));
   }
 };
@@ -65,7 +65,7 @@ export async function ExpireJWTNeeded(req: Req, res: Res, next: Next): Promise<R
 
     return (req.user) ? next() : next(boom.unauthorized('expired_token'));
   } catch (err: any) {
-    console.log(`${err}`.error);
+    console.log(`${err}`.red.bold);
     return next(boom.unauthorized('expired_token'));
   }
 };

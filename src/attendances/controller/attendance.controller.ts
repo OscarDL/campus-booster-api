@@ -11,7 +11,7 @@ export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
             )
         );
     } catch (err: any) {
-        console.log(`${err}`.error);
+        console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));
     }
 }
@@ -26,7 +26,7 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
             )
         );
     } catch (err: any) {
-        console.log(`${err}`.error);
+        console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));
     }
 }
@@ -48,7 +48,7 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
             )
         );
     } catch (err: any) {
-        console.log(`${err}`.error);
+        console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));
     }
 }
@@ -71,7 +71,7 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
             )
         );
     } catch (err: any) {
-        console.log(`${err}`.error);
+        console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));
     }
 }
@@ -95,7 +95,7 @@ export async function remove(req: Req, res: Res, next: Next): Promise<Resp>  {
             )
         );
     } catch (err: any) {
-        console.log(`${err}`.error);
+        console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));
     }
 }

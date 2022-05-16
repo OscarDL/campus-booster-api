@@ -7,11 +7,11 @@ export function toolExistAsQuery(name: string): AsyncFn {
         try {
             if(req.query[name]) {
                 const tool = await findById(req.query[name]);
-                return (!tool) ? next(boom.badRequest(`Tool_not_found`)) : next();
+                return (!tool) ? next(boom.badRequest(`resource_not_found`, [ "Tool", req.query[name]])) : next();
             }
             return next();
         } catch (err: any) {
-            console.log(`${err}`.error);
+            console.log(`${err}`.red.bold);
             return next(err.isBoom ? err : boom.internal(err.name));
         }
     }
@@ -22,11 +22,11 @@ export function toolExistAsBody(name: string): AsyncFn {
         try {
             if(req.body[name]) {
                 const tool = await findById(req.body[name]);
-                return (!tool) ? next(boom.badRequest(`Tool_not_found`)) : next();
+                return (!tool) ? next(boom.badRequest(`resource_not_found`, [ "Tool", req.body[name]])) : next();
             }
             return next();
         } catch (err: any) {
-            console.log(`${err}`.error);
+            console.log(`${err}`.red.bold);
             return next(err.isBoom ? err : boom.internal(err.name));
         }
     }
@@ -37,11 +37,11 @@ export function toolExistAsParam(name: string): AsyncFn {
         try {
             if(req.params[name]) { 
                 const tool = await findById(req.params[name]);
-                return (!tool) ? next(boom.badRequest(`Tool_not_found`)) : next();
+                return (!tool) ? next(boom.badRequest(`resource_not_found`, [ "Tool", req.params[name]])) : next();
             }
             return next();
         } catch (err: any) {
-            console.log(`${err}`.error);
+            console.log(`${err}`.red.bold);
             return next(err.isBoom ? err : boom.internal(err.name));
         }
     }

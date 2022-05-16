@@ -50,7 +50,7 @@ const checkType = (data: any, type: ParameterTypes, enumOptions?: Array<any>): b
         case 'date': 
             return (typeof data === "string" && new Date(data).toString() != "Invalid Date")
         default:
-            throw new Error('Type de paramètre inconnu.');
+            throw new Error('unknow_type');
     }
 }
 
@@ -66,15 +66,15 @@ export function queryParametersNeeded(params: string | string[], type: Parameter
                 return (req.query[params]) ?
                     (checkType((['float', 'integer'].includes(type)) ? parseNumber(req.query[params]) : req.query[params], type, enumOptions)) ?
                         next() : 
-                        next(boom.badRequest(`${params}_format`)) : 
-                        next(boom.badRequest(`${params}_missing`));
+                        next(boom.badRequest(`query_format`, [ params, type ])) : 
+                        next(boom.badRequest(`query_missing`, params));
             } else if(typeof params === 'object' && Array.isArray(params)) {
                 for (let i = 0; i < params.length; i++) {
                     const param = params[i];
                     if(!req.query[param]) {
-                        return next(boom.badRequest(`${param}_missing`));
+                        return next(boom.badRequest(`query_missing`, param));
                     } else if(!checkType((['float', 'integer'].includes(type)) ? parseNumber(req.query[param]) : req.query[param], type, enumOptions)) {
-                        return next(boom.badRequest(`${param}_format`)); 
+                        return next(boom.badRequest(`query_format`, [ param, type ])); 
                     }  
                 }
                 return next();
@@ -94,15 +94,15 @@ export function paramParametersNeeded(params: string | string[], type: Parameter
                 return (req.params[params]) ?
                     (checkType((['float', 'integer'].includes(type)) ? parseNumber(req.params[params]) : req.params[params], type, enumOptions)) ?
                     next() : 
-                    next(boom.badRequest(`${params}_format`)) : 
-                    next(boom.badRequest(`${params}_missing`));
+                    next(boom.badRequest(`param_format`, [ params, type ])) : 
+                    next(boom.badRequest(`param_missing`, params));
             } else if(typeof params === 'object' && Array.isArray(params)) {
                 for (let i = 0; i < params.length; i++) {
                     const param = params[i];
                     if(!req.params[param]) {
-                        return next(boom.badRequest(`${param}_missing`));
+                        return next(boom.badRequest(`param_missing`, param));
                     } else if(!checkType((['float', 'integer'].includes(type)) ? parseNumber(req.params[param]) : req.params[param], type, enumOptions)) {
-                        return next(boom.badRequest(`${param}_format`)); 
+                        return next(boom.badRequest(`param_format`, [ param, type ])); 
                     }  
                 }
                 return next();
@@ -122,15 +122,15 @@ export function bodyParametersNeeded(params: string | string[], type: ParameterT
                 return (req.body[params] || [false, 0].includes(req.body[params])) ?
                     (checkType(req.body[params], type, enumOptions)) ?
                     next() : 
-                    next(boom.badRequest(`${params}_format`)) : 
-                    next(boom.badRequest(`${params}_missing`));
+                    next(boom.badRequest(`body_format`, [ params, type ])) : 
+                    next(boom.badRequest(`body_missing`, params));
             } else if(typeof params === 'object' && Array.isArray(params)) {
                 for (let i = 0; i < params.length; i++) {
                     const param = params[i];
                     if(!req.body[param] && ![false, 0].includes(req.body[param])) {
-                        return next(boom.badRequest(`${param}_missing`));
+                        return next(boom.badRequest(`body_format`, [ param, type ]));
                     } else if(!checkType(req.body[param], type, enumOptions) && ![false, 0].includes(req.body[param])) {
-                        return next(boom.badRequest(`${param}_format`)); 
+                        return next(boom.badRequest(`body_missing`, param)); 
                     }  
                 }
                 next();

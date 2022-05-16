@@ -5,7 +5,6 @@ const multerS3 = require('multer-s3-transform');
 const config = require('../../config/env.config').default;
 const moment = require('moment');
 const boom = require('@hapi/boom');
-const { i18n } = require('../i18n/index');
 
 const AUTHORIZED_IMAGE_EXTENSIONS = [
   'image/png',
@@ -37,12 +36,10 @@ exports.remove = (fileKey) => {
 
 exports.uploadImage = (directory) => multer({
   fileFilter: (req, file, cb) => {
-    console.log(file);
     const format = file.originalname.slice(file.originalname.lastIndexOf('.'));
-
     return (AUTHORIZED_IMAGE_EXTENSIONS.includes(file.mimetype))
       ? cb(null, true) : 
-      cb(boom.badRequest(i18n.__('invalid_image_format', format)), false);
+      cb(boom.badRequest(`image_format_aws`, format), false);
   },
 
   storage: multerS3({
@@ -67,15 +64,12 @@ exports.uploadImage = (directory) => multer({
 
 exports.uploadDocument = (directory) => multer({
   fileFilter: (req, file, cb) => {
-    console.log(file);
     const format = file.originalname.slice(file.originalname.lastIndexOf('.'));
     const extensions = AUTHORIZED_IMAGE_EXTENSIONS.concat(AUTHORIZED_DOCUMENT_EXTENSIONS);
-
     return (extensions.includes(file.mimetype))
       ? cb(null, true) :
-      cb(boom.badRequest(i18n.__('invalid_document_format', format)), false);
+      cb(boom.badRequest(`document_format_aws`, format), false);
   },
-
   storage: multerS3({
     s3: s3,
     bucket: config.aws.bucket,

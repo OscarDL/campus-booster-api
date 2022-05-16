@@ -28,11 +28,12 @@ export default (app: App): void => {
     // GET USER BALANCES
     app.get(routePrefix + `/user/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed(ADMIN.concat(roles.Student)),
+        PermissionMiddleware.onlySameUserOrAdmin,
         RequestMiddleware.queryParameterHoped('limit', 'integer'),
         RequestMiddleware.queryParameterHoped('offset', 'float'),
         RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam('user_id'),
+        BalanceMiddleware.itsMyBalanceOrIAmAdmin,
 		BalanceController.getUser
     ]);
     // GET BALANCE BY ID
@@ -47,8 +48,8 @@ export default (app: App): void => {
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(ADMIN),
-    RequestMiddleware.bodyParametersNeeded('userId', 'integer'),
-		    RequestMiddleware.bodyParametersNeeded(['dateRequested','dateConfirmed'], 'string'),
+        RequestMiddleware.bodyParametersNeeded('userId', 'integer'),
+		RequestMiddleware.bodyParametersNeeded(['dateRequested','dateConfirmed'], 'string'),
         RequestMiddleware.bodyParametersNeeded("status", "enum", [...balanceStatus]),
         RequestMiddleware.bodyParameterHoped('description', "string"),
         RequestMiddleware.bodyParameterHoped('debit', "string"),

@@ -19,6 +19,8 @@ const singleUpload = upload.single("file");
 const routePrefix = config.route_prefix + '/users';
 
 export default (app: App): void => {
+    app.get('/api/v1/test', 
+    RequestMiddleware.bodyParametersNeeded('user_id', 'boolean'));
 
     // GET ALL USERS
     app.get(routePrefix, [

@@ -92,7 +92,7 @@ export default class MailerService<
             );
             return m?.accepted?.includes(options.email)!;
         } catch (err) {
-            console.log(`${err}`.error);
+            console.log(`${err}`.red.bold);
             return false;
         }
     }
@@ -129,7 +129,7 @@ export default class MailerService<
             );
             return { accepted: m?.accepted, rejected: m?.rejected };
         } catch (err) {
-            console.log(`${err}`.error);
+            console.log(`${err}`.red.bold);
             return { accepted: [], rejected: emails };
         }
     }
