@@ -40,10 +40,10 @@ export default (app: App): void => {
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         singleUpload,
 		RequestMiddleware.bodyParametersNeeded(['firstName','lastName', 'birthday'], 'string'),
-        RequestMiddleware.bodyParametersNeeded('email', 'email'),
         RequestMiddleware.bodyParametersNeeded('role', 'enum', Object.values(roles)),
         RequestMiddleware.bodyParameterHoped("personalEmail", "email"),
         UserMiddleware.emailIsNotTaken,
+        UserMiddleware.personalEmailIsNotTaken,
         RequestMiddleware.bodyParametersNeeded([
             'campusId'
         ], 'integer'),

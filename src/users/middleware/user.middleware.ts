@@ -1,8 +1,12 @@
 import { Req, Res, Next, Resp, AsyncFn } from '../../../types/express';
 import boom from '@hapi/boom';
 import { findById, findOne } from '../service/user.service';
+const replaceString = require("replace-special-characters");
 import config from "../../../config/env.config";
-const { permissionLevel: { Student }} = config;
+const {
+    permissionLevel: { Student },
+    app_domaine
+} = config;
 
 export function userExistAsQuery(name: string): AsyncFn {
     return async(req: Req, res: Res, next: Next): Promise<Resp> => {
@@ -51,13 +55,30 @@ export function userExistAsParam(name: string): AsyncFn {
 
 export async function emailIsNotTaken(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
+        const email = `${replaceString(req.body.firstName?.toLocaleLowerCase())}.${replaceString(req.body.lastName?.toLocaleLowerCase())}@${app_domaine}`;
         return (
             await findOne({
-                where: {
-                    email: req.body.email
-                }
-            }) ? next(boom.badRequest('email_taken', req.body.email)) : next()        
+                where: { email }
+            }) ? next(boom.badRequest('email_taken', email)) : next()        
         );
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
+export async function personalEmailIsNotTaken(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        if(req.body.personalEmail) {
+            return (
+                await findOne({
+                    where: {
+                        personalEmail: req.body.personalEmail 
+                    }
+                }) ? next(boom.badRequest('email_taken', req.body.personalEmail)) : next()        
+            );
+        }
+        return next();
     } catch (err: any) {
         console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));

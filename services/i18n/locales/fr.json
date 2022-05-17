@@ -25,6 +25,5 @@
 	"email_taken": "L'email \"%s\" est déjà utilisé par un utilisateur de l'application.",
 	"user_creation": "Echec de la création de l'utilisateur.",
 	"smtp_error": "Echec de l'envoie de l'email à \"%s\", contactez l'administrateur.",
-	"personal_email_required": "Cet utilisateur n'existe pas dans l'AD, un email personel est donc requis.",
-	"An internal server error occurred": "Erreur inconnue du serveur."
+	"personal_email_required": "Cet utilisateur n'existe pas dans l'AD, un email personel est donc requis."
 }

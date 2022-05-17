@@ -18,6 +18,7 @@ export interface UserAttributes {
 	lastName: string;
 	birthday: Date;
 	email: string;
+	personalEmail?: string;
 	active?: boolean;
 	validated?: boolean;
 	role?: typeof permissionLevel[keyof typeof permissionLevel];

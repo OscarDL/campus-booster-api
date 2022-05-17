@@ -62,6 +62,20 @@ export default class User extends S.Model implements UserModel {
   })
 	public email!: string;
 
+	@S.AllowNull(true)
+	@S.IsEmail
+	@S.Is('emailFormat', (email) => {
+		if(!EMAIL_REGEX.test(email)) {
+			throw new Error(`'${email}' is not a correct email format.`)
+		}
+	})
+	@S.Column({
+    type: S.DataType.STRING(255),
+    unique: true,
+		field: 'personal_email'
+  })
+	public personalEmail!: string;
+
 	@S.AllowNull(false)
 	@S.IsDate
 	@S.Column(S.DataType.DATE)
