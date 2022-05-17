@@ -1,6 +1,8 @@
 import { Req, Res, Next, Resp, AsyncFn } from '../../../types/express';
 import boom from '@hapi/boom';
 import { findById, findOne } from '../service/user.service';
+import config from "../../../config/env.config";
+const { permissionLevel: { Student }} = config;
 
 export function userExistAsQuery(name: string): AsyncFn {
     return async(req: Req, res: Res, next: Next): Promise<Resp> => {
@@ -56,6 +58,17 @@ export async function emailIsNotTaken(req: Req, res: Res, next: Next): Promise<R
                 }
             }) ? next(boom.badRequest('email_taken', req.body.email)) : next()        
         );
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
+export async function iamAdminOrItsaStudent(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        return req.isAdmin ? next() : 
+            (await findById(req.params.user_id))?.role === Student ? 
+        next() : next(boom.badRequest('missing_access_rights'));
     } catch (err: any) {
         console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));

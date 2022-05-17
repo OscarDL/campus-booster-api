@@ -19,21 +19,19 @@ const singleUpload = upload.single("file");
 const routePrefix = config.route_prefix + '/users';
 
 export default (app: App): void => {
-    app.get('/api/v1/test', 
-    RequestMiddleware.bodyParametersNeeded('user_id', 'boolean'));
-
     // GET ALL USERS
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed([roles.CampusManager, roles.CampusBoosterAdmin]),
-    UserController.getAll
+        PermissionMiddleware.rolesAllowed(Object.values(roles)),
+        UserController.getAll
     ]);
     // GET USER BY ID
     app.get(routePrefix + `/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.onlySameUserOrAdmin,
+        PermissionMiddleware.rolesAllowed(Object.values(roles)),
 		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
+        UserMiddleware.iamAdminOrItsaStudent,
         UserController.getById
     ]);
     // CREATE A NEW USER
