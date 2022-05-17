@@ -37,7 +37,7 @@ export default (app: App): void => {
     // CREATE A NEW USER
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed([roles.CampusManager, roles.CampusBoosterAdmin]),
+        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         singleUpload,
 		RequestMiddleware.bodyParametersNeeded(['firstName','lastName', 'birthday'], 'string'),
         RequestMiddleware.bodyParametersNeeded('email', 'email'),
@@ -53,7 +53,7 @@ export default (app: App): void => {
     // UPDATE USER
     app.patch(routePrefix + `/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.onlySameUserOrAdmin,
+        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         RequestMiddleware.bodyParameterBlocked('email'),
 		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
@@ -65,7 +65,7 @@ export default (app: App): void => {
     // DELETE USER
     app.delete(routePrefix + `/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.onlySameUserOrAdmin,
+        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
 		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
         UserController.remove
