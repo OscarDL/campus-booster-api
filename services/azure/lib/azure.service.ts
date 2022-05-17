@@ -117,6 +117,7 @@ export default class AzureService {
       return await fetch.callApi('POST', `${auth.apiConfig.uri}/v1.0/users`, this._TOKEN, user);
     } catch (err: any) {
       if(err instanceof Error) {
+        console.log(err);
         console.log(err.message.red);
       }
       return null;

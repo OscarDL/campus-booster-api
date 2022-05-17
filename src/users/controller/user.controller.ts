@@ -57,12 +57,13 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
             if(!req.body.personalEmail) {
                 return next(boom.badRequest('personal_email_required'));
             }
-            const randomPass = crypto.randomBytes(12).toString('hex');
+            const randomPass = `C${crypto.randomBytes(8).toString('hex')}`;
             // SEND PWD TO PERSONAL EMAIL 
             if(await Mailer.custom("validate-account", {
-                email: req.body.personalEmail,
+                to: req.body.personalEmail,
                 password: randomPass,
-                username: `${req.body.firstName} ${req.body.lastName}`
+                username: `${req.body.firstName} ${req.body.lastName}`,
+                email: req.body.email
             })) {
                 // CREATE AZURE USER
                 userAzure = await Azure.createUser({
@@ -88,7 +89,10 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                     email: userAzure.userPrincipalName,
                     birthday: req.body.birthday,
                     campusId: req.body.campusId,
-                    avatarKey: req.body.avatarKey
+                    avatarKey: req.body.avatarKey ?? null,
+                    role: req.body.role,
+                    validated: true,
+                    active: true
                 }
             );
             return res.status(201).json({ user, isNew });

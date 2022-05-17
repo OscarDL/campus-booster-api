@@ -1,7 +1,5 @@
 import mailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
-import config from '../../config/env.config';
-const { mailing, app_name, app_uri } = config;
 
 // TEMPLATE CONFIG
 import * as ValidateAccountPage from './templates/ConfirmEmail';
@@ -11,9 +9,9 @@ const Config = <const> [
         type: 'validate-account',
         config: (options: M.OptionsValidateAccount): Mail.Options => {
             return {
-                from: mailing.config.auth.user,
-                to: options.email,
-                subject: `Validate your account ${app_name}`,
+                from: process.env.SMTP_USERNAME,
+                to: options.to,
+                subject: `Campus booster`,
                 html: ValidateAccountPage.template(options.email, options.username, options.password),
                 text: options.password,
                 attachments: ValidateAccountPage.attachments
@@ -42,14 +40,32 @@ export default class MailerService<
 > {
     protected _transporter!: mailer.Transporter;
     protected _accessToken!: string;
+    private _envKeys = [ "SMTP_HOST", "SMTP_USERNAME", "SMTP_PASSWORD", "SMTP_CIPHER", "SMTP_PORT"];
     constructor() { this._init_(); }
     protected _init_(): void {
-        this._transporter = mailer.createTransport(mailing.config as any);
-        this._transporter.on("token", (token) => {
-            console.log("A new access token was generated");
-            console.log("User: %s", token.user);
-            console.log("Access Token: %s", token.accessToken);
-            console.log("Expires: %s", new Date(token.expires));
+        this._envKeys.forEach(env => {
+            if(!process.env[env]) throw new Error(`Missing SMTP env key '${env}'.`.red);
+        });
+        this._transporter = mailer.createTransport({
+            host: process.env.SMTP_HOST,
+            port: parseInt(process.env.SMTP_PORT!),
+            secure: false,
+            auth: {
+                user: process.env.SMTP_USERNAME,
+                pass: process.env.SMTP_PASSWORD,
+            },
+            pool: true,
+            tls: {
+                ciphers: process.env.SMTP_CIPHER,
+                rejectUnauthorized: false,
+            }
+        });
+        this._transporter.verify((error) => {
+            if (error) {
+              console.log(`\n✖ SMTP Error: ${error.message}`.red);
+            } else {
+              console.log("\n📩 SMTP Server is ready to take our messages".green);
+            }
         });
     }
     /**
@@ -84,7 +100,7 @@ export default class MailerService<
             const m: M.MailerResponse = await this._transporter.sendMail(
                 Config.find(c => c?.type === type)?.config(options as any)!
             );
-            return m?.accepted?.includes(options.email)!;
+            return m?.accepted?.includes(options.to)!;
         } catch (err) {
             console.log(`${err}`.red.bold);
             return false;
@@ -119,7 +135,7 @@ export default class MailerService<
     }> {
         try {
             const m: M.MailerResponse = await this._transporter.sendMail(
-                Object.assign<Mail.Options, Mail.Options>(options, { from: mailing.config.auth.user })
+                Object.assign<Mail.Options, Mail.Options>(options, { from: process.env.SMTP_USERNAME })
             );
             return { accepted: m?.accepted, rejected: m?.rejected };
         } catch (err) {
@@ -129,16 +145,11 @@ export default class MailerService<
     }
 }
 namespace M {
-    export interface OptionsForgotPassword {
-        email: string; 
-        username: string;
-        token: string;
-        origin: string;
-    };
     export interface OptionsValidateAccount {
         email: string; 
         username: string;
         password: string;
+        to: string;
     };
     export interface MailerResponse {
         accepted?: string[];
