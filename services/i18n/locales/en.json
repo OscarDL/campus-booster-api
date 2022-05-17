@@ -21,5 +21,9 @@
 	"body_format": "The request body \"%s\" must be in the format \"%s\" in your request.",
 	"query_missing": "You must specify the \"%s\" field in the query.",
 	"query_format": "The query field \"%s\" must be in the format \"%s\".",
-	"resource_not_found": "We could not find resource \"%s\" with id \"%d\"."
+	"resource_not_found": "We could not find resource \"%s\" with id \"%d\".",
+	"email_taken": "Email \"%s\" is already in use by an application user.",
+	"user_creation": "Failed to create user.",
+	"smtp_error": "Failed to send email to \"%s\", contact administrator.",
+	"personal_email_required": "This user does not exist in AD, so a personal email is required."
 }

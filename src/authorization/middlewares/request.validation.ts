@@ -128,9 +128,9 @@ export function bodyParametersNeeded(params: string | string[], type: ParameterT
                 for (let i = 0; i < params.length; i++) {
                     const param = params[i];
                     if(!req.body[param] && ![false, 0].includes(req.body[param])) {
-                        return next(boom.badRequest(`body_format`, [ param, type ]));
+                        return next(boom.badRequest(`body_missing`, param));
                     } else if(!checkType(req.body[param], type, enumOptions) && ![false, 0].includes(req.body[param])) {
-                        return next(boom.badRequest(`body_missing`, param)); 
+                        return next(boom.badRequest(`body_format`, [ param, type ]));
                     }  
                 }
                 next();
@@ -169,6 +169,60 @@ export function paramParameterHoped(param: string, type: ParameterTypes, enumOpt
     return async(req: Req, res: Res, next: Next): Promise<Resp> => {
         try {
             return (req.params[param]) ? paramParametersNeeded(param, type, enumOptions)(req, res, next) : next();
+        } catch (err: any) {
+            return await ExpressErrorHandler(err)(req, res, next); 
+        }
+    };
+}
+
+export function queryParameterBlocked(params: string | string[]): AsyncFn {
+    return async(req: Req, res: Res, next: Next): Promise<Resp> => {
+        try {
+            if(Array.isArray(params)) {
+                for (let i = 0; i < params.length; i++) {
+                    const param = params[i];
+                    if(req.query[param]) next(boom.badRequest('query_blocked', param));
+                }
+                return next();
+            } else {
+                return req.query[params] ? next(boom.badRequest('query_blocked', params)) : next();
+            }
+        } catch (err: any) {
+            return await ExpressErrorHandler(err)(req, res, next); 
+        }
+    };
+}
+
+export function bodyParameterBlocked(params: string | string[]): AsyncFn {
+    return async(req: Req, res: Res, next: Next): Promise<Resp> => {
+        try {
+            if(Array.isArray(params)) {
+                for (let i = 0; i < params.length; i++) {
+                    const param = params[i];
+                    if(req.body[param]) next(boom.badRequest('query_blocked', param));
+                }
+                return next();
+            } else {
+                return req.body[params] ? next(boom.badRequest('query_blocked', params)) : next();
+            }
+        } catch (err: any) {
+            return await ExpressErrorHandler(err)(req, res, next); 
+        }
+    };
+}
+
+export function paramParameterBlocked(params: string | string[]): AsyncFn {
+    return async(req: Req, res: Res, next: Next): Promise<Resp> => {
+        try {
+            if(Array.isArray(params)) {
+                for (let i = 0; i < params.length; i++) {
+                    const param = params[i];
+                    if(req.params[param]) next(boom.badRequest('query_blocked', param));
+                }
+                return next();
+            } else {
+                return req.params[params] ? next(boom.badRequest('query_blocked', params)) : next();
+            }
         } catch (err: any) {
             return await ExpressErrorHandler(err)(req, res, next); 
         }

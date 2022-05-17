@@ -1,6 +1,6 @@
 import { Req, Res, Next, Resp, AsyncFn } from '../../../types/express';
 import boom from '@hapi/boom';
-import { findById } from '../service/user.service';
+import { findById, findOne } from '../service/user.service';
 
 export function userExistAsQuery(name: string): AsyncFn {
     return async(req: Req, res: Res, next: Next): Promise<Resp> => {
@@ -44,5 +44,20 @@ export function userExistAsParam(name: string): AsyncFn {
             console.log(`${err}`.red.bold);
             return next(err.isBoom ? err : boom.internal(err.name));
         }
+    }
+}
+
+export async function emailIsNotTaken(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        return (
+            await findOne({
+                where: {
+                    email: req.body.email
+                }
+            }) ? next(boom.badRequest('email_taken', req.body.email)) : next()        
+        );
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
     }
 }

@@ -34,20 +34,19 @@ export default {
     },
     mailing: {
         config: {
-            host: 'smtp.gmail.com',
-            port: 587,
+            host: process.env.SMTP_HOST,
+            port: process.env.SMTP_PORT,
             auth: {
-                user: 'adj.apirest@gmail.com',
-                pass: `!i9M{v}#c=(ChvFLih}<`
+                user: process.env.SMTP_USERNAME,
+                pass: process.env.SMTP_PASSWORD
             },
-            secure: false,
+            secure: true,
             tls: {
                 ciphers: 'SSLv3'
             },
             pool: true,
             maxConnections: 2
-        },
-        as: 'support@adj.com'
+        }
     },
     encryption: {
         algorithm: 'aes-256-cbc',

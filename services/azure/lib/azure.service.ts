@@ -62,7 +62,6 @@ export default class AzureService {
     if(!this._TOKEN) throw new Error('You should call OAuth method.');
     return await fetch.callApi('GET', `${auth.apiConfig.uri}/v1.0/groups/${groupID}/members`, this._TOKEN);
   }
-
   /**
    * ### Get Azure AD users
    * @returns {Promise<Az.GetUsersResponse>} a promise of the list of users from Azure AD.
@@ -72,7 +71,6 @@ export default class AzureService {
     if(!this._TOKEN) throw new Error('You should call OAuth method.');
     return await fetch.callApi('GET', `${auth.apiConfig.uri}/v1.0/users`, this._TOKEN);
   }
-
   /**
    * ### Get Azure AD user by email
    * @param email The email of user
@@ -90,7 +88,6 @@ export default class AzureService {
       return null;
     }
   }
-
   /**
    * ### Get Azure AD user avatar by email
    * @param userId The id of user
@@ -104,6 +101,20 @@ export default class AzureService {
       const binary = await fetch.callApi<any>('GET', `${auth.apiConfig.uri}/v1.0/users/${userId}/photo/$value`, this._TOKEN);
       //return `data:${metadata?.['@odata.mediaContentType'] ?? 'images/png'};base64, ${Buffer.from(binary, "binary").toString('base64')}`;
       return binary;
+    } catch (err: any) {
+      return null;
+    }
+  }
+  /**
+   * ### Create an user to the AD
+   * @param user your user azure data
+   * @returns {Promise<Az.PostUserResponse>} a promise of the user creation response from Azure AD.
+   */
+   public async createUser(user: Az.PostUserCreationForm): Promise<Az.PostUserResponse> {
+    try {      
+      await this.refreshToken();
+      if(!this._TOKEN) throw new Error('You should call OAuth method.');
+      return await fetch.callApi('POST', `${auth.apiConfig.uri}/v1.0/users`, this._TOKEN, user);
     } catch (err: any) {
       if(err instanceof Error) {
         console.log(err.message.red);

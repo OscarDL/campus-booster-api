@@ -51,6 +51,7 @@ export default class Moderator<
     protected _dir!: string;
     protected _langs: U[];
     protected _words: string[] = [];
+    protected _lockedChar = " /%!?;.,$=+-'#~&)°([]{}_"
 
     /**
      * 
@@ -104,20 +105,20 @@ export default class Moderator<
                 w.toLocaleLowerCase()
             ) &&
             ( 
-                text[
+                this._lockedChar.includes(text[
                     text.toLocaleLowerCase().indexOf(
                         w.toLocaleLowerCase()
                     ) + w.length
-                ] === ' ' ||
+                ]) ||
                 text.toLocaleLowerCase().indexOf(
                     w.toLocaleLowerCase()
                 ) + w.length === text.length
             ) && (
-                text[
+                this._lockedChar.includes(text[
                     text.toLocaleLowerCase().indexOf(
                         w.toLocaleLowerCase()
                     ) - 1
-                ] === ' ' ||
+                ]) ||
                 text.toLocaleLowerCase().indexOf(
                     w.toLocaleLowerCase()
                 ) === 0
