@@ -41,9 +41,16 @@ export default class MailerService<
     C extends T[number]['config']
 > {
     protected _transporter!: mailer.Transporter;
+    protected _accessToken!: string;
     constructor() { this._init_(); }
     protected _init_(): void {
         this._transporter = mailer.createTransport(mailing.config as any);
+        this._transporter.on("token", (token) => {
+            console.log("A new access token was generated");
+            console.log("User: %s", token.user);
+            console.log("Access Token: %s", token.accessToken);
+            console.log("Expires: %s", new Date(token.expires));
+        });
     }
     /**
      * Sends an email using custom config

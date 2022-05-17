@@ -40,7 +40,7 @@ export default {
                 user: process.env.SMTP_USERNAME,
                 pass: process.env.SMTP_PASSWORD
             },
-            secure: false,
+            secure: true,
             tls: {
                 ciphers: 'SSLv3'
             },
