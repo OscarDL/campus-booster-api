@@ -5,6 +5,11 @@ import s3 from '../../../services/aws/s3';
 import AzureService from '../../../services/azure';
 import crypto from "crypto";
 import MailerService from '../../../services/mailing';
+import config from '../../../config/env.config';
+const replaceString = require("replace-special-characters");
+const {
+    app_domaine
+} = config;
 const Mailer = new MailerService();
 const Azure = new AzureService();
 Azure.OAuth();
@@ -51,7 +56,8 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
         if(req.file) {
             req.body.avatarKey = (req.file as any).key;
         }
-        let userAzure = await Azure.getUser(req.body.email);
+        const email = `${replaceString(req.body.firstName?.toLocaleLowerCase())}.${replaceString(req.body.lastName?.toLocaleLowerCase())}@${app_domaine}`;
+        let userAzure = await Azure.getUser(email);
         let isNew = !userAzure;
         if(!userAzure) {
             if(!req.body.personalEmail) {
@@ -63,18 +69,18 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                 to: req.body.personalEmail,
                 password: randomPass,
                 username: `${req.body.firstName} ${req.body.lastName}`,
-                email: req.body.email
+                email
             })) {
                 // CREATE AZURE USER
                 userAzure = await Azure.createUser({
                     accountEnabled: true,
                     displayName: `${req.body.firstName} ${req.body.lastName}`,
-                    mailNickname: `${req.body.firstName.toLocaleLowerCase()}.${req.body.lastName.toLocaleLowerCase()}`,
+                    mailNickname: `${replaceString(req.body.firstName?.toLocaleLowerCase())}.${replaceString(req.body.lastName?.toLocaleLowerCase())}`,
                     passwordProfile: {
                         password: randomPass,
                         forceChangePasswordNextSignIn: true
                     },
-                    userPrincipalName: req.body.email,
+                    userPrincipalName: email,
                 });
             } else {
                 return next(boom.badRequest('smtp_error', req.body.personalEmail));
@@ -92,7 +98,8 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                     avatarKey: req.body.avatarKey ?? null,
                     role: req.body.role,
                     validated: true,
-                    active: true
+                    active: true,
+                    personalEmail: req.body.personalEmail
                 }
             );
             return res.status(201).json({ user, isNew });

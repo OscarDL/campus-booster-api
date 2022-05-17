@@ -1,6 +1,7 @@
 export default {
     env: process.env.NODE_ENV || 'development',
     app_name: process.env.APP_NAME || 'Campus Booster - API',
+    app_domaine: process.env.APP_DOMAINE || "campusbooster.eu",
     app_site: process.env.APP_SITE || 'http://localhost:3000',
     app_uri: process.env.APP_URI || 'http://localhost:1337',
     route_prefix: process.env.ROUTE_PREFIX || '/api/v1',
@@ -47,6 +48,5 @@ export default {
         regInt: '([0-9]{0,9})',
         regHex: '([0-9a-fA-F]{0,30})',
         regUuidv4: '([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})'
-    },
-    MINIMUM_CREATION_ACCOUNT_LEGAL_AGE: 13
+    }
 }

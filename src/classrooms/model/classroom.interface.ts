@@ -5,7 +5,8 @@ import { ClassroomHasCourseModel } from './../../classroom_has_courses/model/cla
 import { UserHasClassroomModel } from './../../user_has_classrooms/model/user-hasclassroom.interface';
 export interface ClassroomAttributes {
   readonly id?: number;
-	section: number;
+	name: string;
+	promotion: number;
 	readonly created_at?: Date;
 	readonly updated_at?: Date;
 	campusId?: number;
