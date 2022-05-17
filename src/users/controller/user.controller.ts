@@ -13,7 +13,12 @@ export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         return res.status(200).json(
             await UserService.findById(
-                req.params.user_id
+                req.params.user_id,
+                {},
+                [
+                    "withClassrooms",
+                    req.isAdmin ? "defaultScope" : "iamNotAdmin"
+                ]
             )
         );
     } catch (err: any) {
@@ -29,7 +34,10 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
                 {
                     limit: req.query?.limit
                 },
-                "withClassrooms"
+                [ 
+                    "withClassrooms",
+                    req.isAdmin ? "defaultScope" : "iamNotAdmin"
+                ]
             )
         );
     } catch (err: any) {
