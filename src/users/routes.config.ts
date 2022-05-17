@@ -41,6 +41,7 @@ export default (app: App): void => {
         singleUpload,
 		RequestMiddleware.bodyParametersNeeded(['firstName','lastName', 'birthday'], 'string'),
         RequestMiddleware.bodyParametersNeeded('email', 'email'),
+        RequestMiddleware.bodyParametersNeeded('role', 'enum', Object.values(roles)),
         RequestMiddleware.bodyParameterHoped("personalEmail", "email"),
         UserMiddleware.emailIsNotTaken,
         RequestMiddleware.bodyParametersNeeded([

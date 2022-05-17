@@ -32,22 +32,6 @@ export default {
         CampusManager: "CAMPUS_MANAGER",
         CampusBoosterAdmin: "CAMPUS_BOOSTER_ADMIN"
     },
-    mailing: {
-        config: {
-            host: process.env.SMTP_HOST,
-            port: process.env.SMTP_PORT,
-            auth: {
-                user: process.env.SMTP_USERNAME,
-                pass: process.env.SMTP_PASSWORD
-            },
-            secure: true,
-            tls: {
-                ciphers: 'SSLv3'
-            },
-            pool: true,
-            maxConnections: 2
-        }
-    },
     encryption: {
         algorithm: 'aes-256-cbc',
         ENCRYPTION_KEY: process.env.ENCRYPTION_KEY || 'E)H@MbQeThWmZq4t7w!z%C*F-JaNdRfU',
