@@ -1,6 +1,6 @@
 import { Model, Optional } from "sequelize";
 import ToolScope from './tool.scope';
-export const categories = <const> [ "general", "development", "infrastructure", "net-sec" ];
+export const categories = <const> [ "general", "development", "infrastructure", "net_sec" ];
 export type Category = typeof categories[number];
 export interface ToolAttributes {
   readonly id: number;
