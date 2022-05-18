@@ -6,23 +6,22 @@ import * as CampusController from './controller/campus.controller';
 import * as CampusMiddleware from './middleware/campus.middleware';
 import config from '../../config/env.config';
 const { 
-	permissionLevel: { Student },
-    customRegex: { regInt } 
+    customRegex: { regInt }
 } = config;
 
 const routePrefix = config.route_prefix + '/campus'; 
 
 export default (app: App): void => {
-    // GET ALL CAMPUSS
+    // GET ALL CAMPUS
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed([ Student ]), 
+        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
         CampusController.getAll
     ]);
     // GET CAMPUS BY ID
     app.get(`${routePrefix}/:campusId${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed([ Student ]), 
+        PermissionMiddleware.onlySameUserOrAdmin, 
         RequestMiddleware.paramParametersNeeded('campusId', 'integer'),
         CampusMiddleware.campusExistAsParam("campusId"),
         CampusController.getById
@@ -30,14 +29,14 @@ export default (app: App): void => {
     // CREATE A NEW CAMPUS
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed([ Student ]),
+        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         RequestMiddleware.bodyParametersNeeded(['name','city','address'], 'string'),
         CampusController.create
     ]);
     // UPDATE CAMPUS
     app.patch(`${routePrefix}/:campusId${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed([ Student ]), 
+        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
         RequestMiddleware.paramParametersNeeded('campusId', 'integer'),
         CampusMiddleware.campusExistAsParam('campusId'),
         CampusController.update
@@ -45,7 +44,7 @@ export default (app: App): void => {
     // DELETE CAMPUS
     app.delete(`${routePrefix}/:campusId${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed([ Student ]), 
+        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
         RequestMiddleware.paramParametersNeeded('campusId', 'integer'),
         CampusMiddleware.campusExistAsParam('campusId'),
         CampusController.remove

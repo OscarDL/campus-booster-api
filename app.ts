@@ -31,6 +31,7 @@ import { exec } from "node:child_process";
 let server;
 theme(config.colors);
 const app = express();
+const clientPath = path.join(__dirname, path.sep, '..', path.sep, 'client', 'build');
 
 async function execShell(cmd: string): Promise<string> {
     return new Promise((resolve, reject) => exec(cmd, (err, out) => err ? reject(err) : resolve(out)));
@@ -51,8 +52,7 @@ function devHttpsServer(key: string, cert: string, port: number): void {
     server.on('error', (error) => onError(error, port));
 }
 
-if (process.env.NODE_ENV === 'development') {
-
+if (process.env.NODE_ENV !== 'production') {
     const port = Number(process.env.PORT);
     let key, cert;
     try {
@@ -76,9 +76,7 @@ if (process.env.NODE_ENV === 'development') {
         devHttpsServer(key, cert, port);
     }
 } else {
-    const clientPath = path.join(__dirname, path.sep, '..', path.sep, 'client', 'build');
     app.use(express.static(clientPath));
-    app.get('*', (_, res) => res.sendFile(path.join(clientPath, 'index.html')));
     server = http.createServer(app);
 }
 
@@ -181,6 +179,10 @@ routeConfig(app);
 
 app.use(ExpressMiddleware.NotFound());
 app.use(ExpressMiddleware.ErrorHandler());
+
+if (process.env.NODE_ENV === 'production') {
+  app.get('*', (_, res) => res.sendFile(path.join(clientPath, 'index.html')));
+}
 
 function onError(error: any, port: number): never {
     if (error.syscall !== 'listen') {
