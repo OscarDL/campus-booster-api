@@ -42,9 +42,10 @@ export default (app: App): void => {
     // CREATE A NEW CLASSROOM
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ CampusManager, CampusBoosterAdmin ]), 
-		RequestMiddleware.bodyParametersNeeded(['promotion', 'campusId'], 'integer'),
+		PermissionMiddleware.rolesAllowed([ CampusManager, CampusBoosterAdmin ]),
         RequestMiddleware.bodyParametersNeeded(['name'], 'string'),
+        RequestMiddleware.bodyParameterHoped('promotion', "integer"),
+        RequestMiddleware.bodyParameterHoped('campusId', "integer"),
         CampusMiddleware.campusExistAsBody('campusId'),
 		ClassroomController.create
     ]);

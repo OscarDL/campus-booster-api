@@ -2,19 +2,33 @@ import mailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 
 // TEMPLATE CONFIG
-import * as ValidateAccountPage from './templates/ConfirmEmail';
+import * as SendPasswordFr from './templates/SendPasswordFr';
+import * as SendPasswordEn from './templates/SendPasswordEn';
 
 const Config = <const> [
     {
-        type: 'validate-account',
-        config: (options: M.OptionsValidateAccount): Mail.Options => {
+        type: 'send-password-fr',
+        config: (options: M.OptionsSendPassword): Mail.Options => {
             return {
                 from: process.env.SMTP_USERNAME,
                 to: options.to,
-                subject: `Campus booster`,
-                html: ValidateAccountPage.template(options.email, options.username, options.password),
+                subject: `Votre accès à Campus Booster`,
+                html: SendPasswordFr.template(options.email, options.username, options.password),
                 text: options.password,
-                attachments: ValidateAccountPage.attachments
+                attachments: SendPasswordFr.attachments
+            }
+        }
+    },
+    {
+        type: 'send-password-en',
+        config: (options: M.OptionsSendPassword): Mail.Options => {
+            return {
+                from: process.env.SMTP_USERNAME,
+                to: options.to,
+                subject: `Your Campus Booster access`,
+                html: SendPasswordEn.template(options.email, options.username, options.password),
+                text: options.password,
+                attachments: SendPasswordEn.attachments
             }
         }
     }
@@ -145,7 +159,7 @@ export default class MailerService<
     }
 }
 namespace M {
-    export interface OptionsValidateAccount {
+    export interface OptionsSendPassword {
         email: string; 
         username: string;
         password: string;

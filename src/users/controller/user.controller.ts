@@ -5,6 +5,7 @@ import s3 from '../../../services/aws/s3';
 import AzureService from '../../../services/azure';
 import crypto from "crypto";
 import MailerService from '../../../services/mailing';
+import * as UserHasClassroomService from '../../user_has_classrooms/service/user-hasclassroom.service';
 import config from '../../../config/env.config';
 const replaceString = require("replace-special-characters");
 const {
@@ -51,6 +52,25 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
     }
 }
 
+export async function addToClassrooms(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        for (let i = 0; i < req.body.classrooms?.length; i++) {
+            const id = req.body.classrooms[i];
+            await UserHasClassroomService.create({
+                classroomId: id,
+                userId: parseInt(req.params.user_id)
+            });
+        }
+        return res.status(201).json(
+            await UserService.findById(req.params.user_id, {}, ["withClassrooms", "defaultScope"])
+        );
+    } catch (err: any) {
+        console.log(err);
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
 export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
         if(req.file) {
@@ -65,12 +85,15 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
             }
             const randomPass = `C${crypto.randomBytes(8).toString('hex')}`;
             // SEND PWD TO PERSONAL EMAIL 
-            if(await Mailer.custom("validate-account", {
-                to: req.body.personalEmail,
-                password: randomPass,
-                username: `${req.body.firstName} ${req.body.lastName}`,
-                email
-            })) {
+            if(await Mailer.custom(
+                req.headers.lang === "fr" ? "send-password-fr" : "send-password-en", 
+                {
+                    to: req.body.personalEmail,
+                    password: randomPass,
+                    username: `${req.body.firstName} ${req.body.lastName}`,
+                    email
+                }
+            )) {
                 // CREATE AZURE USER
                 userAzure = await Azure.createUser({
                     accountEnabled: true,
@@ -102,7 +125,10 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                     personalEmail: req.body.personalEmail
                 }
             );
-            return res.status(201).json({ user, isNew });
+            return res.status(201).json({ 
+                user: await UserService.findById(user.id, {}, ["withClassrooms" ,"defaultScope"]), 
+                isNew 
+            });
         } else {
             return next(boom.badRequest('user_creation'));
         }
