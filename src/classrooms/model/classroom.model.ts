@@ -19,7 +19,7 @@ import moment from 'moment';
 export default class Classroom extends S.Model implements ClassroomModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.INTEGER)
+	@S.Column(S.DataType.BIGINT)
 	public id!: number;
 
 	@S.AllowNull(false)

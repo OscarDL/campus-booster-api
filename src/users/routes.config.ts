@@ -5,6 +5,7 @@ import * as PermissionMiddleware from '../authorization/middlewares/auth.permiss
 import * as UserController from './controller/user.controller';
 import * as UserMiddleware from './middleware/user.middleware';
 import * as CampusMiddleware from '../campus/middleware/campus.middleware';
+import * as ClassroomMiddleware from '../classrooms/middleware/classroom.middleware';
 
 import config from '../../config/env.config';
 const { 
@@ -49,6 +50,15 @@ export default (app: App): void => {
         ], 'integer'),
         CampusMiddleware.campusExistAsBody('campusId'),
 		UserController.create
+    ]);
+    app.post(routePrefix + `/:user_id${regInt}/classrooms`, [
+        ValidationMiddleware.JWTNeeded,
+        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
+        RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+        UserMiddleware.userExistAsParam('user_id'),
+        RequestMiddleware.bodyParametersNeeded('classrooms', 'array'),
+        ClassroomMiddleware.classroomCanBeLinkedToUser,
+        UserController.addToClassrooms
     ]);
     // UPDATE USER
     app.patch(routePrefix + `/:user_id${regInt}`, [

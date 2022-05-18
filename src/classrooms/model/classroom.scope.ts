@@ -4,6 +4,7 @@ import ClassroomHasCourse from "../../classroom_has_courses/model/classroomhasco
 import { ClassroomProtectedFields } from "./classroom.interface";
 import Planning from "../../plannings/model/planning.model";
 import Course from "../../courses/model/course.model";
+import Campus from "../../campus/model/campus.model";
 export default (() => ({
     defaultScope: ({
         attributes: { 
@@ -12,7 +13,7 @@ export default (() => ({
         include: [
             {
                 model: ClassroomHasCourse.unscoped(),
-                required: true,
+                required: false,
                 include: [
                     {
                         model: Planning.unscoped(),
@@ -26,7 +27,11 @@ export default (() => ({
             },
             {
                 model: UserHasClassroom,
-                required: true,
+                required: false,
+            },
+            {
+                model: Campus.unscoped(),
+                required: false,
             }
         ]
     }) as ScopesOptions

@@ -53,7 +53,11 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
         return res.status(201).json(
             await ClassroomService.create(
-                req.body as any
+                {
+                    promotion: req.body.promotion,
+                    campusId: req.body.campusId,
+                    name: req.body.name
+                }
             )
         );
     } catch (err: any) {
