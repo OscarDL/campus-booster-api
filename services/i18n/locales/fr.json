@@ -28,5 +28,6 @@
 	"personal_email_required": "Cet utilisateur n'existe pas dans l'AD, un email personel est donc requis.",
 	"An internal server error occurred": "Erreur inconnue du serveur.",
 	"user_invalid_campus": "L'utilisateur \"%s\" ne peut pas être assigné au campus de \"%s\".",
-	"user_already_in_classroom":  "L'utilisateur \"%s\" est déjà membre de la classe \"%s\"."
+	"user_already_in_classroom":  "L'utilisateur \"%s\" est déjà membre de la classe \"%s\".",
+	"user_not_in_classroom":  "L'utilisateur \"%s\"n'est pas membre de la classe \"%s\"."
 }

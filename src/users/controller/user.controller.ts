@@ -54,11 +54,34 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
 
 export async function addToClassrooms(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
-        for (let i = 0; i < req.body.classrooms?.length; i++) {
-            const id = req.body.classrooms[i];
+        const classrooms = [ ...new Set(req.body.classrooms) ] as number[];
+        for (let i = 0; i < classrooms?.length; i++) {
+            const id = classrooms[i];
             await UserHasClassroomService.create({
                 classroomId: id,
                 userId: parseInt(req.params.user_id)
+            });
+        }
+        return res.status(201).json(
+            await UserService.findById(req.params.user_id, {}, ["withClassrooms", "defaultScope"])
+        );
+    } catch (err: any) {
+        console.log(err);
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
+export async function removeFromClassrooms(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        const classrooms = [ ...new Set(req.body.classrooms) ] as number[];
+        for (let i = 0; i < classrooms?.length; i++) {
+            const id = classrooms[i];
+            await UserHasClassroomService.remove({
+                where: { 
+                    classroomId: id,
+                    userId: req.params.user_id
+                }
             });
         }
         return res.status(201).json(

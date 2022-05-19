@@ -56,8 +56,9 @@ export async function classroomCanBeLinkedToUser(req: Req, res: Res, next: Next)
                 userId: req.params.user_id
             }
         });
-        for (let i = 0; i < req.body.classrooms?.length; i++) {
-            const id = req.body.classrooms[i];
+        const classrooms = [ ...new Set(req.body.classrooms) ];
+        for (let i = 0; i < classrooms?.length; i++) {
+            const id = classrooms[i];
             if(typeof id === "number") {
                 const classroom = await findById(id);
                 if(!classroom) {
@@ -69,6 +70,36 @@ export async function classroomCanBeLinkedToUser(req: Req, res: Res, next: Next)
                 }
                 if(userHasClassrooms.some(m => m.classroomId === id)) {
                     return next(boom.badRequest(`user_already_in_classroom`, [ `${user?.firstName} ${user?.lastName}`, `${classroom?.name} ${classroom?.promotion}`]));
+                }
+            } else {
+                return next(boom.badRequest(`param_format`, [ "classrooms", "Array<string>" ])); 
+            }
+        }
+        return next();
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
+export async function classroomCanBeUnLinkedFromUser(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        const userHasClassrooms = await UserHasClassroomService.findAll({
+            where: {
+                userId: req.params.user_id
+            }
+        });
+        const classrooms = [ ...new Set(req.body.classrooms) ];
+        for (let i = 0; i < classrooms?.length; i++) {
+            const id = classrooms[i];
+            if(typeof id === "number") {
+                const classroom = await findById(id);
+                if(!classroom) {
+                    return next(boom.badRequest(`resource_not_found`, [ "Classroom", id]));
+                }
+                const user = await Userservice.findById(req.params.user_id);
+                if(!userHasClassrooms.some(m => m.classroomId === id)) {
+                    return next(boom.badRequest(`user_not_in_classroom`, [ `${user?.firstName} ${user?.lastName}`, `${classroom?.name} ${classroom?.promotion}`]));
                 }
             } else {
                 return next(boom.badRequest(`param_format`, [ "classrooms", "Array<string>" ])); 
