@@ -1,5 +1,6 @@
 import './config';
-import './config/models.config';
+import S from './config/models.config';
+S.login();
 
 import fs from 'fs';
 import cors from 'cors';
