@@ -51,7 +51,8 @@ export default (app: App): void => {
         CampusMiddleware.campusExistAsBody('campusId'),
 		UserController.create
     ]);
-    app.post(routePrefix + `/:user_id${regInt}/classrooms`, [
+    // ADD USER TO CLASSROOMS
+    app.post(routePrefix + `/:user_id${regInt}/classrooms/add`, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
@@ -59,6 +60,16 @@ export default (app: App): void => {
         RequestMiddleware.bodyParametersNeeded('classrooms', 'array'),
         ClassroomMiddleware.classroomCanBeLinkedToUser,
         UserController.addToClassrooms
+    ]);
+    // REMOVE USER FROM CLASSROOMS
+    app.post(routePrefix + `/:user_id${regInt}/classrooms/remove`, [
+        ValidationMiddleware.JWTNeeded,
+        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
+        RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+        UserMiddleware.userExistAsParam('user_id'),
+        RequestMiddleware.bodyParametersNeeded('classrooms', 'array'),
+        ClassroomMiddleware.classroomCanBeUnLinkedFromUser,
+        UserController.removeFromClassrooms
     ]);
     // UPDATE USER
     app.patch(routePrefix + `/:user_id${regInt}`, [
