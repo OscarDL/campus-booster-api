@@ -1,11 +1,11 @@
 "use strict"
-import chai, { assert, expect } from 'chai';
+import "@dulysse1/better-node";
+import chai, { expect } from 'chai';
 import EncryptionService from '../services/encryption';
 import Moderator from '../services/moderator';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
-import "@dulysse1/better-node";
 dotenv.config();
 import s3 from '../services/aws/s3';
 import AzureService from '../services/azure';
@@ -16,13 +16,16 @@ describe('Services:', () => {
     describe('Encryption with crypto:', () => {   
         const message = 'Hello world!';
         it('AES Encryption is working', () => {
-            const encr = EncryptionService.cipher(message);
-            expect(encr.split(':')).to.have.length(2); 
+            expect(
+                EncryptionService.cipher(message).split(':')
+            ).to.have.length(2); 
         });
         it('Encryption/Decryption', () => {
-            const encr = EncryptionService.cipher(message);
-            const descr = EncryptionService.decipher(encr);
-            expect(descr).to.be.equal(message);
+            expect(
+                EncryptionService.decipher(
+                    EncryptionService.cipher(message)
+                )
+            ).to.be.equal(message);
         });
     });
     describe('Moderator service:', () => { 

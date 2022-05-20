@@ -8,7 +8,6 @@ import Config from './env.config';
 const config = (Config.env === 'development') ? development : production;
 const validFileName = [ '.model.ts', '.model.js' ];
 
-
 const requireFiles = (directory: string, store: string[]): string[] => {   
     const files = fs.readdirSync(directory);
     for (let i = 0; i < files.length; i++) {
@@ -30,6 +29,7 @@ const sequelize =  new Sequelize({
     host: config.host,
     database: config.database,
     dialect: 'postgres',
+    logging: false,
     dialectOptions: {
         ssl: {
             require: true,
@@ -40,22 +40,28 @@ const sequelize =  new Sequelize({
     models: requireFiles(path.normalize(`${__dirname}/../src`), new Array()) 
 });
 
-// INITIALISATION SEQUELIZE
-sequelize.sync({ 
-    alter: false,
-    force: false,
-    logging: false
-}).then(() => {
-    console.log(
-        `\n⮕  Database environment: ${Config.env.toLocaleUpperCase()} ${Config.env === 'production' ? '🔥' : '🛠️'}`.rgb(198, 98, 255)
-    );
-    console.log('\n✅ Database is synchronized'.green);
-}).catch((err) => {
-    console.log(err);
-    console.log(`\n❌ Unable to synchronize the Database => Error: ${JSON.stringify(err)}`.red.bold);
-    process.kill(process.pid);
-});
+export function login(): Promise<Sequelize> {
+    return new Promise((resolve, reject) => {
+        sequelize.sync({ 
+            alter: false,
+            force: false,
+            logging: false
+        }).then(() => {
+            console.log(
+                `\n⮕  Database environment: ${Config.env.toLocaleUpperCase()} ${Config.env === 'production' ? '🔥' : '🛠️'}`.rgb(198, 98, 255)
+            );
+            console.log('\n✅ Database is synchronized'.green);
+            return resolve(sequelize);
+        }).catch((err) => {
+            console.log(err);
+            console.log(`\n❌ Unable to synchronize the Database => Error: ${JSON.stringify(err)}`.red.bold);
+            process.kill(process.pid);
+            return reject(err);
+        });
+    });
+}
 
 const models = sequelize.models;
 
 export { sequelize, Sequelize, Op, models };
+export default { login };
