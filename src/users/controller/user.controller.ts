@@ -103,9 +103,6 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
         let userAzure = await Azure.getUser(email);
         let isNew = !userAzure;
         if(!userAzure) {
-            if(!req.body.personalEmail) {
-                return next(boom.badRequest('personal_email_required'));
-            }
             const randomPass = `C${crypto.randomBytes(8).toString('hex')}`;
             // SEND PWD TO PERSONAL EMAIL 
             if(await Mailer.custom(
@@ -121,7 +118,7 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                 userAzure = await Azure.createUser({
                     accountEnabled: true,
                     displayName: `${req.body.firstName} ${req.body.lastName}`,
-                    mailNickname: `${replaceString(req.body.firstName?.toLocaleLowerCase())}.${replaceString(req.body.lastName?.toLocaleLowerCase())}`,
+                    mailNickname: req.body.email,
                     passwordProfile: {
                         password: randomPass,
                         forceChangePasswordNextSignIn: true
