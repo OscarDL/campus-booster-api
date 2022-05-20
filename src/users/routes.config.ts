@@ -40,9 +40,8 @@ export default (app: App): void => {
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         singleUpload,
-		RequestMiddleware.bodyParametersNeeded(['firstName','lastName', 'birthday'], 'string'),
+		RequestMiddleware.bodyParametersNeeded(['firstName', 'lastName', 'email', 'personalEmail', 'birthday'], 'string'),
         RequestMiddleware.bodyParametersNeeded('role', 'enum', Object.values(roles)),
-        RequestMiddleware.bodyParameterHoped("personalEmail", "email"),
         UserMiddleware.emailIsNotTaken,
         UserMiddleware.personalEmailIsNotTaken,
         RequestMiddleware.bodyParametersNeeded([
@@ -75,7 +74,6 @@ export default (app: App): void => {
     app.patch(routePrefix + `/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
-        RequestMiddleware.bodyParameterBlocked('email'),
 		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
         singleUpload,
