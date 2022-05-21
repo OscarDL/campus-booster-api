@@ -106,7 +106,7 @@ export default class AzureService {
     }
   }
   /**
-   * ### Create an user to the AD
+   * ### Create a user to the AD
    * @param user your user azure data
    * @returns {Promise<Az.PostUserResponse>} a promise of the user creation response from Azure AD.
    */
@@ -117,8 +117,48 @@ export default class AzureService {
       return await fetch.callApi('POST', `${auth.apiConfig.uri}/v1.0/users`, this._TOKEN, user);
     } catch (err: any) {
       if(err instanceof Error) {
-        console.log(err);
         console.log(err.message.red);
+        console.log((err as any)?.response?.data?.error);
+      }
+      return null;
+    }
+  }
+  /**
+   * ### Update a user to the AD
+   * @param user your user azure data
+   * @returns {Promise<any>} an empty promise.
+   */
+   public async updateUser(user: Az.PatchUserUpdateForm): Promise<any> {
+    try {      
+      await this.refreshToken();
+      if(!this._TOKEN) throw new Error('You should call OAuth method.');
+      const test = await fetch.callApi('PATCH', `${auth.apiConfig.uri}/v1.0/users/${user.userPrincipalName}`, this._TOKEN, user);
+      console.log(test)
+      return test
+    } catch (err: any) {
+      if(err instanceof Error) {
+        console.log(err.message.red);
+        console.log((err as any)?.response?.data?.error);
+      }
+      return null;
+    }
+  }
+  /**
+   * ### Delete a user from the AD
+   * @param email your user azure email
+   * @returns {Promise<any>} an empty promise.
+   */
+   public async deleteUser(email: string): Promise<any> {
+    try {      
+      await this.refreshToken();
+      if(!this._TOKEN) throw new Error('You should call OAuth method.');
+      const test = await fetch.callApi('DELETE', `${auth.apiConfig.uri}/v1.0/users/${email}`, this._TOKEN);
+      console.log(test)
+      return test
+    } catch (err: any) {
+      if(err instanceof Error) {
+        console.log(err.message.red);
+        console.log((err as any)?.response?.data?.error);
       }
       return null;
     }

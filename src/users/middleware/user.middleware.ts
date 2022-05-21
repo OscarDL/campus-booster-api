@@ -5,7 +5,7 @@ const replaceString = require("replace-special-characters");
 import config from "../../../config/env.config";
 const {
     permissionLevel: { Student },
-    app_domaine
+    app_domain
 } = config;
 
 export function userExistAsQuery(name: string): AsyncFn {
@@ -55,11 +55,10 @@ export function userExistAsParam(name: string): AsyncFn {
 
 export async function emailIsNotTaken(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
-        const email = `${replaceString(req.body.firstName?.toLocaleLowerCase())}.${replaceString(req.body.lastName?.toLocaleLowerCase())}@${app_domaine}`;
         return (
             await findOne({
-                where: { email }
-            }) ? next(boom.badRequest('email_taken', email)) : next()        
+                where: { email: req.body.email }
+            }) ? next(boom.conflict('email_taken', req.body.email)) : next()        
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);
@@ -75,7 +74,7 @@ export async function personalEmailIsNotTaken(req: Req, res: Res, next: Next): P
                     where: {
                         personalEmail: req.body.personalEmail 
                     }
-                }) ? next(boom.badRequest('email_taken', req.body.personalEmail)) : next()        
+                }) ? next(boom.conflict('email_taken', req.body.personalEmail)) : next()        
             );
         }
         return next();
