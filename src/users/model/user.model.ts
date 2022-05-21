@@ -93,9 +93,9 @@ export default class User extends S.Model implements UserModel {
 	public active!: boolean;
 
 	@S.AllowNull(false)
-	@S.Default(true)
+	@S.Default(false)
 	@S.Column(S.DataType.BOOLEAN)
-	public validated!: boolean;
+	public banned!: boolean;
 
 	@S.AllowNull(false)
 	@S.Default(permissionLevel.Student)
