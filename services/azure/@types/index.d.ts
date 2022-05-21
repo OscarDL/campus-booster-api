@@ -5,6 +5,7 @@ namespace Az {
   export type GetUserResponse = User | null;
   export type GetUserPhotoMetadataResponse = UserPhotoMetadata |null;
   export type PostUserCreationForm = FormUserCreation;
+  export type PatchUserUpdateForm = FormUserUpdate;
   export type PostUserResponse = UserCreationResponse | null;
 }
 interface RequestResponse<T> {
@@ -77,10 +78,20 @@ interface PasswordProfile {
 }
 interface FormUserCreation {
   accountEnabled: boolean;
+  surname: string;
+  givenName: string;
   displayName: string;
   mailNickname: string;
   userPrincipalName: string;
   passwordProfile: PasswordProfile;
+}
+interface FormUserUpdate {
+  accountEnabled?: boolean;
+  surname?: string;
+  givenName?: string;
+  displayName?: string;
+  mailNickname?: string;
+  userPrincipalName?: string;
 }
 interface UserCreationResponse {
   '@odata.context': string;

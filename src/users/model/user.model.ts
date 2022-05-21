@@ -71,7 +71,6 @@ export default class User extends S.Model implements UserModel {
 	})
 	@S.Column({
     type: S.DataType.STRING(255),
-    unique: true,
 		field: 'personal_email'
   })
 	public personalEmail!: string;

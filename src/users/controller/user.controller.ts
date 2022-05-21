@@ -7,9 +7,10 @@ import crypto from "crypto";
 import MailerService from '../../../services/mailing';
 import * as UserHasClassroomService from '../../user_has_classrooms/service/user-hasclassroom.service';
 import config from '../../../config/env.config';
-const replaceString = require("replace-special-characters");
+import generatePassword from 'generate-password';
+
 const {
-    app_domaine
+    app_domain
 } = config;
 const Mailer = new MailerService();
 const Azure = new AzureService();
@@ -99,13 +100,33 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
         if(req.file) {
             req.body.avatarKey = (req.file as any).key;
         }
-        const email = `${replaceString(req.body.firstName?.toLocaleLowerCase())}.${replaceString(req.body.lastName?.toLocaleLowerCase())}@${app_domaine}`;
-        let userAzure = await Azure.getUser(email);
-        let isNew = !userAzure;
-        if(!userAzure) {
-            const randomPass = `C${crypto.randomBytes(8).toString('hex')}`;
-            // SEND PWD TO PERSONAL EMAIL 
-            if(await Mailer.custom(
+        const email = `${req.body.email.split('@')[0]}@${app_domain}`;
+        let azureUser = await Azure.getUser(email);
+        let isNew = !azureUser;
+
+        if(!azureUser) {
+            // Very rarely, the generator doesn't put a number in the password
+            // But Azure requires at least one number or symbol in the password
+            let randomPass = '';
+            while (!randomPass.match(/\w*\d{1,}\w*/) || !randomPass.match(/[!@#$%^&*()+_\-=}{\[\]|:;"\/?.><,`~]/)) {
+                randomPass = generatePassword.generate({length: 12, numbers: true, symbols: true});
+            }
+
+            // CREATE AZURE USER
+            azureUser = await Azure.createUser({
+                accountEnabled: true,
+                surname: req.body.lastName,
+                givenName: req.body.firstName,
+                displayName: `${req.body.firstName} ${req.body.lastName}`,
+                mailNickname: email.split('@')[0],
+                passwordProfile: {
+                    password: randomPass,
+                    forceChangePasswordNextSignIn: true
+                },
+                userPrincipalName: email,
+            });
+            // SEND PASSWORD TO PERSONAL EMAIL, ELSE DELETE AZURE USER
+            if (!(await Mailer.custom(
                 req.headers.lang === "fr" ? "send-password-fr" : "send-password-en", 
                 {
                     to: req.body.personalEmail,
@@ -113,29 +134,17 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                     username: `${req.body.firstName} ${req.body.lastName}`,
                     email
                 }
-            )) {
-                // CREATE AZURE USER
-                userAzure = await Azure.createUser({
-                    accountEnabled: true,
-                    displayName: `${req.body.firstName} ${req.body.lastName}`,
-                    mailNickname: req.body.email,
-                    passwordProfile: {
-                        password: randomPass,
-                        forceChangePasswordNextSignIn: true
-                    },
-                    userPrincipalName: email,
-                });
-            } else {
+            ))) {
                 return next(boom.badRequest('smtp_error', req.body.personalEmail));
             }
         }
-        if(userAzure) {
+        if (azureUser) {
             const user = await UserService.create(
                 {
-                    azureId: userAzure.id,
+                    azureId: azureUser.id,
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
-                    email: userAzure.userPrincipalName,
+                    email: azureUser.userPrincipalName,
                     birthday: req.body.birthday,
                     campusId: req.body.campusId,
                     avatarKey: req.body.avatarKey ?? null,
@@ -146,14 +155,14 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                 }
             );
             return res.status(201).json({ 
-                user: await UserService.findById(user.id, {}, ["withClassrooms" ,"defaultScope"]), 
-                isNew 
+                user: await UserService.findById(user.id, {}, ["withClassrooms" ,"defaultScope"]), isNew 
             });
         } else {
             return next(boom.badRequest('user_creation'));
         }
     } catch (err: any) {
         console.log(`${err}`.red.bold);
+        await Azure.deleteUser(req.body.email);
         return next(err.isBoom ? err : boom.internal(err.name));
     }
 }
@@ -161,6 +170,8 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
 export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
         const user = await UserService.findById(req.params.user_id);
+        const {firstName, lastName, email} = req.body;
+
         if(req.file) {
             req.body.avatarKey = (req.file as any).key;
             if(user?.avatarKey) await s3.remove(user.avatarKey);
@@ -170,11 +181,19 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
                 req.body.avatarKey = null;
             }
         }
+
+        if (user && (user.firstName !== firstName || user.lastName !== lastName || user.email !== email)) {
+            await Azure.updateUser({
+                surname: lastName,
+                givenName: firstName,
+                displayName: (firstName && lastName) ? `${firstName} ${lastName}` : undefined,
+                mailNickname: email.split('@')[0],
+                userPrincipalName: email,
+            });
+        }
+
         return res.status(203).json(
-            await UserService.update(
-                user?.id, 
-                req.body
-            )
+            await UserService.update(user?.id, req.body, ["withClassrooms", "defaultScope"])
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);
@@ -188,6 +207,9 @@ export async function remove(req: Req, res: Res, next: Next): Promise<Resp>  {
         if(user?.avatarKey) {
             await s3.remove(user.avatarKey);
         }
+
+        if (user?.email) await Azure.deleteUser(user?.email);
+
         return res.status(204).json(
             await UserService.remove(
                 {

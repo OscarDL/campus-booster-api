@@ -40,13 +40,11 @@ export default (app: App): void => {
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         singleUpload,
-		RequestMiddleware.bodyParametersNeeded(['firstName', 'lastName', 'email', 'personalEmail', 'birthday'], 'string'),
+		RequestMiddleware.bodyParametersNeeded(['firstName', 'lastName', 'birthday'], 'string'),
+		RequestMiddleware.bodyParametersNeeded(['email', 'personalEmail'], 'email'),
         RequestMiddleware.bodyParametersNeeded('role', 'enum', Object.values(roles)),
         UserMiddleware.emailIsNotTaken,
-        UserMiddleware.personalEmailIsNotTaken,
-        RequestMiddleware.bodyParametersNeeded([
-            'campusId'
-        ], 'integer'),
+        RequestMiddleware.bodyParametersNeeded('campusId', 'integer'),
         CampusMiddleware.campusExistAsBody('campusId'),
 		UserController.create
     ]);
@@ -79,6 +77,7 @@ export default (app: App): void => {
         singleUpload,
         RequestMiddleware.bodyParameterHoped('campusId', 'integer'),
         CampusMiddleware.campusExistAsBody('campusId'),
+        UserMiddleware.emailIsNotTaken,
         UserController.update
     ]);
     // DELETE USER
