@@ -6,7 +6,7 @@
 	"access_denied": "L'accès à ce contenu vous a été refusé.",
 	"banned": "Votre compte a été banni.",
 	"missing_access_rights": "Vous ne possédez pas de droits d'accès.",
-	"validate_account": "Votre compte n'a pas été validé.",
+	"activate_acount": "Votre compte n'a pas été activé.",
 	"invalid_session": "Votre session n'est pas valide.",
 	"invalid_token": "Votre jeton d'accès n'est pas valide.",
 	"missing_token": "Jeton d'autorisation manquant.",

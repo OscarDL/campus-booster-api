@@ -3,7 +3,6 @@ import * as UserService from '../service/user.service';
 import boom from '@hapi/boom';
 import s3 from '../../../services/aws/s3';
 import AzureService from '../../../services/azure';
-import crypto from "crypto";
 import MailerService from '../../../services/mailing';
 import * as UserHasClassroomService from '../../user_has_classrooms/service/user-hasclassroom.service';
 import config from '../../../config/env.config';
@@ -15,6 +14,16 @@ const {
 const Mailer = new MailerService();
 const Azure = new AzureService();
 Azure.OAuth();
+
+export function generateNewPassword(): string {
+    // Very rarely, the generator doesn't put a number in the password
+    // But Azure requires at least one number or symbol in the password
+    let randomPass = '';
+    while (!randomPass.match(/\w*\d{1,}\w*/) || !randomPass.match(/[!@#$%^&*()+_\-=}{\[\]|:;"\/?.><,`~]/)) {
+        randomPass = generatePassword.generate({length: 12, numbers: true, symbols: true});
+    }
+    return randomPass;
+}
 
 export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
@@ -100,18 +109,14 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
         if(req.file) {
             req.body.avatarKey = (req.file as any).key;
         }
+
         const email = `${req.body.email.split('@')[0]}@${app_domain}`;
+        const password = generateNewPassword();
+
         let azureUser = await Azure.getUser(email);
         let isNew = !azureUser;
 
         if(!azureUser) {
-            // Very rarely, the generator doesn't put a number in the password
-            // But Azure requires at least one number or symbol in the password
-            let randomPass = '';
-            while (!randomPass.match(/\w*\d{1,}\w*/) || !randomPass.match(/[!@#$%^&*()+_\-=}{\[\]|:;"\/?.><,`~]/)) {
-                randomPass = generatePassword.generate({length: 12, numbers: true, symbols: true});
-            }
-
             // CREATE AZURE USER
             azureUser = await Azure.createUser({
                 accountEnabled: true,
@@ -119,19 +124,19 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                 givenName: req.body.firstName,
                 displayName: `${req.body.firstName} ${req.body.lastName}`,
                 mailNickname: email.split('@')[0],
+                userPrincipalName: email,
                 passwordProfile: {
-                    password: randomPass,
+                    password,
                     forceChangePasswordNextSignIn: true
                 },
-                userPrincipalName: email,
             });
-            // SEND PASSWORD TO PERSONAL EMAIL, ELSE DELETE AZURE USER
+            // SEND PASSWORD TO PERSONAL EMAIL
             if (!(await Mailer.custom(
                 req.headers.lang === "fr" ? "send-password-fr" : "send-password-en", 
                 {
                     to: req.body.personalEmail,
-                    password: randomPass,
                     username: `${req.body.firstName} ${req.body.lastName}`,
+                    password,
                     email
                 }
             ))) {
@@ -149,8 +154,8 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                     campusId: req.body.campusId,
                     avatarKey: req.body.avatarKey ?? null,
                     role: req.body.role,
-                    validated: true,
-                    active: true,
+                    active: false,
+                    banned: false,
                     personalEmail: req.body.personalEmail
                 }
             );
@@ -170,7 +175,7 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
 export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
         const user = await UserService.findById(req.params.user_id);
-        const {firstName, lastName, email} = req.body;
+        const {firstName, lastName, email, personalEmail} = req.body;
 
         if(req.file) {
             req.body.avatarKey = (req.file as any).key;
@@ -183,18 +188,59 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
         }
 
         if (user && (user.firstName !== firstName || user.lastName !== lastName || user.email !== email)) {
-            await Azure.updateUser({
+            let newPassword;
+            let newPasswordField = {};
+
+            if (!user.active && user.personalEmail !== personalEmail) {
+                newPassword = generateNewPassword();
+
+                newPasswordField = {
+                    passwordProfile: {
+                        password: newPassword,
+                        forceChangePasswordNextSignIn: true
+                    }
+                }
+            }
+
+            await Azure.updateUser(user.email ?? '', {
                 surname: lastName,
                 givenName: firstName,
                 displayName: (firstName && lastName) ? `${firstName} ${lastName}` : undefined,
                 mailNickname: email.split('@')[0],
                 userPrincipalName: email,
+                ...newPasswordField
             });
+
+            // SEND NEW PASSWORD TO NEW PERSONAL EMAIL
+            if (newPassword) {
+                if (!(await Mailer.custom(
+                    req.headers.lang === "fr" ? "send-password-fr" : "send-password-en", 
+                    {
+                        to: req.body.personalEmail,
+                        username: `${req.body.firstName} ${req.body.lastName}`,
+                        password: newPassword,
+                        email
+                    }
+                ))) {
+                    return next(boom.badRequest('smtp_error', req.body.personalEmail));
+                }
+            }
         }
 
         return res.status(203).json(
             await UserService.update(user?.id, req.body, ["withClassrooms", "defaultScope"])
         );
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
+export async function activate(req: Req, res: Res, next: Next): Promise<Resp>  {
+    try {
+      return res.status(203).json(
+          await UserService.update(req.params.user_id, {active: true})
+      );
     } catch (err: any) {
         console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));

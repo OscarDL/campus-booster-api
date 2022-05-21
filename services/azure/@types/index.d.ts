@@ -60,6 +60,7 @@ interface GroupMember {
   userPrincipalName?: string;
 }
 interface User {
+  accountEnabled: boolean;
   businessPhones: string[];
   displayName: string;
   givenName: string;
@@ -96,6 +97,7 @@ interface FormUserUpdate {
 interface UserCreationResponse {
   '@odata.context': string;
   id: string;
+  accountEnabled: boolean;
   businessPhones: string[];
   displayName: string;
   givenName: string;

@@ -16,13 +16,13 @@ export async function decryptToken(req: Req, res: Res, next: Next): Promise<Resp
       {
         where: {
           email: user.userPrincipalName,
-          active: true
+          banned: false
         }
       },
       'all'
     );
 
-    if(!req.user) return next(boom.badRequest(`access_denied`));
+    if(!req.user) return next(boom.badRequest('banned'));
     if(!req.user.azureId) {
       req.user = await UserService.update(
         req.user.id,

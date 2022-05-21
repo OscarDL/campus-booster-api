@@ -2,13 +2,19 @@ import { Req, Res, Next, Resp } from '../../../types/express';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import config from '../../../config/env.config';
+import boom from '@hapi/boom';
 import { ExpressErrorHandler } from '../../../services/express';
+import AzureService from '../../../services/azure/lib/azure.service';
+
+const Azure = new AzureService();
+Azure.OAuth();
 
 export async function login(req: Req, res: Res, next: Next): Promise<Resp> {
   try {
       req.body = {
         id: req.user?.id
       };
+      if (!req.user || req.user.banned) return next(boom.forbidden('banned'));
 
       const refreshId = req.user?.id + config.jwtSecret;
       const salt = crypto.randomBytes(16).toString('base64'); 

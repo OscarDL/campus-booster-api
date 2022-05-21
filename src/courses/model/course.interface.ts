@@ -6,6 +6,7 @@ export interface CourseAttributes {
   readonly id?: number;
 	name: string;
 	link: string;
+	year: number;
 	credits: number;
 	speciality: boolean;
 	description: string;
