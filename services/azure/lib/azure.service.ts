@@ -128,11 +128,11 @@ export default class AzureService {
    * @param user your user azure data
    * @returns {Promise<any>} an empty promise.
    */
-   public async updateUser(user: Az.PatchUserUpdateForm): Promise<any> {
+   public async updateUser(email: string, user: Az.PatchUserUpdateForm): Promise<any> {
     try {      
       await this.refreshToken();
       if(!this._TOKEN) throw new Error('You should call OAuth method.');
-      const test = await fetch.callApi('PATCH', `${auth.apiConfig.uri}/v1.0/users/${user.userPrincipalName}`, this._TOKEN, user);
+      const test = await fetch.callApi('PATCH', `${auth.apiConfig.uri}/v1.0/users/${email}`, this._TOKEN, user);
       console.log(test)
       return test
     } catch (err: any) {

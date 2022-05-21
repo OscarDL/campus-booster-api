@@ -80,6 +80,13 @@ export default (app: App): void => {
         UserMiddleware.emailIsNotTaken,
         UserController.update
     ]);
+    // ACTIVATE USER ACCOUNT
+    app.patch(routePrefix + `/:user_id${regInt}/activate`, [
+        ValidationMiddleware.JWTNeeded,
+        PermissionMiddleware.rolesAllowed(Object.values(roles)),
+        UserMiddleware.userExistAsParam("user_id"),
+        UserController.activate
+    ]);
     // DELETE USER
     app.delete(routePrefix + `/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,

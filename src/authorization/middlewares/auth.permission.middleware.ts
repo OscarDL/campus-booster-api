@@ -3,7 +3,6 @@ import config from '../../../config/env.config';
 const { permissionLevel: roles } = config;
 import boom from '@hapi/boom';
 
-type Role = typeof roles[keyof typeof roles];
 type Roles = Array<typeof roles[keyof typeof roles]>;
 
 export const ADMIN_ROLES = [roles.Assistant, roles.CampusManager, roles.CampusBoosterAdmin];
@@ -13,23 +12,16 @@ export function rolesAllowed(roles: Roles): Fn {
     return (req: Req, res: Res, next: Next): Resp => {
         try {
             if(!req.user) throw new Error('Login required.');
-            if(req.user?.active) {
+            if(req.user.active) {
                 const userRole = req.user?.role;
                 if (userRole && roles.includes(userRole)) {
-                    if(!req.user?.active) {
-                        return next(boom.forbidden(`banned`));
-                    }
                     req.isAdmin = (ADMIN_ROLES.includes(userRole)) ? true : false;
                     return next();
                 } else {
-                    if(!req.user?.active) {
-                        return next(boom.forbidden(`banned`));
-                    } else {
-                        return next(boom.badRequest('missing_access_rights'));
-                    }
+                    return next(boom.badRequest('missing_access_rights'));
                 }
             } else {
-                return next(boom.notAcceptable('validate_account'));
+                return next(boom.notAcceptable('activate_acount'));
             }
         } catch (e: any) {
             console.log(`${e}`.red.bold);
@@ -64,7 +56,7 @@ export function onlySameUserOrAdmin(req: Req, res: Res, next: Next): Resp {
                 }
             }   
         } else {
-            return next(boom.notAcceptable('validate_account'));
+            return next(boom.notAcceptable('activate_acount'));
         }
     } catch (e: any) {
         console.log(`${e}`.red.bold);
@@ -98,7 +90,7 @@ export function onlySameUserOrSuperAdmin(req: Req, res: Res, next: Next): Resp {
                 }
             }
         } else {
-            return next(boom.notAcceptable('validate_account'));
+            return next(boom.notAcceptable('activate_acount'));
         }
     } catch (e: any) {
         console.log(`${e}`.red.bold);
@@ -122,7 +114,7 @@ export function onlySuperAdmin(req: Req, res: Res, next: Next): Resp {
                 }
             }
         } else {
-            return next(boom.notAcceptable('validate_account'));
+            return next(boom.notAcceptable('activate_acount'));
         }
     } catch (e: any) {
         console.log(`${e}`.red.bold);
