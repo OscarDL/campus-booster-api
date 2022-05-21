@@ -42,6 +42,13 @@ export default class Course extends S.Model implements CourseModel {
 
 	@S.AllowNull(false)
 	@S.Column({
+    field: 'year',
+    type: S.DataType.INTEGER
+  })
+	public year!: number;
+
+	@S.AllowNull(false)
+	@S.Column({
     field: 'description',
     type: S.DataType.STRING(2048)
   })
