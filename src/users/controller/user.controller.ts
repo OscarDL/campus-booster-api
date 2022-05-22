@@ -15,12 +15,12 @@ const Mailer = new MailerService();
 const Azure = new AzureService();
 Azure.OAuth();
 
-export function generateNewPassword(): string {
+export function generateNewPassword(length: number): string {
     // Very rarely, the generator doesn't put a number in the password
     // But Azure requires at least one number or symbol in the password
     let randomPass = '';
     while (!randomPass.match(/\w*\d{1,}\w*/) || !randomPass.match(/[!@#$%^&*()+_\-=}{\[\]|:;"\/?.><,`~]/)) {
-        randomPass = generatePassword.generate({length: 12, numbers: true, symbols: true});
+        randomPass = generatePassword.generate({length, numbers: true, symbols: true});
     }
     return randomPass;
 }
@@ -111,7 +111,7 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
         }
 
         const email = `${req.body.email.split('@')[0]}@${app_domain}`;
-        const password = generateNewPassword();
+        const password = generateNewPassword(16);
 
         let azureUser = await Azure.getUser(email);
         let isNew = !azureUser;
@@ -187,12 +187,12 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
             }
         }
 
-        if (user && (user.firstName !== firstName || user.lastName !== lastName || user.email !== email)) {
+        if (user && (user.firstName !== firstName || user.lastName !== lastName || user.email !== email || user.personalEmail !== personalEmail)) {
             let newPassword;
             let newPasswordField = {};
 
             if (!user.active && user.personalEmail !== personalEmail) {
-                newPassword = generateNewPassword();
+                newPassword = generateNewPassword(16);
 
                 newPasswordField = {
                     passwordProfile: {

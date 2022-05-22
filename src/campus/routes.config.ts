@@ -21,7 +21,7 @@ export default (app: App): void => {
     // GET CAMPUS BY ID
     app.get(`${routePrefix}/:campusId${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.onlySameUserOrAdmin, 
+        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
         RequestMiddleware.paramParametersNeeded('campusId', 'integer'),
         CampusMiddleware.campusExistAsParam("campusId"),
         CampusController.getById

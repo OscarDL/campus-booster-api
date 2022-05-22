@@ -18,25 +18,25 @@ export default (app: App): void => {
 		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
 		PlanningController.getAll
     ]);
-    // GET USER PLANNING
+    // GET PLANNING BY ID
+    app.get(`${routePrefix}/:planning_id${regInt}`, [
+        ValidationMiddleware.JWTNeeded,
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
+		RequestMiddleware.paramParametersNeeded('planning_id', 'integer'),
+        PlanningMiddleware.planningExistAsParam("planning_id"),
+        PlanningController.getById
+    ]);
+    // GET PLANNING BY USER
     app.get(routePrefix + `/user/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.onlySameUserOrAdmin,    
 		PlanningController.getByUser
     ]);
-    // GET CLASS PLANNING
+    // GET PLANNING BY CLASS
     app.get(routePrefix + `/classroom/:classroom_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.onlySameUserOrAdmin,    
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),    
 		PlanningController.getByClass
-    ]);
-    // GET PLANNING BY ID
-    app.get(`${routePrefix}/:planning_id${regInt}`, [
-        ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.onlySameUserOrAdmin, 
-		RequestMiddleware.paramParametersNeeded('planning_id', 'integer'),
-        PlanningMiddleware.planningExistAsParam("planning_id"),
-        PlanningController.getById
     ]);
     // CREATE A NEW PLANNING
     app.post(routePrefix, [
