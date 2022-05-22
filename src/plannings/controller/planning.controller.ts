@@ -1,5 +1,6 @@
 import { Req, Res, Next, Resp } from '../../../types/express';
 import * as PlanningService from '../service/planning.service';
+import * as UserService from '../../users/service/user.service';
 import boom from '@hapi/boom';
 
 export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
@@ -23,6 +24,43 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
                     limit: req.query?.limit
                 }
             )
+        );
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
+export async function getByUser(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        const user = await UserService.findById(req.params?.user_id, {}, 'withClassrooms');
+        if(!user) return next(boom.badRequest('resource_not_found', ['user', req.params?.user_id]));
+
+        return res.status(200).json(
+          (await PlanningService.findAll(
+              {
+                  limit: req.query?.limit
+              }
+          )).filter(planning => (
+              user.UserHasClassrooms?.map(uhc => uhc.classroomId).includes(planning.ClassroomHasCourse?.classroomId)
+          ))
+        );
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
+export async function getByClass(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        return res.status(200).json(
+            (await PlanningService.findAll(
+                {
+                    limit: req.query?.limit
+                }
+            )).filter(planning => (
+                planning.ClassroomHasCourse?.classroomId === Number(req.params.classroom_id)
+            ))
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);
