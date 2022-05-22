@@ -6,8 +6,7 @@ import * as PlanningController from './controller/planning.controller';
 import * as PlanningMiddleware from './middleware/planning.middleware';
 import config from '../../config/env.config';
 const {
-    customRegex: { regInt },
-    permissionLevel: { Student }
+    customRegex: { regInt }
 } = config;
 
 const routePrefix = config.route_prefix + '/plannings';
@@ -19,11 +18,17 @@ export default (app: App): void => {
 		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
 		PlanningController.getAll
     ]);
-    // GET CLASS PLANNING
-    app.get(routePrefix + `/:user_id${regInt}/classroom/:classroom_id${regInt}`, [
+    // GET USER PLANNING
+    app.get(routePrefix + `/user/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES.concat([ Student ])),    
-		PlanningController.getAll
+		PermissionMiddleware.onlySameUserOrAdmin,    
+		PlanningController.getByUser
+    ]);
+    // GET CLASS PLANNING
+    app.get(routePrefix + `/classroom/:classroom_id${regInt}`, [
+        ValidationMiddleware.JWTNeeded,
+		PermissionMiddleware.onlySameUserOrAdmin,    
+		PlanningController.getByClass
     ]);
     // GET PLANNING BY ID
     app.get(`${routePrefix}/:planning_id${regInt}`, [
