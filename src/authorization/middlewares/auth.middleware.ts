@@ -24,10 +24,11 @@ export async function decryptToken(req: Req, res: Res, next: Next): Promise<Resp
 
     if(!req.user) return next(boom.badRequest('banned'));
     if(!req.user.azureId) {
+      const hash = await bcrypt.hash(req.body.azureId, 12);
       req.user = await UserService.update(
         req.user.id,
         {
-          azureId: req.body.azureId
+          azureId: hash
         },
         'all'
       );
