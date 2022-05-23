@@ -1,7 +1,6 @@
 import { Req, Res, Next, Resp } from '../../../types/express';
 import * as UserService from '../service/user.service';
 import boom from '@hapi/boom';
-import bcrypt from 'bcrypt';
 import s3 from '../../../services/aws/s3';
 import AzureService from '../../../services/azure';
 import MailerService from '../../../services/mailing';
@@ -20,8 +19,8 @@ export function generateNewPassword(length: number): string {
     // Very rarely, the generator doesn't put a number in the password
     // But Azure requires at least one number or symbol in the password
     let randomPass = '';
-    while (!randomPass.match(/\w*\d{1,}\w*/) || !randomPass.match(/[!@#$%^&*()+_\-=}{\[\]|:;"\/?.><,`~]/)) {
-        randomPass = generatePassword.generate({length, numbers: true, symbols: true});
+    while (!randomPass.match(/\w*\d{1,}\w*/) || !randomPass.match(/[!@#$%^&*()+_\-=}{\[\]|:;\/?.,`~]/)) {
+        randomPass = generatePassword.generate({length, numbers: true, symbols: true, exclude: '<>"'});
     }
     return randomPass;
 }
@@ -153,10 +152,9 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
             }
         }
         if (azureUser) {
-            const hash = await bcrypt.hash(azureUser.id, 12);
             const user = await UserService.create(
                 {
-                    azureId: hash,
+                    azureId: azureUser.id,
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
                     email: azureUser.userPrincipalName,

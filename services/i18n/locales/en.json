@@ -2,7 +2,7 @@
 	"internal": "An internal server error has occured.",
 	"bearer_missing": "Bearer token is missing.",
 	"unauthorized": "You are not allowed to do this action.",
-	"azure_ad_denied": "You are not allowed to do this AD action.",
+	"azure_ad_denied": "You are not allowed to use this app.",
 	"access_denied": "You have been denied access to this content.",
 	"banned": "Your account has been banned.",
 	"missing_access_rights": "You don't have access rights.",
