@@ -7,7 +7,8 @@ import * as CourseMiddleware from './middleware/course.middleware';
 import * as UserMiddleware from '../users/middleware/user.middleware';
 import config from '../../config/env.config';
 const { 
-    customRegex: { regInt } 
+    customRegex: { regInt },
+    permissionLevel: roles
 } = config;
 
 const routePrefix = config.route_prefix + '/courses';
@@ -16,27 +17,27 @@ export default (app: App): void => {
     // GET ALL COURSES
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         RequestMiddleware.queryParameterHoped('offset', 'float'),
         RequestMiddleware.queryParameterHoped('limit', 'integer'),
-		    CourseController.getAll
+		CourseController.getAll
     ]);
 
     // GET ALL COURSES BY USER
     app.get(routePrefix + `/user/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.onlySameUserOrAdmin,
+		PermissionMiddleware.onlySameUserOrAdmin,
         RequestMiddleware.queryParameterHoped('offset', 'float'),
         RequestMiddleware.queryParameterHoped('limit', 'integer'),
         UserMiddleware.userExistAsParam('user_id'),
-		    CourseController.getByUser
+		CourseController.getByUser
     ]);
 
     // GET COURSE BY ID
     app.get(`${routePrefix}/:course_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.rolesAllowed(Object.values(roles).filter(role => role !== roles.Company)), 
-		    RequestMiddleware.paramParametersNeeded('course_id', 'integer'),
+		PermissionMiddleware.rolesAllowed(Object.values(roles).filter(role => role !== roles.Company)), 
+		RequestMiddleware.paramParametersNeeded('course_id', 'integer'),
         CourseMiddleware.courseExistAsParam("course_id"),
         CourseController.getById
     ]);
@@ -44,23 +45,23 @@ export default (app: App): void => {
     // CREATE A NEW COURSE
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
-		    RequestMiddleware.bodyParametersNeeded(['name','description'], 'string'),
-		    CourseController.create
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
+		RequestMiddleware.bodyParametersNeeded(['name','description'], 'string'),
+		CourseController.create
     ]);
     // UPDATE COURSE
     app.patch(`${routePrefix}/:course_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
-		    RequestMiddleware.paramParametersNeeded('course_id', 'integer'),
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
+		RequestMiddleware.paramParametersNeeded('course_id', 'integer'),
         CourseMiddleware.courseExistAsParam("course_id"),
         CourseController.update
     ]);
     // DELETE COURSE
     app.delete(`${routePrefix}/:course_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
-		    RequestMiddleware.paramParametersNeeded('course_id', 'integer'),
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
+		RequestMiddleware.paramParametersNeeded('course_id', 'integer'),
         CourseMiddleware.courseExistAsParam("course_id"),
         CourseController.remove
     ]);
