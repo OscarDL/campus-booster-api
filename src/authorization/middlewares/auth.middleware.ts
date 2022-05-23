@@ -23,19 +23,8 @@ export async function decryptToken(req: Req, res: Res, next: Next): Promise<Resp
     );
 
     if(!req.user) return next(boom.badRequest('banned'));
-    if(!req.user.azureId) {
-      const hash = await bcrypt.hash(req.body.azureId, 12);
-      req.user = await UserService.update(
-        req.user.id,
-        {
-          azureId: hash
-        },
-        'all'
-      );
-    }
 
     const validAzureId = await bcrypt.compare(req.body.azureId, req.user.azureId!);
-
     if (!validAzureId) return next(boom.badRequest(`params_invalid_hash`));
 
     req.user.azureId = undefined;
