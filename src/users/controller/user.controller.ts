@@ -1,6 +1,7 @@
 import { Req, Res, Next, Resp } from '../../../types/express';
 import * as UserService from '../service/user.service';
 import boom from '@hapi/boom';
+import bcrypt from 'bcrypt';
 import s3 from '../../../services/aws/s3';
 import AzureService from '../../../services/azure';
 import MailerService from '../../../services/mailing';
@@ -144,9 +145,10 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
             }
         }
         if (azureUser) {
+            const hash = await bcrypt.hash(azureUser.id, 12);
             const user = await UserService.create(
                 {
-                    azureId: azureUser.id,
+                    azureId: hash,
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
                     email: azureUser.userPrincipalName,
@@ -247,14 +249,24 @@ export async function activate(req: Req, res: Res, next: Next): Promise<Resp>  {
     }
 }
 
+export async function removeFromAzure(req: Req, res: Res, next: Next): Promise<Resp>  {
+    try {
+        // USER SHOULD BE DELETED FROM AZURE BEFORE BEING DELETED IN THE APP DATABASE
+        const user = await UserService.findById(req.params.user_id);
+
+        return res.status(204).json(await Azure.deleteUser(user?.email ?? ''));
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
 export async function remove(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
         const user = await UserService.findById(req.params.user_id);
         if(user?.avatarKey) {
             await s3.remove(user.avatarKey);
         }
-
-        if (user?.email) await Azure.deleteUser(user?.email);
 
         return res.status(204).json(
             await UserService.remove(
