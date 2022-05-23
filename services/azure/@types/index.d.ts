@@ -1,17 +1,7 @@
-namespace Az {
-  export type GetGroupResponse = RequestResponse<Group[]>;
-  export type GetGroupMemberResponse = RequestResponse<GroupMember[]>;
-  export type GetUsersResponse = RequestResponse<User[]>;
-  export type GetUserResponse = User | null;
-  export type GetUserPhotoMetadataResponse = UserPhotoMetadata |null;
-  export type PostUserCreationForm = FormUserCreation;
-  export type PatchUserUpdateForm = FormUserUpdate;
-  export type PostUserResponse = UserCreationResponse | null;
-}
 interface RequestResponse<T> {
   value: T;
 }
-export interface Group {
+interface Group {
   id: string;
   deletedDateTime?: string;
   classification?: string;
@@ -109,12 +99,63 @@ interface UserCreationResponse {
   surname: string;
   userPrincipalName: string;
 }
-export interface UserPhotoMetadata {
+interface UserPhotoMetadata {
   '@odata.context': string;
   '@odata.mediaContentType': string;
   '@odata.mediaEtag': string;
   id: string;
   height: number;
   width: number;
+}
+interface AddPermission {
+  '@odata.context': string;
+  id: string;
+  deletedDateTime?: any;
+  appRoleId: string;
+  createdDateTime: Date;
+  principalDisplayName: string;
+  principalId: string;
+  principalType: string;
+  resourceDisplayName: string;
+  resourceId: string;
+}
+interface Application {
+  accountEnabled: boolean;
+  addIns: any[];
+  alternativeNames: string[];
+  appDisplayName: string;
+  appId: string;
+  appOwnerOrganizationId: string;
+  appRoleAssignmentRequired: boolean;
+  appRoles: any[];
+  disabledByMicrosoftStatus: string;
+  displayName: string;
+  homepage: string;
+  id: string;
+  info: any;
+  keyCredentials: any[];
+  logoutUrl: string;
+  notes: string;
+  oauth2PermissionScopes: any[];
+  passwordCredentials: any[];
+  replyUrls: string[];
+  resourceSpecificApplicationPermissions: any[];
+  servicePrincipalNames: string[];
+  servicePrincipalType: string;
+  tags: string[];
+  tokenEncryptionKeyId: string;
+  verifiedPublisher: any;
+}
+namespace Az {
+  export type GetGroupResponse = RequestResponse<Group[]>;
+  export type GetGroupMemberResponse = RequestResponse<GroupMember[]>;
+  export type GetUsersResponse = RequestResponse<User[]>;
+  export type GetUserResponse = User | null;
+  export type GetUserPhotoMetadataResponse = UserPhotoMetadata |null;
+  export type PostUserCreationForm = FormUserCreation;
+  export type PatchUserUpdateForm = FormUserUpdate;
+  export type PostUserResponse = UserCreationResponse | null;
+  export type AddPermissionResult = AddPermission | null;
+  export type GetApplicationResult = RequestResponse<Application[]> | null;
 }
 export default Az;
