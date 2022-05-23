@@ -83,9 +83,16 @@ export default (app: App): void => {
     // ACTIVATE USER ACCOUNT
     app.patch(routePrefix + `/:user_id${regInt}/activate`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed(Object.values(roles)),
         UserMiddleware.userExistAsParam("user_id"),
         UserController.activate
+    ]);
+    // DELETE USER FROM AZURE
+    app.delete(routePrefix + `/azure/:user_id${regInt}`, [
+        ValidationMiddleware.JWTNeeded,
+        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
+		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+        UserMiddleware.userExistAsParam("user_id"),
+        UserController.removeFromAzure
     ]);
     // DELETE USER
     app.delete(routePrefix + `/:user_id${regInt}`, [

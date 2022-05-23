@@ -1,5 +1,6 @@
 import { Req, Res, Next, Resp } from '../../../types/express';
 import * as CourseService from '../service/course.service';
+import * as UserService from '../../users/service/user.service';
 import boom from '@hapi/boom';
 
 export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
@@ -50,6 +51,21 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
                 [
                     "withPlannings"
                 ]
+            )
+        );
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
+export async function getByUser(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        return res.status(200).json(
+            await CourseService.findAll(
+                {
+                    limit: req.query?.limit
+                }
             )
         );
     } catch (err: any) {
