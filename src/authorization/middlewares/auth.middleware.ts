@@ -15,14 +15,14 @@ export async function decryptToken(req: Req, res: Res, next: Next): Promise<Resp
     req.user = await UserService.findOne(
       {
         where: {
-          email: user.userPrincipalName,
-          banned: false
+          email: user.userPrincipalName
         }
       },
       'all'
     );
 
-    if(!req.user) return next(boom.badRequest('banned'));
+    if(!req.user) return next(boom.badRequest('azure_ad_denied'));
+    if(req.user.banned) return next(boom.badRequest('banned'));
 
     const validAzureId = await bcrypt.compare(req.body.azureId, req.user.azureId!);
     if (!validAzureId) return next(boom.badRequest(`params_invalid_hash`));

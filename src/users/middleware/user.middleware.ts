@@ -101,9 +101,9 @@ export async function iamAdminOrItsaStudent(req: Req, res: Res, next: Next): Pro
     }
 }
 
-export async function dontKillYourself(req: Req, res: Res, next: Next): Promise<Resp> {
+export async function dontDeleteYourself(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
-        return (await findById(req.user?.id)) ? 
+        return Number(req.params?.user_id) === req.user?.id ? 
         next(boom.badRequest('missing_access_rights')): next();
     } catch (err: any) {
         console.log(`${err}`.red.bold);
