@@ -130,6 +130,14 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                     forceChangePasswordNextSignIn: true
                 },
             });
+            if(azureUser && !(
+                await Azure.grantUserToApplication(
+                    azureUser.id,
+                    "Campus Booster"
+                )
+            )) {
+                return next(boom.badRequest('grant_error'));
+            }
             // SEND PASSWORD TO PERSONAL EMAIL
             if (!(await Mailer.custom(
                 req.headers.lang === "fr" ? "send-password-fr" : "send-password-en", 

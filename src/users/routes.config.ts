@@ -93,6 +93,7 @@ export default (app: App): void => {
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
 		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
+        UserMiddleware.dontKillYourself,
         UserController.remove
     ]);
 }

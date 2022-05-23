@@ -105,7 +105,6 @@ export default class User extends S.Model implements UserModel {
 	public dataValues!: UserAttributes;
 
 	@S.BeforeCreate
-	@S.BeforeUpdate
 	static async encryptAzureID(instance: User): Promise<void> {
 		if(instance?.azureId) instance.azureId = await bcrypt.hash(instance.azureId, 12);
 	}

@@ -100,3 +100,13 @@ export async function iamAdminOrItsaStudent(req: Req, res: Res, next: Next): Pro
         return next(err.isBoom ? err : boom.internal(err.name));
     }
 }
+
+export async function dontKillYourself(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        return (await findById(req.user?.id)) ? 
+        next(boom.badRequest('missing_access_rights')): next();
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}

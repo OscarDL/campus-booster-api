@@ -29,5 +29,6 @@
 	"An internal server error occurred": "Erreur inconnue du serveur.",
 	"user_invalid_campus": "L'utilisateur \"%s\" ne peut pas être assigné au campus de \"%s\".",
 	"user_already_in_classroom":  "L'utilisateur \"%s\" est déjà membre de la classe \"%s\".",
-	"user_not_in_classroom":  "L'utilisateur \"%s\"n'est pas membre de la classe \"%s\"."
+	"user_not_in_classroom":  "L'utilisateur \"%s\"n'est pas membre de la classe \"%s\".",
+	"grant_error": "Echec de la création de l'utilisateur. L'ajout de permission sur Azure a échoué."
 }

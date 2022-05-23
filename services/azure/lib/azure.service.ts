@@ -2,6 +2,7 @@ import fetch from './azure.fetch';
 import auth from './azure.auth';
 import { AuthenticationResult } from '@azure/msal-node';
 import Az from '../@types';
+import crypto from "crypto";
 import moment, { Moment } from 'moment-timezone';
 /**
  *  # Azure Ad service
@@ -81,6 +82,52 @@ export default class AzureService {
       await this.refreshToken();
       if(!this._TOKEN) throw new Error('You should call OAuth method.');
       return await fetch.callApi('GET', `${auth.apiConfig.uri}/v1.0/users/${email}`, this._TOKEN);
+    } catch (err: any) {
+      if(err instanceof Error) {
+        console.log(err.message.red);
+      }
+      return null;
+    }
+  }
+  /**
+   * ### Get all Azure AD applications
+   * @returns {Promise<Az.GetApplicationResult>} a promise of the list of applications.
+   */
+  public async getApplications(): Promise<Az.GetApplicationResult> {
+    try {
+      await this.refreshToken();
+      if(!this._TOKEN) throw new Error('You should call OAuth method.');
+      return await fetch.callApi('GET', `${auth.apiConfig.uri}/v1.0/servicePrincipals`, this._TOKEN);
+    } catch (err: any) {
+      if(err instanceof Error) {
+        console.log(err.message.red);
+      }
+      return null;
+    }
+  }
+  /**
+   * ### Give permission to user to an application
+   * @param userId The ID of your user
+   * @param applicationName The appDisplayName of your application target
+   * @returns {Promise<Az.GetUserResponse>} a promise of the result of the grant.
+  */
+  public async grantUserToApplication(userId: string, applicationName: string): Promise<Az.AddPermissionResult> {
+    try {
+      await this.refreshToken();
+      if(!this._TOKEN) throw new Error('You should call OAuth method.');
+      const applications = await this.getApplications();
+      if(!applications) throw void 0;
+      const resourceId = applications.value.find(v => v.appDisplayName === applicationName)?.id;
+      return await fetch.callApi(
+        'POST', 
+        `${auth.apiConfig.uri}/v1.0/users/${userId}/appRoleAssignments`, 
+        this._TOKEN, 
+        {
+          resourceId,
+          principalId: userId,
+          appRoleId: "00000000-0000-0000-0000-000000000000" || crypto.randomUUID()
+        }
+      );
     } catch (err: any) {
       if(err instanceof Error) {
         console.log(err.message.red);
