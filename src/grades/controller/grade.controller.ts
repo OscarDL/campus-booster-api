@@ -9,7 +9,6 @@ export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
                 req.params.grade_id,
                 {},
                 [
-                    "withTeacher",
                     "withUser",
                     "withCourse"
                 ]
@@ -30,7 +29,6 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
                     offset: req.query?.offset
                 },
                 [
-                    "withTeacher",
                     "withUser",
                     "withCourse"
                 ]
@@ -54,7 +52,6 @@ export async function getByUser(req: Req, res: Res, next: Next): Promise<Resp> {
                     }
                 },
                 [
-                    "withTeacher",
                     "withCourse"
                 ]
             )
@@ -75,9 +72,8 @@ export async function getByTeacher(req: Req, res: Res, next: Next): Promise<Resp
                     where: {
                         teacherId: req.params.teacher_id
                     }
-                },
+                } as any,
                 [
-                    "withTeacher",
                     "withCourse",
                     "withUser",
                 ]
@@ -96,7 +92,6 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                 average: req.body.average,
                 comment: req.body.comment,
                 userId: req.body.userId,
-                teacherId: req.body.teacherId,
                 classroomHasCourseId: req.body.classroomHasCourseId
             }
         );
@@ -105,7 +100,6 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                 grade.id,
                 {},
                 [
-                    "withTeacher",
                     "withUser",
                     "withCourse"
                 ]
@@ -129,7 +123,6 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
                 grade.id,
                 {},
                 [
-                    "withTeacher",
                     "withUser",
                     "withCourse"
                 ]

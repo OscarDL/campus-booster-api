@@ -4,7 +4,7 @@ export default (() => ({
     defaultScope: ({
         attributes: { 
             exclude: CourseContentProtectedFields
-        }
+        },
     }) as ScopesOptions,
     all: ({
         attributes: { 

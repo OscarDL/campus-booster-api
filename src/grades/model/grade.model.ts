@@ -5,7 +5,6 @@ import * as S from 'sequelize-typescript';
 import { GradeModel } from './grade.interface';
 import GradeScope from './grade.scope';
 import User from './../../users/model/user.model';
-import Teacher from './../../teachers/model/teacher.model';
 import ClassroomHasCourse from './../../classroom_has_courses/model/classroomhascourse.model';
 
 @S.Scopes(GradeScope)
@@ -41,20 +40,6 @@ export default class Grade extends S.Model implements GradeModel {
 		onDelete: 'CASCADE'
 	})
 	public User!: User;
-
-	@S.ForeignKey(() => Teacher)
-	@S.Column({
-    field: 'teacher_id',
-	})
-	public teacherId!: number;
-
-	@S.BelongsTo(() => Teacher, { 
-		foreignKey: {
-      field: 'teacher_id'
-    },
-		onDelete: 'CASCADE'
-	})
-	public Teacher!: Teacher;
 
 	@S.ForeignKey(() => ClassroomHasCourse)
 	@S.Column({

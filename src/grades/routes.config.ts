@@ -5,7 +5,6 @@ import * as RequestMiddleware from '../authorization/middlewares/request.validat
 import * as GradeController from './controller/grade.controller';
 import * as GradeMiddleware from './middleware/grade.middleware';
 import * as UserMiddleware from '../users/middleware/user.middleware';
-import * as TeacherMiddleware from '../teachers/middleware/teacher.middleware';
 import * as ClassroomHasCourseMiddleware from '../classroom_has_courses/middleware/classroomhascourse.middleware';
 import config from '../../config/env.config';
 const {
@@ -50,7 +49,6 @@ export default (app: App): void => {
         RequestMiddleware.queryParameterHoped('offset', 'float'),
         RequestMiddleware.queryParameterHoped('limit', 'integer'),
 		RequestMiddleware.paramParametersNeeded('teacher_id', 'integer'),
-        TeacherMiddleware.teacherExistAsParam('teacher_id'),
         GradeController.getByTeacher
     ]);
     // CREATE A NEW GRADE
@@ -61,9 +59,7 @@ export default (app: App): void => {
         RequestMiddleware.bodyParameterHoped("comment", "string"),
         RequestMiddleware.bodyParametersNeeded(["userId", "teacherId", "classroomHasCourseId"], "integer"),
 		UserMiddleware.userExistAsBody('userId'),
-        TeacherMiddleware.teacherExistAsBody('teacherId'),
         ClassroomHasCourseMiddleware.classroomhascourseExistAsBody('classroomHasCourseId'),
-        TeacherMiddleware.teacherIsInClassroom,
         UserMiddleware.userIsInClassroom,
         GradeController.create
     ]);

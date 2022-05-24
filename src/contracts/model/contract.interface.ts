@@ -1,7 +1,6 @@
 import { Model, Optional } from "sequelize";
 import { UserModel } from "./../../users/model/user.interface";
 import ContractScope from './contract.scope';
-import { TeacherModel } from './../../teachers/model/teacher.interface';
 export interface ContractAttributes {
   readonly id: number;
 	startDate: Date;
@@ -18,7 +17,7 @@ export interface ContractAttributes {
 	userId: number;
 	User?: UserModel;
 	supervisorId: number;
-	Supervisor?: TeacherModel;
+	Supervisor?: UserModel;
 };
 export interface ContractCreationAttributes extends Optional<ContractAttributes, 'id'> {}
 export interface ContractModel extends Model<ContractAttributes, ContractCreationAttributes>, Partial<ContractAttributes> {

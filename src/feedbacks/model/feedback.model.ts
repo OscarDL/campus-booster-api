@@ -5,7 +5,6 @@ import * as S from 'sequelize-typescript';
 import User from '../../users/model/user.model';
 import { FeedbackModel } from './feedback.interface';
 import FeedbackScope from './feedback.scope';
-import Teacher from './../../teachers/model/teacher.model';
 import ClassroomHasCourse from './../../classroom_has_courses/model/classroomhascourse.model';
 
 @S.Scopes(FeedbackScope)
@@ -70,7 +69,7 @@ export default class Feedback extends S.Model implements FeedbackModel {
 	})
 	public User!: User;
 
-	@S.ForeignKey(() => Teacher)
+	@S.ForeignKey(() => User)
 	@S.Column(
 		{
 			field: 'teacher_id',
@@ -78,13 +77,13 @@ export default class Feedback extends S.Model implements FeedbackModel {
 	)
 	public teacherId!: number;
 
-	@S.BelongsTo(() => Teacher, { 
+	@S.BelongsTo(() => User, { 
 		foreignKey: {
       field: 'teacher_id'
     },
 		onDelete: 'CASCADE'
 	})
-	public Teacher!: Teacher;
+	public Teacher!: User;
 
 	@S.ForeignKey(() => ClassroomHasCourse)
 	@S.Column(

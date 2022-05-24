@@ -6,12 +6,7 @@ export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         return res.status(200).json(
             await ContractService.findById(
-                req.params.contract_id,
-                {},
-                [
-                    "withTeacher",
-                    "withUser"
-                ]
+                req.params.contract_id
             )
         );
     } catch (err: any) {
@@ -30,10 +25,7 @@ export async function getByUser(req: Req, res: Res, next: Next): Promise<Resp> {
                     where: {
                         userId: req.params.user_id
                     }
-                },
-                [
-                    "withTeacher"
-                ]
+                }
             )
         );
     } catch (err: any) {
@@ -49,11 +41,7 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
                 {
                     limit: req.query?.limit,
                     offset: req.query?.offset
-                },
-                [
-                    "withTeacher",
-                    "withUser"
-                ]
+                }
             )
         );
     } catch (err: any) {

@@ -5,6 +5,9 @@ import { ClassroomProtectedFields } from "./classroom.interface";
 import Planning from "../../plannings/model/planning.model";
 import Course from "../../courses/model/course.model";
 import Campus from "../../campus/model/campus.model";
+import Classroom from "./classroom.model";
+import { UserPublicFields } from "./../../users/model/user.interface";
+import User from "./../../users/model/user.model";
 export default (() => ({
     defaultScope: ({
         attributes: { 
@@ -26,8 +29,19 @@ export default (() => ({
                 ]
             },
             {
-                model: UserHasClassroom,
+                model: UserHasClassroom.unscoped(),
                 required: false,
+                include: [
+                    {
+                        model: User.unscoped(),
+                        required: true,
+                        attributes: UserPublicFields
+                    },
+                    {
+                        model: Classroom.unscoped(),
+                        required: true
+                    },
+                ]
             },
             {
                 model: Campus.unscoped(),

@@ -6,6 +6,7 @@ import AzureService from '../../../services/azure';
 import MailerService from '../../../services/mailing';
 import * as UserHasClassroomService from '../../user_has_classrooms/service/user-hasclassroom.service';
 import config from '../../../config/env.config';
+const { permissionLevel: { Professor }} = config;
 import generatePassword from 'generate-password';
 
 const {
@@ -109,7 +110,6 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
         if(req.file) {
             req.body.avatarKey = (req.file as any).key;
         }
-
         const email = `${req.body.email.split('@')[0]}@${app_domain}`;
         const password = generateNewPassword(16);
 
