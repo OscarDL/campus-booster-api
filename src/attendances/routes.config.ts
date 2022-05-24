@@ -5,6 +5,7 @@ import * as RequestMiddleware from '../authorization/middlewares/request.validat
 import * as AttendanceController from './controller/attendance.controller';
 import * as AttendanceMiddleware from './middleware/attendance.middleware';
 import * as PlanningMiddleware from '../plannings/middleware/planning.middleware';
+import * as UserMiddleware from '../users/middleware/user.middleware';
 import config from '../../config/env.config';
 const { 
 	permissionLevel: { Student }, 
@@ -21,16 +22,28 @@ export default (app: App): void => {
     // GET ALL ATTENDANCES
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ Student ]), 
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
+        RequestMiddleware.queryParameterHoped('offset', 'float'),
+        RequestMiddleware.queryParameterHoped('limit', 'integer'),
 		AttendanceController.getAll
     ]);
     // GET ATTENDANCE BY ID
     app.get(`${routePrefix}/:attendance_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ Student ]), 
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
 		RequestMiddleware.paramParametersNeeded('attendance_id', 'integer'),
         AttendanceMiddleware.attendanceExistAsParam("attendance_id"),
         AttendanceController.getById
+    ]);
+    // GET ATTENDANCE BY USER
+    app.get(`${routePrefix}/user/:user_id${regInt}`, [
+        ValidationMiddleware.JWTNeeded,
+        PermissionMiddleware.onlySameUserOrAdmin,
+        RequestMiddleware.queryParameterHoped('offset', 'float'),
+        RequestMiddleware.queryParameterHoped('limit', 'integer'),
+        RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+        UserMiddleware.userExistAsParam('user_id'),
+        AttendanceController.getByUser
     ]);
     // CREATE A NEW ATTENDANCE
     app.post(routePrefix, [

@@ -1,4 +1,5 @@
 import { ScopesOptions } from "sequelize-typescript";
+import { UserPublicFields } from "../../users/model/user.interface";
 import User from "../../users/model/user.model";
 import { BalanceProtectedFields } from "./balance.interface";
 export default (() => ({
@@ -10,7 +11,7 @@ export default (() => ({
             {
                 model: User.unscoped(),
                 required: true,
-                attributes: [ "id", "firstName", "lastName", "email" ]
+                attributes: UserPublicFields
             }
         ]
     }) as ScopesOptions

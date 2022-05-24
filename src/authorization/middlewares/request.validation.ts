@@ -199,11 +199,11 @@ export function bodyParameterBlocked(params: string | string[]): AsyncFn {
             if(Array.isArray(params)) {
                 for (let i = 0; i < params.length; i++) {
                     const param = params[i];
-                    if(req.body[param]) next(boom.badRequest('query_blocked', param));
+                    if(req.body[param]) next(boom.badRequest('body_blocked', param));
                 }
                 return next();
             } else {
-                return req.body[params] ? next(boom.badRequest('query_blocked', params)) : next();
+                return req.body[params] ? next(boom.badRequest('body_blocked', params)) : next();
             }
         } catch (err: any) {
             return await ExpressErrorHandler(err)(req, res, next); 
@@ -217,11 +217,11 @@ export function paramParameterBlocked(params: string | string[]): AsyncFn {
             if(Array.isArray(params)) {
                 for (let i = 0; i < params.length; i++) {
                     const param = params[i];
-                    if(req.params[param]) next(boom.badRequest('query_blocked', param));
+                    if(req.params[param]) next(boom.badRequest('param_blocked', param));
                 }
                 return next();
             } else {
-                return req.params[params] ? next(boom.badRequest('query_blocked', params)) : next();
+                return req.params[params] ? next(boom.badRequest('param_blocked', params)) : next();
             }
         } catch (err: any) {
             return await ExpressErrorHandler(err)(req, res, next); 

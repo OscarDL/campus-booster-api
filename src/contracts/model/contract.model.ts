@@ -73,7 +73,7 @@ export default class Contract extends S.Model implements ContractModel {
     },
 		onDelete: 'CASCADE'
 	})
-	public Campus!: User;
+	public User!: User;
 
 	@S.ForeignKey(() => Teacher)
 	@S.Column({

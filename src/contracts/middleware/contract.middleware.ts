@@ -1,6 +1,6 @@
 import { Req, Res, Next, Resp, AsyncFn } from '../../../types/express';
 import boom from '@hapi/boom';
-import { findById } from '../service/contract.service';
+import { findById, findOne } from '../service/contract.service';
 
 export function contractExistAsQuery(name: string): AsyncFn {
     return async(req: Req, res: Res, next: Next): Promise<Resp> => {
@@ -45,4 +45,18 @@ export function contractExistAsParam(name: string): AsyncFn {
             return next(err.isBoom ? err : boom.internal(err.name));
         }
     }
+}
+
+export async function isMyContractOrIamAdmin(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        return req.isAdmin ? next() : await findOne({
+            where: {
+                id: req.params.contract_id,
+                userId: req.user?.id
+            }
+        }) ? next() : next(boom.badRequest('missing_access_rights'));
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    } 
 }
