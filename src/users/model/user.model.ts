@@ -8,13 +8,13 @@ import config from '../../../config/env.config';
 const { permissionLevel } = config;
 import bcrypt from 'bcrypt';
 import Campus from './../../campus/model/campus.model';
-import Teacher from './../../teachers/model/teacher.model';
 import Feedback from './../../feedbacks/model/feedback.model';
 import Attendance from './../../attendances/model/attendance.model';
 import Grade from './../../grades/model/grade.model';
 import Balance from './../../balances/model/balance.model';
 import UserHasClassroom from './../../user_has_classrooms/model/user-hasclassroom.model';
 import s3 from '../../../services/aws/s3';
+import Contract from 'src/contracts/model/contract.model';
 
 @S.Scopes(UserScope)
 @S.Table({
@@ -161,14 +161,6 @@ export default class User extends S.Model implements UserModel {
 	})
 	public UserHasClassrooms!: UserHasClassroom[];
 
-	@S.HasMany(() => Teacher, { 
-		foreignKey: {
-      field: 'user_id'
-    },
-		onDelete: 'CASCADE'
-	})
-	public Teachers!: Teacher[];
-
 	@S.HasMany(() => Feedback, { 
 		foreignKey: {
       field: 'user_id'
@@ -183,7 +175,7 @@ export default class User extends S.Model implements UserModel {
     },
 		onDelete: 'CASCADE'
 	})
-	Attendances !: Attendance[];
+	public Attendances !: Attendance[];
 
 	@S.HasMany(() => Grade, { 
 		foreignKey: {
@@ -200,4 +192,20 @@ export default class User extends S.Model implements UserModel {
 		onDelete: 'CASCADE'
 	})
 	public Balances!: Balance[];
+
+	@S.HasMany(() => Contract, { 
+		foreignKey: {
+      field: 'user_id'
+    },
+		onDelete: 'CASCADE'
+	})
+	public UserContracts!: Contract[];
+
+	@S.HasMany(() => Contract, { 
+		foreignKey: {
+      field: 'supervisor_id'
+    },
+		onDelete: 'CASCADE'
+	})
+	public SupervisorContracts!: Contract[];
 }

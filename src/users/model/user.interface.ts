@@ -1,9 +1,10 @@
+import { ContractModel } from './../../contracts/model/contract.interface';
+import { ClassroomHasCourseModel } from './../../classroom_has_courses/model/classroomhascourse.interface';
 import { Model, Optional } from "sequelize";
 import UserScope from './user.scope';
 import config from '../../../config/env.config';
 import { CampusModel } from './../../campus/model/campus.interface';
 import { FeedbackModel } from './../../feedbacks/model/feedback.interface';
-import { TeacherModel } from './../../teachers/model/teacher.interface';
 import { AttendanceModel } from './../../attendances/model/attendance.interface';
 import { GradeModel } from './../../grades/model/grade.interface';
 import { BalanceModel } from './../../balances/model/balance.interface';
@@ -28,12 +29,14 @@ export interface UserAttributes {
 	Campus?: CampusModel;
 	UserHasClassrooms?: UserHasClassroomModel[];
 	Feedbacks?: FeedbackModel[];
-	Teachers?: TeacherModel[];
 	Attendances?: AttendanceModel[];
 	Grades?: GradeModel[];
+	ClassroomHasCourses?: ClassroomHasCourseModel[]; 
 	Balances?: BalanceModel[];
 	avatarKey?: string | null;
 	avatarBase64?: string | null;
+	SupervisorContracts?: ContractModel[];
+	UserContracts?: ContractModel[];
 };
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 export interface UserModel extends Model<UserAttributes, UserCreationAttributes>, Partial<UserAttributes> {

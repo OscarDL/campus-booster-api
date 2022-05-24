@@ -2,7 +2,6 @@ import { ScopesOptions } from "sequelize-typescript";
 import { ClassroomHasCourseProtectedFields } from "./classroomhascourse.interface";
 import Course from './../../courses/model/course.model';
 import Classroom from './../../classrooms/model/classroom.model';
-import Teacher from "./../../teachers/model/teacher.model";
 import Planning from './../../plannings/model/planning.model';
 import Feedback from './../../feedbacks/model/feedback.model';
 import Grade from './../../grades/model/grade.model';
@@ -34,10 +33,6 @@ export default (() => ({
             {
                 model: Classroom.unscoped(),
                 required: true,
-            },
-            {
-                model: Teacher,
-                required: false,
             },
             {
                 model: Planning.unscoped(),

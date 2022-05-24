@@ -5,7 +5,6 @@ import * as S from 'sequelize-typescript';
 import { ContractModel, STATUS } from './contract.interface';
 import ContractScope from './contract.scope';
 import User from './../../users/model/user.model';
-import Teacher from './../../teachers/model/teacher.model';
 
 @S.Scopes(ContractScope)
 @S.Table({
@@ -75,17 +74,18 @@ export default class Contract extends S.Model implements ContractModel {
 	})
 	public User!: User;
 
-	@S.ForeignKey(() => Teacher)
+	@S.ForeignKey(() => User)
 	@S.Column({
     field: 'supervisor_id',
   })
 	public supervisorId!: number;
 
-	@S.BelongsTo(() => Teacher, { 
+	@S.BelongsTo(() => User, { 
 		foreignKey: {
+			
       field: 'supervisor_id'
     },
 		onDelete: 'CASCADE'
 	})
-	public Supervisor!: Teacher;
+	public Supervisor!: User;
 }

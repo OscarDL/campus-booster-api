@@ -6,10 +6,10 @@ import Course from './../../courses/model/course.model';
 import { ClassroomHasCourseModel } from './classroomhascourse.interface';
 import ClassroomHasCourseScope from './classroomhascourse.scope';
 import Classroom from './../../classrooms/model/classroom.model';
-import Teacher from './../../teachers/model/teacher.model';
 import Planning from './../../plannings/model/planning.model';
 import Feedback from './../../feedbacks/model/feedback.model';
 import Grade from './../../grades/model/grade.model';
+import User from './../../users/model/user.model';
 
 @S.Scopes(ClassroomHasCourseScope)
 @S.Table({
@@ -42,6 +42,20 @@ export default class ClassroomHasCourse extends S.Model implements ClassroomHasC
 	})
 	public Course!: Course;
 
+	@S.ForeignKey(() => User)
+	@S.Column({
+		field: 'teacher_id'
+	})
+	public teacherId!: number;
+
+	@S.BelongsTo(() => User, { 
+		foreignKey: {
+      field: 'teacher_id'
+    },
+		onDelete: 'CASCADE'
+	})
+	public Teacher!: User;
+
 	@S.ForeignKey(() => Classroom)
 	@S.Column({
 		field: 'classroom_id'
@@ -55,14 +69,6 @@ export default class ClassroomHasCourse extends S.Model implements ClassroomHasC
 		onDelete: 'CASCADE'
 	})
 	public Classroom!: Classroom;
-
-	@S.HasMany(() => Teacher, { 
-		foreignKey: {
-      field: 'classroom_has_course_id'
-    },
-		onDelete: 'CASCADE'
-	})
-	public Teachers!: Teacher[];
 
 	@S.HasMany(() => Planning, { 
 		foreignKey: {

@@ -1,7 +1,6 @@
 import { Model, Optional } from "sequelize";
 import FeedbackScope from './feedback.scope';
 import { UserModel } from "./../../users/model/user.interface";
-import { TeacherModel } from './../../teachers/model/teacher.interface';
 import { CourseModel } from './../../courses/model/course.interface';
 export interface FeedbackAttributes {
   readonly id: number;
@@ -11,10 +10,10 @@ export interface FeedbackAttributes {
 	fluencyInSpeaking: string;
 	readonly created_at?: Date;
 	readonly updated_at?: Date;
-	userId?: number;
+	userId: number;
 	User?: UserModel;
-	teacherId?: number;
-	Teacher?: TeacherModel;
+	teacherId: number;
+	Teacher?: UserModel;
 	courseId?: number;
 	Course?: CourseModel;
 };

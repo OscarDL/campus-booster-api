@@ -52,5 +52,5 @@ export default (() => ({
                 required: false
             }
         ]
-    }) as ScopesOptions,
+    }) as ScopesOptions
 }));
