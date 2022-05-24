@@ -1,4 +1,7 @@
 import { ScopesOptions } from "sequelize-typescript";
+import Teacher from "../../teachers/model/teacher.model";
+import { UserPublicFields } from "../../users/model/user.interface";
+import User from "../../users/model/user.model";
 import { ContractProtectedFields } from "./contract.interface";
 export default (() => ({
     defaultScope: ({
@@ -6,9 +9,21 @@ export default (() => ({
             exclude: ContractProtectedFields
         }
     }) as ScopesOptions,
-    all: ({
-        attributes: { 
-            exclude: []
-        }
+    withUser: ({
+        include: [
+            {
+                model: User.unscoped(),
+                required: true,
+                attributes: UserPublicFields
+            }
+        ]
+    }) as ScopesOptions,
+    withTeacher: ({
+        include: [
+            {
+                model: Teacher,
+                required: true
+            }
+        ]
     }) as ScopesOptions,
 }));

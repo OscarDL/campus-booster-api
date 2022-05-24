@@ -2,6 +2,7 @@ import { ScopesOptions } from "sequelize-typescript";
 import { CampusProtectedFields } from "./campus.interface";
 import User from './../../users/model/user.model';
 import Classroom from './../../classrooms/model/classroom.model';
+import { UserPublicFields } from "../../users/model/user.interface";
 export default (() => ({
     defaultScope: ({
         attributes: { 
@@ -12,7 +13,8 @@ export default (() => ({
         include: [
             {
                 model: User.unscoped(),
-                required: false
+                required: false,
+                attributes: UserPublicFields
             }
         ]
     }) as ScopesOptions,

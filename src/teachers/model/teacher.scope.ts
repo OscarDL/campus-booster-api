@@ -4,6 +4,7 @@ import User from './../../users/model/user.model';
 import ClassroomHasCourse from './../../classroom_has_courses/model/classroomhascourse.model';
 import Grade from './../../grades/model/grade.model';
 import Feedback from './../../feedbacks/model/feedback.model';
+import { UserPublicFields } from "../../users/model/user.interface";
 export default (() => ({
     defaultScope: ({
         attributes: { 
@@ -12,7 +13,8 @@ export default (() => ({
         include: [
             {
                 model: User.unscoped(),
-                required: true
+                required: true,
+                attributes: UserPublicFields
             }
         ]
     }) as ScopesOptions,
@@ -23,7 +25,8 @@ export default (() => ({
         include: [
             {
                 model: User.unscoped(),
-                required: true
+                required: true,
+                attributes: UserPublicFields
             },
             {
                 model: ClassroomHasCourse,

@@ -6,7 +6,13 @@ export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         return res.status(200).json(
             await GradeService.findById(
-                req.params.grade_id
+                req.params.grade_id,
+                {},
+                [
+                    "withTeacher",
+                    "withUser",
+                    "withCourse"
+                ]
             )
         );
     } catch (err: any) {
@@ -20,8 +26,14 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
         return res.status(200).json(
             await GradeService.findAll(
                 {
-                    limit: req.query?.limit
-                }
+                    limit: req.query?.limit,
+                    offset: req.query?.offset
+                },
+                [
+                    "withTeacher",
+                    "withUser",
+                    "withCourse"
+                ]
             )
         );
     } catch (err: any) {
@@ -33,11 +45,43 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
 export async function getByUser(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         return res.status(200).json(
-            (await GradeService.findAll(
+            await GradeService.findAll(
                 {
-                    limit: req.query?.limit
-                }
-            )).filter(grade => grade.userId === Number(req.params.user_id))
+                    limit: req.query?.limit,
+                    offset: req.query?.offset,
+                    where: {
+                        userId: req.params.user_id
+                    }
+                },
+                [
+                    "withTeacher",
+                    "withCourse"
+                ]
+            )
+        );
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
+export async function getByTeacher(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        return res.status(200).json(
+            await GradeService.findAll(
+                {
+                    limit: req.query?.limit,
+                    offset: req.query?.offset,
+                    where: {
+                        teacherId: req.params.teacher_id
+                    }
+                },
+                [
+                    "withTeacher",
+                    "withCourse",
+                    "withUser",
+                ]
+            )
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);
@@ -47,12 +91,28 @@ export async function getByUser(req: Req, res: Res, next: Next): Promise<Resp> {
 
 export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        const grade = await GradeService.create(
+            {
+                average: req.body.average,
+                comment: req.body.comment,
+                userId: req.body.userId,
+                teacherId: req.body.teacherId,
+                classroomHasCourseId: req.body.classroomHasCourseId
+            }
+        );
         return res.status(201).json(
-            await GradeService.create(
-                req.body as any
+            await GradeService.findById(
+                grade.id,
+                {},
+                [
+                    "withTeacher",
+                    "withUser",
+                    "withCourse"
+                ]
             )
         );
     } catch (err: any) {
+        console.log(err);
         console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));
     }
@@ -60,10 +120,19 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
 
 export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        const grade = await GradeService.update(
+            req.params.grade_id, 
+            req.body
+        );
         return res.status(203).json(
-            await GradeService.update(
-                req.params.grade_id, 
-                req.body
+            await GradeService.findById(
+                grade.id,
+                {},
+                [
+                    "withTeacher",
+                    "withUser",
+                    "withCourse"
+                ]
             )
         );
     } catch (err: any) {

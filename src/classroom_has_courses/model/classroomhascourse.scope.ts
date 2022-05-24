@@ -36,7 +36,7 @@ export default (() => ({
                 required: true,
             },
             {
-                model: Teacher.unscoped(),
+                model: Teacher,
                 required: false,
             },
             {

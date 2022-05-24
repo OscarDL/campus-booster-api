@@ -9,6 +9,6 @@ exports.i18n = new I18n({
   autoReload: true,
   missingKeyFn: function (locale, value) {
     console.log(locale, value);
-    //return locale === "fr" ? 'Erreur inconnue du serveur.' : 'Unknow server error.';
+    return locale === "fr" ? 'Erreur inconnue du serveur.' : 'Unknow server error.';
   },
 });

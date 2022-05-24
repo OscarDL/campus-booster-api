@@ -41,3 +41,4 @@ export interface UserModel extends Model<UserAttributes, UserCreationAttributes>
 };
 export type UserScopesAttributes = keyof ReturnType<typeof UserScope>;
 export const UserProtectedFields = [];
+export const UserPublicFields : (keyof UserAttributes)[] = [ "id", "firstName", "lastName", "email" ];

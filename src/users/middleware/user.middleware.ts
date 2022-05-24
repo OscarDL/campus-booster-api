@@ -110,3 +110,18 @@ export async function dontDeleteYourself(req: Req, res: Res, next: Next): Promis
         return next(err.isBoom ? err : boom.internal(err.name));
     }
 }
+
+export async function userIsInClassroom(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        if(req.body.userId && req.body.classroomHasCourseId) {
+            const user = await findById(req.body.userId, {}, "withClassrooms");
+            const IDs = user?.UserHasClassrooms?.map(u => u.Classroom?.ClassroomHasCourses?.map(c => c?.id))?.flat();
+            return (IDs?.includes(req.body.classroomHasCourseId)) ? 
+            next() : next(boom.badRequest('missing_access_rights'));
+        }
+        return next();
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}

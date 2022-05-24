@@ -7,7 +7,12 @@ export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         return res.status(200).json(
             await AttendanceService.findById(
-                req.params.attendance_id
+                req.params.attendance_id,
+                {},
+                [
+                    "withPlanning",
+                    "withUser"
+                ]
             )
         );
     } catch (err: any) {
@@ -21,8 +26,35 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
         return res.status(200).json(
             await AttendanceService.findAll(
                 {
-                    limit: req.query?.limit
-                }
+                    limit: req.query?.limit,
+                    offset: req.query?.offset
+                },
+                [
+                    "withPlanning",
+                    "withUser"
+                ]
+            )
+        );
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
+export async function getByUser(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        return res.status(200).json(
+            await AttendanceService.findAll(
+                {
+                    limit: req.query?.limit,
+                    offset: req.query?.offset,
+                    where: {
+                        userId:req.params.user_id
+                    }
+                },
+                [
+                    "withPlanning"
+                ]
             )
         );
     } catch (err: any) {
