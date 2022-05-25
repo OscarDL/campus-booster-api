@@ -1,6 +1,5 @@
 import { Req, Res, Next, Resp } from '../../../types/express';
 import * as CourseService from '../service/course.service';
-import * as UserService from '../../users/service/user.service';
 import boom from '@hapi/boom';
 
 export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
@@ -31,7 +30,7 @@ export async function getByUser(req: Req, res: Res, next: Next): Promise<Resp> {
                     where: {
                         '$ClassroomHasCourses.Classroom.UserHasClassrooms.user_id$': req.params.user_id
                     }
-                } as any,
+                },
                 [
                     "withClassroomHasCourse",
                     "withUser",

@@ -96,7 +96,8 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                 average: req.body.average,
                 comment: req.body.comment,
                 userId: req.body.userId,
-                classroomHasCourseId: req.body.classroomHasCourseId
+                classroomHasCourseId: req.body.classroomHasCourseId,
+                teacherId: req.body.teacherId
             }
         );
         return res.status(201).json(
@@ -105,7 +106,8 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                 {},
                 [
                     "withUser",
-                    "withCourse"
+                    "withCourse",
+                    "withTeacher"
                 ]
             )
         );
