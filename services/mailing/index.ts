@@ -37,7 +37,7 @@ const Config = <const> [
 
 
 /**
- * Node mailer custom service
+ * ### Node mailer custom service
  * @author Ulysse Dupont
  * @class MailerService
  * @namespace MailerService
@@ -50,7 +50,8 @@ const Config = <const> [
 export default class MailerService<
     T extends typeof Config,
     K extends T[number]['type'],
-    C extends T[number]['config']
+    C extends T[number]['config'],
+    U extends M.UnpackFirstParam<C>
 > {
     protected _transporter!: mailer.Transporter;
     protected _accessToken!: string;
@@ -83,7 +84,7 @@ export default class MailerService<
         });
     }
     /**
-     * Sends an email using custom config
+     * ### Sends an email using custom config
      * 
      * @param type The topic of your email.
      * @param options Options to complete email template.
@@ -109,7 +110,7 @@ export default class MailerService<
      * ```
      * @returns A promise boolean
      */
-    public async custom(type: K, options: M.UnpackFirstParam<C>): Promise<boolean> {
+    public async custom(type: K, options: U): Promise<boolean> {
         try {
             const m: M.MailerResponse = await this._transporter.sendMail(
                 Config.find(c => c?.type === type)?.config(options as any)!
@@ -121,7 +122,7 @@ export default class MailerService<
         }
     }
     /**
-     * Sends an email using the preselected transport object
+     * ### Sends an email using the preselected transport object
      * 
      * @param email The target email address.
      * @param options Options to create your email.

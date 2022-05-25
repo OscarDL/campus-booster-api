@@ -1,3 +1,4 @@
+import { TeacherModel } from './../../teachers/model/teacher.interface';
 import { Model, Optional } from "sequelize";
 import FeedbackScope from './feedback.scope';
 import { UserModel } from "./../../users/model/user.interface";
@@ -13,8 +14,8 @@ export interface FeedbackAttributes {
 	userId: number;
 	User?: UserModel;
 	teacherId: number;
-	Teacher?: UserModel;
-	courseId?: number;
+	Teacher?: TeacherModel;
+	courseId: number;
 	Course?: CourseModel;
 };
 export interface FeedbackCreationAttributes extends Optional<FeedbackAttributes, 'id'> {}

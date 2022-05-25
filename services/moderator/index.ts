@@ -1,5 +1,6 @@
 import csv from 'csvtojson';
 import path from 'path';
+import '@dulysse1/better-node';
 
 const Langs = <const> {
     french: 'french.csv',
@@ -54,7 +55,7 @@ export default class Moderator<
     protected _lockedChar = " /%!?;.,$=+-'#~&)°([]{}_"
 
     /**
-     * 
+     * ### constructor
      * @param langs choose your language(s)
      */
     constructor(...langs: U[]) {
@@ -81,7 +82,7 @@ export default class Moderator<
     }
 
     protected replaceStringAt(text: string, index: number, replacement: string): string {
-        return text.substr(0, index) + replacement + text.substr(index + replacement.length);
+        return text.slice(0, index) + replacement + text.slice(index + replacement.length);
     }
 
     /**

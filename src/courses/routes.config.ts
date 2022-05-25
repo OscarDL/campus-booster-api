@@ -41,12 +41,20 @@ export default (app: App): void => {
         CourseMiddleware.courseExistAsParam("course_id"),
         CourseController.getById
     ]);
-  
     // CREATE A NEW COURSE
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
-		RequestMiddleware.bodyParametersNeeded(['name','description'], 'string'),
+		RequestMiddleware.bodyParametersNeeded([
+            'name',
+            'description',
+            'link',
+        ], 'string'),
+        RequestMiddleware.bodyParametersNeeded([
+            'credits',
+            'year'
+        ], "integer"),
+        RequestMiddleware.bodyParameterHoped('speciality', 'boolean'),
 		CourseController.create
     ]);
     // UPDATE COURSE
@@ -55,6 +63,12 @@ export default (app: App): void => {
 		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
 		RequestMiddleware.paramParametersNeeded('course_id', 'integer'),
         CourseMiddleware.courseExistAsParam("course_id"),
+        RequestMiddleware.bodyParameterHoped('name', 'string'),
+        RequestMiddleware.bodyParameterHoped('description', 'string'),
+        RequestMiddleware.bodyParameterHoped('link', 'string'),
+        RequestMiddleware.bodyParameterHoped('credits', 'integer'),
+        RequestMiddleware.bodyParameterHoped('year', 'integer'),
+        RequestMiddleware.bodyParameterHoped('speciality', 'boolean'),
         CourseController.update
     ]);
     // DELETE COURSE

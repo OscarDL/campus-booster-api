@@ -1,4 +1,4 @@
-import { UserModel } from './../../users/model/user.interface';
+import { TeacherModel } from './../../teachers/model/teacher.interface';
 import { Model, Optional } from "sequelize";
 import ClassroomHasCourseScope from './classroomhascourse.scope';
 import { CourseModel } from './../../courses/model/course.interface';
@@ -13,13 +13,12 @@ export interface ClassroomHasCourseAttributes {
 	readonly updated_at?: Date;
 	courseId: number;
 	classroomId: number;
-	teacherId: number;
 	Course?: CourseModel;
 	Classroom?: ClassroomModel;
-	Teacher?: UserModel;
 	Plannings?: PlanningModel[];
 	Feedbacks?: FeedbackModel[];
 	Grades?: GradeModel[];
+	Teachers?: TeacherModel[];
 };
 export interface ClassroomHasCourseCreationAttributes extends Optional<ClassroomHasCourseAttributes, 'id'> {}
 export interface ClassroomHasCourseModel extends Model<ClassroomHasCourseAttributes, ClassroomHasCourseCreationAttributes>, Partial<ClassroomHasCourseAttributes> {

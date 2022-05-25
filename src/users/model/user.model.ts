@@ -4,8 +4,6 @@
 import * as S from 'sequelize-typescript';
 import { EMAIL_REGEX, UserAttributes, UserModel } from './user.interface';
 import UserScope from './user.scope';
-import config from '../../../config/env.config';
-const { permissionLevel } = config;
 import bcrypt from 'bcrypt';
 import Campus from './../../campus/model/campus.model';
 import Feedback from './../../feedbacks/model/feedback.model';
@@ -14,18 +12,22 @@ import Grade from './../../grades/model/grade.model';
 import Balance from './../../balances/model/balance.model';
 import UserHasClassroom from './../../user_has_classrooms/model/user-hasclassroom.model';
 import s3 from '../../../services/aws/s3';
-import Contract from 'src/contracts/model/contract.model';
+import Contract from '../../contracts/model/contract.model';
+import Teacher from '../../teachers/model/teacher.model';
+
+import config from '../../../config/env.config';
+const { db_schema, permissionLevel } = config;
 
 @S.Scopes(UserScope)
 @S.Table({
   timestamps: true,
   underscored: true,
-  schema: 'public'
+  schema: db_schema
 })
 export default class User extends S.Model implements UserModel {
 	@S.PrimaryKey
   @S.AutoIncrement
-  @S.Column(S.DataType.INTEGER)
+  @S.Column(S.DataType.BIGINT)
 	public id!: number;
 
 	@S.AllowNull(true)
@@ -197,15 +199,15 @@ export default class User extends S.Model implements UserModel {
 		foreignKey: {
       field: 'user_id'
     },
-		onDelete: 'CASCADE'
+		onDelete: 'CASCADE',
 	})
-	public UserContracts!: Contract[];
+	public Contracts!: Contract[];
 
-	@S.HasMany(() => Contract, { 
+	@S.HasMany(() => Teacher, { 
 		foreignKey: {
-      field: 'supervisor_id'
+      field: 'user_id'
     },
-		onDelete: 'CASCADE'
+		onDelete: 'CASCADE',
 	})
-	public SupervisorContracts!: Contract[];
+	public Teachers!: Teacher[];
 }

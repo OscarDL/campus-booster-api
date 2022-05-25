@@ -1,16 +1,18 @@
-import { ScopesOptions } from "sequelize-typescript";
+import { ScopeOptions, ScopesOptions } from "sequelize-typescript";
 import Planning from "../../plannings/model/planning.model";
 import ClassroomHasCourse from "../../classroom_has_courses/model/classroomhascourse.model";
 import { CourseProtectedFields } from "./course.interface";
 import Classroom from "../../classrooms/model/classroom.model";
 import UserHasClassroom from "../../user_has_classrooms/model/user-hasclassroom.model";
+import CourseContent from "../../course-contents/model/course-content.model";
+import Teacher from "../../teachers/model/teacher.model";
 export default (() => ({
     defaultScope: ({
         attributes: { 
             exclude: CourseProtectedFields
         }
     }) as ScopesOptions,
-    withPlannings: ({
+    withClassroomHasCourse: ({
         include: [
             {
                 model: ClassroomHasCourse.unscoped(),
@@ -18,6 +20,10 @@ export default (() => ({
                 include: [
                     {
                         model: Planning.unscoped(),
+                        required: false
+                    },
+                    {
+                        model: Teacher.unscoped(),
                         required: false
                     }
                 ]
@@ -43,5 +49,13 @@ export default (() => ({
                 ]
             }
         ],
-    }) as ScopesOptions
+    }) as ScopesOptions,
+    withContent: ({
+        include: [
+            {
+                model: CourseContent.unscoped(),
+                required: false
+            }
+        ]
+    }) as ScopesOptions,
 }));

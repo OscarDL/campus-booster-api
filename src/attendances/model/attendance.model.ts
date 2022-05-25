@@ -9,16 +9,19 @@ import User from './../../users/model/user.model';
 import s3 from '../../../services/aws/s3';
 import { AttendanceAttributes } from './attendance.interface';
 
+import config from '../../../config/env.config';
+const { db_schema } = config;
+
 @S.Scopes(AttendanceScope)
 @S.Table({
   timestamps: true,
   underscored: true,
-  schema: 'public'
+  schema: db_schema
 })
 export default class Attendance extends S.Model implements AttendanceModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.INTEGER)
+	@S.Column(S.DataType.BIGINT)
 	public id!: number;
 
 	@S.AllowNull(true)

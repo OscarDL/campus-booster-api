@@ -5,7 +5,7 @@ export interface CourseContentAttributes {
   readonly id: number;
 	name: string;
 	link: string;
-	availability?: string;
+	availability?: boolean;
 	readonly created_at?: Date;
 	readonly updated_at?: Date;
 	courseId?: number;

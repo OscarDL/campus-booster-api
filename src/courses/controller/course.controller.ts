@@ -7,7 +7,13 @@ export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         return res.status(200).json(
             await CourseService.findById(
-                req.params.course_id
+                req.params.course_id,
+                {},
+                [
+                    "withContent",
+                    "withClassroomHasCourse",
+                    "withUser"
+                ]
             )
         );
     } catch (err: any) {
@@ -28,8 +34,9 @@ export async function getByUser(req: Req, res: Res, next: Next): Promise<Resp> {
                     }
                 } as any,
                 [
-                    "withPlannings",
-                    "withUser"
+                    "withClassroomHasCourse",
+                    "withUser",
+                    "withContent"
                 ]
             )
         );
@@ -49,7 +56,9 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
                     offset: req.query?.offset
                 },
                 [
-                    "withPlannings"
+                    "withClassroomHasCourse",
+                    "withUser",
+                    "withContent"
                 ]
             )
         );
@@ -61,9 +70,28 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
 
 export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        const course = await CourseService.create(
+            {
+                name: req.body.name,
+                description: req.body.description,
+                link: req.body.link,
+                credits: req.body.credits,
+                year: req.body.year,
+                speciality: req.body.speciality,
+            }
+        );
         return res.status(201).json(
-            await CourseService.create(
-                req.body as any
+            await CourseService.findOne(
+                {
+                    where: {
+                        id: course.id
+                    }
+                },
+                [
+                    "withClassroomHasCourse",
+                    "withUser",
+                    "withContent"
+                ]
             )
         );
     } catch (err: any) {
@@ -74,10 +102,30 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
 
 export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        const course = await CourseService.update(
+            req.params.course_id,
+            {
+                
+                name: req.body.name,
+                description: req.body.description,
+                link: req.body.link,
+                credits: req.body.credits,
+                year: req.body.year,
+                speciality: req.body.speciality,
+            }
+        );
         return res.status(203).json(
-            await CourseService.update(
-                req.params.course_id, 
-                req.body
+            await CourseService.findOne(
+                {
+                    where: {
+                        id: course.id
+                    }
+                },
+                [
+                    "withClassroomHasCourse",
+                    "withUser",
+                    "withContent"
+                ]
             )
         );
     } catch (err: any) {
