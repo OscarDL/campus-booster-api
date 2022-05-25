@@ -7,16 +7,19 @@ import ToolScope from './tool.scope';
 import s3 from './../../../services/aws/s3';
 import { ToolAttributes } from './tool.interface';
 
+import config from '../../../config/env.config';
+const { db_schema } = config;
+
 @S.Scopes(ToolScope)
 @S.Table({
   timestamps: true,
   underscored: true,
-  schema: 'public'
+  schema: db_schema
 })
 export default class Tool extends S.Model implements ToolModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.INTEGER)
+	@S.Column(S.DataType.BIGINT)
 	public id!: number;
 
 	@S.AllowNull(true)

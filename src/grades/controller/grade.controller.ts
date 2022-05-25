@@ -10,7 +10,8 @@ export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
                 {},
                 [
                     "withUser",
-                    "withCourse"
+                    "withCourse",
+                    "withTeacher"
                 ]
             )
         );
@@ -30,7 +31,8 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
                 },
                 [
                     "withUser",
-                    "withCourse"
+                    "withCourse",
+                    "withTeacher"
                 ]
             )
         );
@@ -52,7 +54,8 @@ export async function getByUser(req: Req, res: Res, next: Next): Promise<Resp> {
                     }
                 },
                 [
-                    "withCourse"
+                    "withCourse",
+                    "withTeacher"
                 ]
             )
         );
@@ -76,6 +79,7 @@ export async function getByTeacher(req: Req, res: Res, next: Next): Promise<Resp
                 [
                     "withCourse",
                     "withUser",
+                    "withTeacher"
                 ]
             )
         );

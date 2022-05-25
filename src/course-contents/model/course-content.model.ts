@@ -6,16 +6,19 @@ import { CourseContentModel } from './course-content.interface';
 import CourseContentScope from './course-content.scope';
 import Course from './../../courses/model/course.model';
 
+import config from '../../../config/env.config';
+const { db_schema } = config;
+
 @S.Scopes(CourseContentScope)
 @S.Table({
   timestamps: true,
   underscored: true,
-  schema: 'public'
+  schema: db_schema
 })
 export default class CourseContent extends S.Model implements CourseContentModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.INTEGER)
+	@S.Column(S.DataType.BIGINT)
 	public id!: number;
 
 	@S.AllowNull(false)
@@ -29,7 +32,7 @@ export default class CourseContent extends S.Model implements CourseContentModel
 	@S.AllowNull(true)
 	@S.Default(true)
 	@S.Column(S.DataType.BOOLEAN)
-	public availability!: string;
+	public availability!: boolean;
 
 	@S.ForeignKey(() => Course)
 	@S.Column({

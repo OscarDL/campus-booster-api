@@ -5,8 +5,8 @@ import Classroom from './../../classrooms/model/classroom.model';
 import Planning from './../../plannings/model/planning.model';
 import Feedback from './../../feedbacks/model/feedback.model';
 import Grade from './../../grades/model/grade.model';
-import User from "src/users/model/user.model";
-import { UserPublicFields } from "src/users/model/user.interface";
+import Teacher from "./../../teachers/model/teacher.model";
+
 export default (() => ({
     defaultScope: ({
         attributes: { 
@@ -44,6 +44,10 @@ export default (() => ({
             },
             {
                 model: Planning.unscoped(),
+                required: false,
+            },
+            {
+                model: Teacher.unscoped(),
                 required: false,
             },
             {

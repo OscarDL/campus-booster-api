@@ -70,7 +70,7 @@ if (process.env.NODE_ENV !== 'production') {
             console.log(out.info);
             devHttpsServer(key, cert, port);
         }).catch(() => {
-            console.log("mkcert HTTPS localhost error.".red.bold);
+            console.log("mkcert error or missing install.".red.bold);
             process.exit(1);
         });
     } else {

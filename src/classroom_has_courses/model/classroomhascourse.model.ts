@@ -9,18 +9,20 @@ import Classroom from './../../classrooms/model/classroom.model';
 import Planning from './../../plannings/model/planning.model';
 import Feedback from './../../feedbacks/model/feedback.model';
 import Grade from './../../grades/model/grade.model';
-import User from './../../users/model/user.model';
+import Teacher from './../../teachers/model/teacher.model';
+import config from '../../../config/env.config';
+const { db_schema } = config;
 
 @S.Scopes(ClassroomHasCourseScope)
 @S.Table({
   timestamps: true,
   underscored: true,
-  schema: 'public'
+  schema: db_schema
 })
 export default class ClassroomHasCourse extends S.Model implements ClassroomHasCourseModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.INTEGER)
+	@S.Column(S.DataType.BIGINT)
 	public id!: number;
 
 	@S.AllowNull(true)
@@ -41,20 +43,6 @@ export default class ClassroomHasCourse extends S.Model implements ClassroomHasC
 		onDelete: 'CASCADE'
 	})
 	public Course!: Course;
-
-	@S.ForeignKey(() => User)
-	@S.Column({
-		field: 'teacher_id'
-	})
-	public teacherId!: number;
-
-	@S.BelongsTo(() => User, { 
-		foreignKey: {
-      field: 'teacher_id'
-    },
-		onDelete: 'CASCADE'
-	})
-	public Teacher!: User;
 
 	@S.ForeignKey(() => Classroom)
 	@S.Column({
@@ -93,4 +81,12 @@ export default class ClassroomHasCourse extends S.Model implements ClassroomHasC
 		onDelete: 'CASCADE'
 	})
 	public Grades!: Grade[];
+
+	@S.HasMany(() => Teacher, { 
+		foreignKey: {
+      field: 'classroom_has_course_id'
+    },
+		onDelete: 'CASCADE'
+	})
+	public Teachers!: Teacher[];
 }

@@ -6,16 +6,20 @@ import { ContractModel, STATUS } from './contract.interface';
 import ContractScope from './contract.scope';
 import User from './../../users/model/user.model';
 
+import config from '../../../config/env.config';
+import Teacher from './../../teachers/model/teacher.model';
+const { db_schema } = config;
+
 @S.Scopes(ContractScope)
 @S.Table({
   timestamps: true,
   underscored: true,
-  schema: 'public'
+  schema: db_schema
 })
 export default class Contract extends S.Model implements ContractModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.INTEGER)
+	@S.Column(S.DataType.BIGINT)
 	public id!: number;
 
 	@S.AllowNull(false)
@@ -74,18 +78,17 @@ export default class Contract extends S.Model implements ContractModel {
 	})
 	public User!: User;
 
-	@S.ForeignKey(() => User)
+	@S.ForeignKey(() => Teacher)
 	@S.Column({
     field: 'supervisor_id',
   })
 	public supervisorId!: number;
 
-	@S.BelongsTo(() => User, { 
+	@S.BelongsTo(() => Teacher, { 
 		foreignKey: {
-			
       field: 'supervisor_id'
     },
 		onDelete: 'CASCADE'
 	})
-	public Supervisor!: User;
+	public Supervisor!: Teacher;
 }

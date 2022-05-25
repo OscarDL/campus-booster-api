@@ -8,6 +8,7 @@ import Campus from "../../campus/model/campus.model";
 import Classroom from "./classroom.model";
 import { UserPublicFields } from "./../../users/model/user.interface";
 import User from "./../../users/model/user.model";
+import Teacher from "../../teachers/model/teacher.model";
 export default (() => ({
     defaultScope: ({
         attributes: { 
@@ -24,6 +25,10 @@ export default (() => ({
                     },
                     {
                         model: Course.unscoped(),
+                        required: false,
+                    },
+                    {
+                        model: Teacher.unscoped(),
                         required: false,
                     }
                 ]

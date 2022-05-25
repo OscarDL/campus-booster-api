@@ -1,4 +1,5 @@
 import { ScopesOptions } from "sequelize-typescript";
+import Teacher from "./../../teachers/model/teacher.model";
 import { UserPublicFields } from "../../users/model/user.interface";
 import User from "../../users/model/user.model";
 import { ContractProtectedFields } from "./contract.interface";
@@ -10,15 +11,17 @@ export default (() => ({
         include: [
             {
                 model: User.unscoped(),
-                as: 'User',
                 required: true,
                 attributes: UserPublicFields
             },
             {
-                model: User.unscoped(),
-                as: 'Supervisor',
+                model: Teacher.unscoped(),
                 required: true,
-                attributes: UserPublicFields
+                include: [{
+                    model: User.unscoped(),
+                    required: true,
+                    attributes: UserPublicFields
+                }]
             }
         ]
     }) as ScopesOptions,

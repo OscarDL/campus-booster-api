@@ -7,16 +7,19 @@ import CourseScope from './course.scope';
 import CourseContent from './../../course-contents/model/course-content.model';
 import ClassroomHasCourse from './../../classroom_has_courses/model/classroomhascourse.model';
 
+import config from '../../../config/env.config';
+const { db_schema } = config;
+
 @S.Scopes(CourseScope)
 @S.Table({
   timestamps: true,
   underscored: true,
-  schema: 'public'
+  schema: db_schema
 })
 export default class Course extends S.Model implements CourseModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.INTEGER)
+	@S.Column(S.DataType.BIGINT)
 	public id!: number;
 
 	@S.AllowNull(false)
@@ -41,6 +44,8 @@ export default class Course extends S.Model implements CourseModel {
 	public credits!: number;
 
 	@S.AllowNull(false)
+	@S.Min(1)
+	@S.Max(5)
 	@S.Column({
     field: 'year',
     type: S.DataType.INTEGER
@@ -54,7 +59,7 @@ export default class Course extends S.Model implements CourseModel {
   })
 	public description!: string;
 
-	@S.AllowNull(false)
+	@S.AllowNull(true)
   @S.Default(false)
 	@S.Column({
     field: 'speciality',

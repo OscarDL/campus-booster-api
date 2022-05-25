@@ -10,11 +10,14 @@ import ClassroomHasCourse from './../../classroom_has_courses/model/classroomhas
 import UserHasClassroom from './../../user_has_classrooms/model/user-hasclassroom.model';
 import moment from 'moment';
 
+import config from '../../../config/env.config';
+const { db_schema } = config;
+
 @S.Scopes(ClassroomScope)
 @S.Table({
   timestamps: true,
   underscored: true,
-  schema: 'public'
+  schema: db_schema
 })
 export default class Classroom extends S.Model implements ClassroomModel {
   @S.PrimaryKey

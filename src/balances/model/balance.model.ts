@@ -6,16 +6,19 @@ import { BalanceModel, BalanceStatus } from './balance.interface';
 import BalanceScope from './balance.scope';
 import User from './../../users/model/user.model';
 
+import config from '../../../config/env.config';
+const { db_schema } = config;
+
 @S.Scopes(BalanceScope)
 @S.Table({
   timestamps: true,
   underscored: true,
-  schema: 'public'
+  schema: db_schema
 })
 export default class Balance extends S.Model implements BalanceModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.INTEGER)
+	@S.Column(S.DataType.BIGINT)
 	public id!: number;
 
 	@S.AllowNull(false)

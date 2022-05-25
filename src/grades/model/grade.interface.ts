@@ -1,3 +1,4 @@
+import { TeacherModel } from './../../teachers/model/teacher.interface';
 import { Model, Optional } from "sequelize";
 import { UserModel } from "./../../users/model/user.interface";
 import GradeScope from './grade.scope';
@@ -11,6 +12,8 @@ export interface GradeAttributes {
 	userId: number;
 	classroomHasCourseId: number;
 	User?: UserModel;
+	teacherId?: number;
+	Teacher?: TeacherModel;
 	ClassroomHasCourse?: ClassroomHasCourseModel;
 };
 export interface GradeCreationAttributes extends Optional<GradeAttributes, 'id'> {}

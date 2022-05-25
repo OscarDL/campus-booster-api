@@ -6,17 +6,21 @@ import User from '../../users/model/user.model';
 import { FeedbackModel } from './feedback.interface';
 import FeedbackScope from './feedback.scope';
 import ClassroomHasCourse from './../../classroom_has_courses/model/classroomhascourse.model';
+import Teacher from '../../teachers/model/teacher.model';
+
+import config from '../../../config/env.config';
+const { db_schema } = config;
 
 @S.Scopes(FeedbackScope)
 @S.Table({
   timestamps: true,
   underscored: true,
-  schema: 'public'
+  schema: db_schema
 })
 export default class Feedback extends S.Model implements FeedbackModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.INTEGER)
+	@S.Column(S.DataType.BIGINT)
 	public id!: number;
 
 	@S.AllowNull(false)
@@ -69,7 +73,7 @@ export default class Feedback extends S.Model implements FeedbackModel {
 	})
 	public User!: User;
 
-	@S.ForeignKey(() => User)
+	@S.ForeignKey(() => Teacher)
 	@S.Column(
 		{
 			field: 'teacher_id',
@@ -77,13 +81,13 @@ export default class Feedback extends S.Model implements FeedbackModel {
 	)
 	public teacherId!: number;
 
-	@S.BelongsTo(() => User, { 
+	@S.BelongsTo(() => Teacher, { 
 		foreignKey: {
       field: 'teacher_id'
     },
 		onDelete: 'CASCADE'
 	})
-	public Teacher!: User;
+	public Teacher!: Teacher;
 
 	@S.ForeignKey(() => ClassroomHasCourse)
 	@S.Column(

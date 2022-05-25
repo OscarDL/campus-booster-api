@@ -6,16 +6,19 @@ import { PlanningModel } from './planning.interface';
 import PlanningScope from './planning.scope';
 import ClassroomHasCourse from './../../classroom_has_courses/model/classroomhascourse.model';
 
+import config from '../../../config/env.config';
+const { db_schema } = config;
+
 @S.Scopes(PlanningScope)
 @S.Table({
   timestamps: true,
   underscored: true,
-  schema: 'public'
+  schema: db_schema
 })
 export default class Planning extends S.Model implements PlanningModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.INTEGER)
+	@S.Column(S.DataType.BIGINT)
 	public id!: number;
 
 	@S.AllowNull(false)

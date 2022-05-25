@@ -1,4 +1,5 @@
 import { ScopesOptions } from "sequelize-typescript";
+import Teacher from "../../teachers/model/teacher.model";
 import ClassroomHasCourse from "../../classroom_has_courses/model/classroomhascourse.model";
 import { UserPublicFields } from "../../users/model/user.interface";
 import User from "../../users/model/user.model";
@@ -15,6 +16,21 @@ export default (() => ({
                 model: User.unscoped(),
                 required: true,
                 attributes: UserPublicFields
+            }
+        ]
+    }) as ScopesOptions,
+    withTeacher: ({
+        include: [
+            {
+                model: Teacher.unscoped(),
+                required: true,
+                include: [
+                    {
+                        model: User.unscoped(),
+                        required: true,
+                        attributes: UserPublicFields
+                    }
+                ]
             }
         ]
     }) as ScopesOptions,

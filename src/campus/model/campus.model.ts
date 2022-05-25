@@ -7,17 +7,20 @@ import CampusScope from './campus.scope';
 import User from './../../users/model/user.model';
 import Classroom from './../../classrooms/model/classroom.model';
 
+import config from '../../../config/env.config';
+const { db_schema } = config;
+
 @S.Scopes(CampusScope)
 @S.Table({
   timestamps: true,
   underscored: true,
-  schema: 'public',
+  schema: db_schema,
 	tableName: 'campus'
 })
 export default class Campus extends S.Model implements CampusModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.INTEGER)
+	@S.Column(S.DataType.BIGINT)
 	public id!: number;
 
 	@S.AllowNull(false)
