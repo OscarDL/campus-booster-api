@@ -4,8 +4,9 @@ import ClassroomHasCourse from "../../classroom_has_courses/model/classroomhasco
 import { CourseProtectedFields } from "./course.interface";
 import Classroom from "../../classrooms/model/classroom.model";
 import UserHasClassroom from "../../user_has_classrooms/model/user-hasclassroom.model";
-import CourseContent from "../../course-contents/model/course-content.model";
 import Teacher from "../../teachers/model/teacher.model";
+import User from "../../users/model/user.model";
+import { UserPublicFields } from "../../users/model/user.interface";
 export default (() => ({
     defaultScope: ({
         attributes: { 
@@ -24,7 +25,12 @@ export default (() => ({
                     },
                     {
                         model: Teacher.unscoped(),
-                        required: false
+                        required: false,
+                        include: [{
+                            model: User.unscoped(),
+                            required: true,
+                            attributes: UserPublicFields
+                        }]
                     }
                 ]
             }
@@ -49,13 +55,5 @@ export default (() => ({
                 ]
             }
         ],
-    }) as ScopesOptions,
-    withContent: ({
-        include: [
-            {
-                model: CourseContent.unscoped(),
-                required: false
-            }
-        ]
     }) as ScopesOptions,
 }));

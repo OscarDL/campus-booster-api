@@ -1,6 +1,5 @@
 import { Model, Optional } from "sequelize";
 import CourseScope from './course.scope';
-import { CourseContentModel } from './../../course-contents/model/course-content.interface';
 import { ClassroomHasCourseModel } from "./../../classroom_has_courses/model/classroomhascourse.interface";
 export interface CourseAttributes {
   readonly id?: number;
@@ -12,7 +11,6 @@ export interface CourseAttributes {
 	description: string;
 	readonly created_at?: Date;
 	readonly updated_at?: Date;
-	CourseContents?: CourseContentModel[];
 	ClassroomHasCourses?: ClassroomHasCourseModel[];
 };
 export interface CourseCreationAttributes extends Optional<CourseAttributes, 'id'> {}
