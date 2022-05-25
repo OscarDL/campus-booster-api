@@ -4,7 +4,6 @@
 import * as S from 'sequelize-typescript';
 import { CourseModel } from './course.interface';
 import CourseScope from './course.scope';
-import CourseContent from './../../course-contents/model/course-content.model';
 import ClassroomHasCourse from './../../classroom_has_courses/model/classroomhascourse.model';
 
 import config from '../../../config/env.config';
@@ -66,14 +65,6 @@ export default class Course extends S.Model implements CourseModel {
     type: S.DataType.BOOLEAN
   })
 	public speciality!: boolean;
-
-	@S.HasMany(() => CourseContent, { 
-		foreignKey: {
-      field: 'course_id'
-    },
-		onDelete: 'CASCADE'
-	})
-	public CourseContents!: CourseContent[];
 
 	@S.HasMany(() => ClassroomHasCourse, { 
 		foreignKey: {

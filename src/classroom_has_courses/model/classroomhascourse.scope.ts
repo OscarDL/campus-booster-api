@@ -22,12 +22,6 @@ export default (() => ({
             {
                 model: Classroom.unscoped(),
                 required: true,
-            },
-            {
-                model: User.unscoped(),
-                as: 'Teacher',
-                required: true,
-                attributes: UserPublicFields
             }
         ]
     }) as ScopesOptions,
@@ -59,12 +53,6 @@ export default (() => ({
             {
                 model: Grade.unscoped(),
                 required: false,
-            },
-            {
-                model: User.unscoped(),
-                as: 'Teacher',
-                required: true,
-                attributes: UserPublicFields
             }
         ]
     }) as ScopesOptions,
