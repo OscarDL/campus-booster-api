@@ -2,7 +2,7 @@ import { TeacherModel } from './../../teachers/model/teacher.interface';
 import { Model, Optional } from "sequelize";
 import { UserModel } from "./../../users/model/user.interface";
 import GradeScope from './grade.scope';
-import { ClassroomHasCourseModel } from './../../classroom_has_courses/model/classroomhascourse.interface';
+import { ClassroomHasCourseAttributes } from './../../classroom_has_courses/model/classroomhascourse.interface';
 export interface GradeAttributes {
   readonly id: number;
 	average: number;
@@ -14,11 +14,16 @@ export interface GradeAttributes {
 	User?: UserModel;
 	teacherId?: number;
 	Teacher?: TeacherModel;
-	ClassroomHasCourse?: ClassroomHasCourseModel;
+	ClassroomHasCourse?: ClassroomHasCourseAttributes;
 };
 export interface GradeCreationAttributes extends Optional<GradeAttributes, 'id'> {}
-export interface GradeModel extends Model<GradeAttributes, GradeCreationAttributes>, Partial<GradeAttributes> {
-  dataValues?: GradeAttributes;
-};
+export interface GradeModel extends 
+	Model<GradeAttributes, GradeCreationAttributes>, 
+	Partial<GradeAttributes>,
+	GradeModelAttributes
+{};
+export interface GradeModelAttributes {
+	dataValues?: GradeAttributes;
+}
 export type GradeScopesAttributes = keyof ReturnType<typeof GradeScope>;
 export const GradeProtectedFields = [];

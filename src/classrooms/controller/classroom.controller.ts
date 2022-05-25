@@ -38,8 +38,8 @@ export async function getMine(req: Req, res: Res, next: Next): Promise<Resp> {
                     limit: req.query?.limit,
                     offset: req.query?.offset,
                     where: {
-                        '$UserHasClassrooms.user_id$': req.params.user_id 
-                    } as any
+                        '$UserHasClassrooms.userId$': req.params.user_id 
+                    }
                 }
             )
         );
