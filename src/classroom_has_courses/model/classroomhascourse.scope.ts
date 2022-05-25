@@ -6,6 +6,8 @@ import Planning from './../../plannings/model/planning.model';
 import Feedback from './../../feedbacks/model/feedback.model';
 import Grade from './../../grades/model/grade.model';
 import Teacher from "./../../teachers/model/teacher.model";
+import User from "../../users/model/user.model";
+import { UserPublicFields } from "../../users/model/user.interface";
 
 export default (() => ({
     defaultScope: ({
