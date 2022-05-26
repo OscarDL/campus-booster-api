@@ -54,6 +54,8 @@ export function userExistAsParam(name: string): AsyncFn {
 }
 
 export async function emailIsNotTaken(req: Req, res: Res, next: Next): Promise<Resp> {
+    if (!req.body.email) return next();
+
     try {
         const user = await findOne({where: { email: req.body.email }});
 
