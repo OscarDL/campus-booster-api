@@ -195,7 +195,9 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
             }
         }
 
-        if (user && (user.firstName !== firstName || user.lastName !== lastName || user.email !== email || user.personalEmail !== personalEmail)) {
+        if (user && firstName && lastName && email && personalEmail &&
+          (user.firstName !== firstName || user.lastName !== lastName || user.email !== email || user.personalEmail !== personalEmail)
+        ) {
             let newPassword;
             let newPasswordField = {};
 
