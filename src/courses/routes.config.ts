@@ -17,7 +17,7 @@ export default (app: App): void => {
     // GET ALL COURSES
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
+    PermissionMiddleware.rolesAllowed(Object.values(roles).filter(role => role !== roles.Company)), 
         RequestMiddleware.queryParameterHoped('offset', 'float'),
         RequestMiddleware.queryParameterHoped('limit', 'integer'),
 		CourseController.getAll

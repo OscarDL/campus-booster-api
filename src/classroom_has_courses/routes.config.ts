@@ -12,7 +12,6 @@ const {
     customRegex: { regInt } 
 } = config;
 
-const ADMIN = [ roles.Assistant, roles.CampusManager, roles.CampusBoosterAdmin ];
 const routePrefix = config.route_prefix + '/classroomhascourses';
 
 export default (app: App): void => {
@@ -33,7 +32,7 @@ export default (app: App): void => {
     // CREATE A NEW CLASSROOMHASCOURSE
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed(ADMIN.concat(roles.FullProfessor)),
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES.concat(roles.FullProfessor)),
         RequestMiddleware.bodyParametersNeeded([
             "courseId",
             "classroomId"
@@ -45,7 +44,7 @@ export default (app: App): void => {
     // UPDATE CLASSROOMHASCOURSE
     app.patch(`${routePrefix}/:classroomhascourse_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed(ADMIN.concat(roles.FullProfessor)),
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES.concat(roles.FullProfessor)),
 		RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
         ClassroomHasCourseMiddleware.classroomhascourseExistAsParam("classroomhascourse_id"),
         RequestMiddleware.bodyParameterHoped("classroomId", "integer"),
@@ -57,7 +56,7 @@ export default (app: App): void => {
     // DELETE CLASSROOMHASCOURSE
     app.delete(`${routePrefix}/:classroomhascourse_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed(ADMIN),
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
 		RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
         ClassroomHasCourseMiddleware.classroomhascourseExistAsParam("classroomhascourse_id"),
         ClassroomHasCourseController.remove
