@@ -6,7 +6,8 @@ import * as CampusController from './controller/campus.controller';
 import * as CampusMiddleware from './middleware/campus.middleware';
 import config from '../../config/env.config';
 const { 
-    customRegex: { regInt }
+    customRegex: { regInt },
+    permissionLevel: roles
 } = config;
 
 const routePrefix = config.route_prefix + '/campus'; 
@@ -29,7 +30,7 @@ export default (app: App): void => {
     // CREATE A NEW CAMPUS
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
+        PermissionMiddleware.rolesAllowed([roles.CampusBoosterAdmin]),
         RequestMiddleware.bodyParametersNeeded(['name','city','address'], 'string'),
         CampusController.create
     ]);
@@ -44,7 +45,7 @@ export default (app: App): void => {
     // DELETE CAMPUS
     app.delete(`${routePrefix}/:campusId${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
+        PermissionMiddleware.rolesAllowed([roles.CampusBoosterAdmin]), 
         RequestMiddleware.paramParametersNeeded('campusId', 'integer'),
         CampusMiddleware.campusExistAsParam('campusId'),
         CampusController.remove

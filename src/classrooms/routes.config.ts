@@ -42,7 +42,7 @@ export default (app: App): void => {
     // CREATE A NEW CLASSROOM
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ CampusManager, CampusBoosterAdmin ]),
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         RequestMiddleware.bodyParametersNeeded(['name'], 'string'),
         RequestMiddleware.bodyParameterHoped('promotion', "integer"),
         RequestMiddleware.bodyParameterHoped('campusId', "integer"),
@@ -52,7 +52,7 @@ export default (app: App): void => {
     // UPDATE CLASSROOM
     app.patch(`${routePrefix}/:classroom_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ Student ]), 
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
 		RequestMiddleware.paramParametersNeeded('classroom_id', 'integer'),
         ClassroomMiddleware.classroomExistAsParam("classroom_id"),
         ClassroomController.update
@@ -60,7 +60,7 @@ export default (app: App): void => {
     // DELETE CLASSROOM
     app.delete(`${routePrefix}/:classroom_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ Student ]), 
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
 		RequestMiddleware.paramParametersNeeded('classroom_id', 'integer'),
         ClassroomMiddleware.classroomExistAsParam("classroom_id"),
         ClassroomController.remove
