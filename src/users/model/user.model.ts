@@ -151,7 +151,8 @@ export default class User extends S.Model implements UserModel {
 		foreignKey: {
       field: 'campus_id'
     },
-		onDelete: 'CASCADE'
+		onDelete: 'CASCADE',
+		as: 'Campus'
 	})
 	public Campus!: Campus;
 
