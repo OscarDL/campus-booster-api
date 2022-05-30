@@ -130,7 +130,8 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
                 {},
                 [
                     "withUser",
-                    "withCourse"
+                    "withCourse",
+                    "withTeacher"
                 ]
             )
         );

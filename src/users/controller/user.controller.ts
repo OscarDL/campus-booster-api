@@ -47,7 +47,7 @@ export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
 export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         return res.status(200).json(
-            await UserService.findAll(
+            (await UserService.findAll(
                 {
                     limit: req.query?.limit
                 },
@@ -55,7 +55,7 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
                     "withClassrooms",
                     req.isAdmin ? "defaultScope" : "iamNotAdmin"
                 ]
-            )
+            )).filter(user => (req.isAdmin || !req.user?.campusId) ? true : user.campusId === req.user?.campusId)
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);
@@ -195,7 +195,9 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
             }
         }
 
-        if (user && (user.firstName !== firstName || user.lastName !== lastName || user.email !== email || user.personalEmail !== personalEmail)) {
+        if (user && firstName && lastName && email && personalEmail &&
+          (user.firstName !== firstName || user.lastName !== lastName || user.email !== email || user.personalEmail !== personalEmail)
+        ) {
             let newPassword;
             let newPasswordField = {};
 

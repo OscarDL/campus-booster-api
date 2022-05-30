@@ -28,19 +28,26 @@ export default class Campus extends S.Model implements CampusModel {
 	public name!: string;
 
 	@S.AllowNull(false)
+	@S.Default('')
+	@S.Column(S.DataType.STRING(255))
+	public address!: string;
+
+	@S.AllowNull(false)
+	@S.Default('')
+	@S.Column(S.DataType.STRING(255))
+	public postCode!: string;
+
+	@S.AllowNull(false)
+	@S.Default('')
 	@S.Column(S.DataType.STRING(255))
 	public city!: string;
 
 	@S.AllowNull(false)
-	@S.Column(S.DataType.STRING(255))
-	public address!: string;
-
-	@S.AllowNull(true)
 	@S.Default(true)
 	@S.Column(S.DataType.BOOLEAN)
 	public open!: string;
 
-	@S.AllowNull(true)
+	@S.AllowNull(false)
 	@S.Default(false)
 	@S.Column(S.DataType.BOOLEAN)
 	public virtual!: string;

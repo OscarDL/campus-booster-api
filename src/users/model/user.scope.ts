@@ -9,7 +9,7 @@ const { permissionLevel: { Student } } = config;
 export default (() => ({
     defaultScope: ({
         attributes: { 
-            exclude: UserProtectedFields
+            exclude: []
         },
         include: [
             {
@@ -22,9 +22,9 @@ export default (() => ({
         attributes: { 
             exclude: UserProtectedFields
         },
-        where: {
-            role: Student
-        },
+        // where: {
+        //     role: Student
+        // },
         include: [
             {
                 model: Campus.unscoped(),
