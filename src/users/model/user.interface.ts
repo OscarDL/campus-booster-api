@@ -44,4 +44,4 @@ export interface UserModel extends Model<UserAttributes, UserCreationAttributes>
 };
 export type UserScopesAttributes = keyof ReturnType<typeof UserScope>;
 export const UserProtectedFields = [ "azureId", "personalEmail", "avatarKey", "avatarBase64", "active", "banned" ];
-export const UserPublicFields : (keyof UserAttributes)[] = [ "id", "firstName", "lastName", "email" ];
+export const UserPublicFields : (keyof UserAttributes)[] = [ "id", "firstName", "lastName", "email", "role" ];

@@ -14,6 +14,7 @@ export interface CampusAttributes {
 	readonly updated_at?: Date;
 	Users?: UserModel[];
 	Classrooms?: ClassroomModel[];
+	CampusManagers?: UserModel[];
 };
 export interface CampusCreationAttributes extends Optional<CampusAttributes, 'id'> {}
 export interface CampusModel extends Model<CampusAttributes, CampusCreationAttributes>, Partial<CampusAttributes> {

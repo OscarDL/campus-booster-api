@@ -41,9 +41,17 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
 
 export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        const campus = await CampusService.create(
+            req.body as any
+        );
         return res.status(201).json(
-            await CampusService.create(
-                req.body as any
+            await CampusService.findById(
+                campus?.id,
+                {},
+                [
+                    "withClassrooms",
+                    "withUsers"
+                ]
             )
         );
     } catch (err: any) {
@@ -54,10 +62,18 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
 
 export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        const campus = await CampusService.update(
+            req.params.campusId, 
+            req.body
+        );
         return res.status(203).json(
-            await CampusService.update(
-                req.params.campusId, 
-                req.body
+            await CampusService.findById(
+                campus?.id,
+                {},
+                [
+                    "withClassrooms",
+                    "withUsers"
+                ]
             )
         );
     } catch (err: any) {

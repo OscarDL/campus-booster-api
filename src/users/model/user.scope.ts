@@ -3,9 +3,7 @@ import { ScopesOptions } from "sequelize-typescript";
 import { UserProtectedFields } from "./user.interface";
 import Campus from './../../campus/model/campus.model';
 import UserHasClassroom from './../../user_has_classrooms/model/user-hasclassroom.model';
-import config from '../../../config/env.config';
 import Teacher from '../../teachers/model/teacher.model';
-const { permissionLevel: { Student } } = config;
 export default (() => ({
     defaultScope: ({
         attributes: { 
@@ -22,9 +20,6 @@ export default (() => ({
         attributes: { 
             exclude: UserProtectedFields
         },
-        // where: {
-        //     role: Student
-        // },
         include: [
             {
                 model: Campus.unscoped(),
