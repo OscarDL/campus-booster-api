@@ -14,7 +14,18 @@ export default (() => ({
             {
                 model: User.unscoped(),
                 required: false,
-                attributes: UserPublicFields
+                attributes: UserPublicFields,
+                as: 'Users'
+            }
+        ]
+    }) as ScopesOptions,
+    withCampusManager: ({
+        include: [
+            {
+                model: User.unscoped(),
+                required: false,
+                attributes: UserPublicFields,
+                as: 'CampusManager'
             }
         ]
     }) as ScopesOptions,

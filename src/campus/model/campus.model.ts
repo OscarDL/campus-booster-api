@@ -49,7 +49,8 @@ export default class Campus extends S.Model implements CampusModel {
 		foreignKey: {
       field: 'campus_id'
     },
-		onDelete: 'CASCADE'
+		onDelete: 'CASCADE',
+		as: 'Users'
 	})
 	public Users!: User[];
 
@@ -60,4 +61,19 @@ export default class Campus extends S.Model implements CampusModel {
 		onDelete: 'CASCADE'
 	})
 	public Classrooms!: Classroom[];
+
+	@S.ForeignKey(() => User)
+	@S.Column({
+    field: 'campus_manager_id',
+  })
+	public campusManagerId!: number;
+
+	@S.BelongsTo(() => User, { 
+		foreignKey: {
+      field: 'campus_manager_id'
+    },
+		onDelete: 'SET NULL',
+		as: 'CampusManager'
+	})
+	public CampusManager!: User;
 }
