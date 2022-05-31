@@ -6,7 +6,6 @@ import AzureService from '../../../services/azure';
 import MailerService from '../../../services/mailing';
 import * as UserHasClassroomService from '../../user_has_classrooms/service/user-hasclassroom.service';
 import config from '../../../config/env.config';
-const { permissionLevel: { Professor }} = config;
 import generatePassword from 'generate-password';
 
 const {
@@ -24,6 +23,20 @@ export function generateNewPassword(length: number): string {
         randomPass = generatePassword.generate({length, numbers: true, symbols: true, exclude: '<>"'});
     }
     return randomPass;
+}
+
+export async function sendPasswordEmail(req: Req, next: Next, email: string, newPassword: string) {
+    if (!(await Mailer.custom(
+        req.headers.lang === "fr" ? "send-password-fr" : "send-password-en", 
+        {
+            to: req.body.personalEmail,
+            username: `${req.body.firstName} ${req.body.lastName}`,
+            password: newPassword,
+            email
+        }
+    ))) {
+        return next(boom.badRequest('smtp_error', req.body.personalEmail));
+    }
 }
 
 export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
@@ -138,18 +151,7 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
             )) {
                 return next(boom.badRequest('grant_error'));
             }
-            // SEND PASSWORD TO PERSONAL EMAIL
-            if (!(await Mailer.custom(
-                req.headers.lang === "fr" ? "send-password-fr" : "send-password-en", 
-                {
-                    to: req.body.personalEmail,
-                    username: `${req.body.firstName} ${req.body.lastName}`,
-                    password,
-                    email
-                }
-            ))) {
-                return next(boom.badRequest('smtp_error', req.body.personalEmail));
-            }
+            sendPasswordEmail(req, next, email, password);
         }
         if (azureUser) {
             const user = await UserService.create(
@@ -196,23 +198,26 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
         }
 
         if (user && firstName && lastName && email && personalEmail &&
-          (user.firstName !== firstName || user.lastName !== lastName || user.email !== email || user.personalEmail !== personalEmail)
+            (user.firstName !== firstName || user.lastName !== lastName || user.email !== email || user.personalEmail !== personalEmail)
         ) {
-            let newPassword;
+            let newPassword = '';
             let newPasswordField = {};
 
-            if (!user.active && user.personalEmail !== personalEmail) {
+            // Reset password if personal email changed
+            if (user.personalEmail !== personalEmail) {
                 newPassword = generateNewPassword(16);
-
                 newPasswordField = {
                     passwordProfile: {
                         password: newPassword,
                         forceChangePasswordNextSignIn: true
                     }
-                }
+                };
+
+                await sendPasswordEmail(req, next, email, newPassword);
+                await UserService.update(user.id, {active: false});
             }
 
-            await Azure.updateUser(user.email ?? '', {
+            await Azure.updateUser(user.email!, {
                 surname: lastName,
                 givenName: firstName,
                 displayName: (firstName && lastName) ? `${firstName} ${lastName}` : undefined,
@@ -220,26 +225,38 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
                 userPrincipalName: email,
                 ...newPasswordField
             });
-
-            // SEND NEW PASSWORD TO NEW PERSONAL EMAIL
-            if (newPassword) {
-                if (!(await Mailer.custom(
-                    req.headers.lang === "fr" ? "send-password-fr" : "send-password-en", 
-                    {
-                        to: req.body.personalEmail,
-                        username: `${req.body.firstName} ${req.body.lastName}`,
-                        password: newPassword,
-                        email
-                    }
-                ))) {
-                    return next(boom.badRequest('smtp_error', req.body.personalEmail));
-                }
-            }
         }
 
+        await UserService.update(user?.id, req.body, ["withClassrooms", "defaultScope"]);
         return res.status(203).json(
-            await UserService.update(user?.id, req.body, ["withClassrooms", "defaultScope"])
+            await UserService.findById(user?.id, {}, ["withClassrooms", "defaultScope"])
         );
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
+export async function resetUserPassword(req: Req, res: Res, next: Next): Promise<Resp>  {
+    try {
+      const user = await UserService.findById(req.params.user_id);
+      const personalEmail = user?.personalEmail || req.body.personalEmail || '';
+
+      if (!user || !personalEmail) {
+          return next(boom.badRequest('user_password_reset'));
+      }
+
+      const newPassword = generateNewPassword(16);
+      await Azure.updateUser(user.email!, {
+          passwordProfile: {
+              password: newPassword,
+              forceChangePasswordNextSignIn: true 
+          }
+      });
+
+      const sentEmail = await sendPasswordEmail(req, next, user.email!, newPassword);
+
+      return res.status(203).json(sentEmail);
     } catch (err: any) {
         console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));

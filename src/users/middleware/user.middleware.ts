@@ -1,10 +1,10 @@
 import { Req, Res, Next, Resp, AsyncFn } from '../../../types/express';
 import boom from '@hapi/boom';
 import { findById, findOne } from '../service/user.service';
-const replaceString = require("replace-special-characters");
+import * as CampusService from '../../campus/service/campus.service';
 import config from "../../../config/env.config";
 const {
-    permissionLevel: { Student },
+    permissionLevel: { CampusManager, Student },
     app_domain
 } = config;
 
@@ -97,6 +97,21 @@ export async function iamAdminOrItsaStudent(req: Req, res: Res, next: Next): Pro
         return req.isAdmin ? next() : 
             (await findById(req.params.user_id))?.role === Student ? 
         next() : next(boom.badRequest('missing_access_rights'));
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
+export async function campusManagerIsNotTaken(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        if(req.body.user?.role === CampusManager) {
+            const campus = await CampusService.findById(req.body.user?.campusId);
+            if (campus?.CampusManager) {
+                return next(boom.conflict('campus_manager_taken', campus.name));
+            }
+        }
+        return next();
     } catch (err: any) {
         console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));

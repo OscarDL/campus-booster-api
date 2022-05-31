@@ -5,11 +5,11 @@ import * as RequestMiddleware from '../authorization/middlewares/request.validat
 import * as ClassroomController from './controller/classroom.controller';
 import * as ClassroomMiddleware from './middleware/classroom.middleware';
 import * as CampusMiddleware from '../campus/middleware/campus.middleware';
+import * as CourseMiddleware from '../courses/middleware/course.middleware';
 import * as UserMiddleware from '../users/middleware/user.middleware';
 import config from '../../config/env.config';
-const { 
-	permissionLevel: { Student, CampusManager, CampusBoosterAdmin }, 
-    customRegex: { regInt } 
+const {
+    customRegex: { regInt }
 } = config;
 
 const routePrefix = config.route_prefix + '/classrooms'; 
@@ -38,6 +38,26 @@ export default (app: App): void => {
 		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam('user_id'),
         ClassroomController.getMine
+    ]);
+    // ADD COURSES TO CLASSROOM
+    app.post(routePrefix + `/:classroom_id${regInt}/courses/add`, [
+        ValidationMiddleware.JWTNeeded,
+        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
+        RequestMiddleware.paramParametersNeeded('classroom_id', 'integer'),
+        ClassroomMiddleware.classroomExistAsParam('classroom_id'),
+        RequestMiddleware.bodyParametersNeeded('courses', 'array'),
+        CourseMiddleware.courseCanBeLinkedToClassroom,
+        ClassroomController.addCoursesToClassroom
+    ]);
+    // REMOVE COURSES FROM CLASSROOM
+    app.post(routePrefix + `/:classroom_id${regInt}/courses/remove`, [
+        ValidationMiddleware.JWTNeeded,
+        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
+        RequestMiddleware.paramParametersNeeded('classroom_id', 'integer'),
+        ClassroomMiddleware.classroomExistAsParam('classroom_id'),
+        RequestMiddleware.bodyParametersNeeded('courses', 'array'),
+        CourseMiddleware.courseCanBeUnLinkedFromClassroom,
+        ClassroomController.removeCoursesFromClassroom
     ]);
     // CREATE A NEW CLASSROOM
     app.post(routePrefix, [

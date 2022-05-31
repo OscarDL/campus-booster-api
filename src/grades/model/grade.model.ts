@@ -20,7 +20,7 @@ const { db_schema } = config;
 export default class Grade extends S.Model implements GradeModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.BIGINT)
+	@S.Column(S.DataType.INTEGER)
 	public id!: number;
 
 	@S.AllowNull(false)

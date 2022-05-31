@@ -1,7 +1,7 @@
 import { Req, Res, Next, Resp, AsyncFn } from '../../../types/express';
 import boom from '@hapi/boom';
 import { findById } from '../service/classroom.service';
-import * as Userservice from '../../users/service/user.service';
+import * as UserService from '../../users/service/user.service';
 import * as UserHasClassroomService from '../../user_has_classrooms/service/user-hasclassroom.service';
 
 export function classroomExistAsQuery(name: string): AsyncFn {
@@ -64,7 +64,7 @@ export async function classroomCanBeLinkedToUser(req: Req, res: Res, next: Next)
                 if(!classroom) {
                     return next(boom.badRequest(`resource_not_found`, [ "Classroom", id]));
                 }
-                const user = await Userservice.findById(req.params.user_id);
+                const user = await UserService.findById(req.params.user_id);
                 if(classroom.campusId && user?.campusId !== classroom.campusId) {
                     return next(boom.badRequest(`user_invalid_campus`, [ `${user?.firstName} ${user?.lastName}`, classroom?.Campus?.name]));
                 }
@@ -97,7 +97,7 @@ export async function classroomCanBeUnLinkedFromUser(req: Req, res: Res, next: N
                 if(!classroom) {
                     return next(boom.badRequest(`resource_not_found`, [ "Classroom", id]));
                 }
-                const user = await Userservice.findById(req.params.user_id);
+                const user = await UserService.findById(req.params.user_id);
                 if(!userHasClassrooms.some(m => m.classroomId === id)) {
                     return next(boom.badRequest(`user_not_in_classroom`, [ `${user?.firstName} ${user?.lastName}`, `${classroom?.name} ${classroom?.promotion}`]));
                 }

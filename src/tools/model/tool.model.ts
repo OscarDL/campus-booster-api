@@ -19,7 +19,7 @@ const { db_schema } = config;
 export default class Tool extends S.Model implements ToolModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.BIGINT)
+	@S.Column(S.DataType.INTEGER)
 	public id!: number;
 
 	@S.AllowNull(true)
