@@ -22,7 +22,6 @@ export default (app: App): void => {
         RequestMiddleware.queryParameterHoped('limit', 'integer'),
 		CourseController.getAll
     ]);
-
     // GET ALL COURSES BY USER
     app.get(routePrefix + `/user/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
@@ -32,7 +31,6 @@ export default (app: App): void => {
         UserMiddleware.userExistAsParam('user_id'),
 		CourseController.getByUser
     ]);
-
     // GET COURSE BY ID
     app.get(`${routePrefix}/:course_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
@@ -45,15 +43,8 @@ export default (app: App): void => {
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
-		RequestMiddleware.bodyParametersNeeded([
-            'name',
-            'description',
-            'link',
-        ], 'string'),
-        RequestMiddleware.bodyParametersNeeded([
-            'credits',
-            'year'
-        ], "integer"),
+		RequestMiddleware.bodyParametersNeeded(['name', 'description', 'link'], 'string'),
+        RequestMiddleware.bodyParametersNeeded(['credits', 'year'], 'integer'),
         RequestMiddleware.bodyParameterHoped('speciality', 'boolean'),
 		CourseController.create
     ]);

@@ -22,7 +22,7 @@ const { db_schema } = config;
 export default class ClassroomHasCourse extends S.Model implements ClassroomHasCourseModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.BIGINT)
+	@S.Column(S.DataType.INTEGER)
 	public id!: number;
 
 	@S.AllowNull(true)

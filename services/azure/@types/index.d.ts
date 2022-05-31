@@ -83,6 +83,7 @@ interface FormUserUpdate {
   displayName?: string;
   mailNickname?: string;
   userPrincipalName?: string;
+  passwordProfile?: PasswordProfile;
 }
 interface UserCreationResponse {
   '@odata.context': string;

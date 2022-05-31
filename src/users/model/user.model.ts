@@ -27,7 +27,7 @@ const { db_schema, permissionLevel } = config;
 export default class User extends S.Model implements UserModel {
 	@S.PrimaryKey
   @S.AutoIncrement
-  @S.Column(S.DataType.BIGINT)
+  @S.Column(S.DataType.INTEGER)
 	public id!: number;
 
 	@S.AllowNull(true)

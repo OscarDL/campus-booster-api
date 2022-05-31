@@ -1,14 +1,21 @@
 import { Req, Res, Next, Resp } from '../../../types/express';
 import * as BalanceService from '../service/balance.service';
 import boom from '@hapi/boom';
+import { BalanceModel } from '../model/balance.interface';
+import { UserModel } from '../../users/model/user.interface';
+
+function filterUsersFromCampus(balance: BalanceModel, user: UserModel) {
+  if (!user.campusId) return true;
+  return balance.User?.campusId === user.campusId;
+}
 
 export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
-        return res.status(200).json(
-            await BalanceService.findById(
-                req.params.balance_id
-            )
-        );
+        const balance = await BalanceService.findById(req.params.balance_id);
+
+        if (req.user?.campusId && req.user?.campusId === balance?.User?.campusId) {
+            return res.status(200).json(balance);
+        }
     } catch (err: any) {
         console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));
@@ -18,12 +25,12 @@ export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
 export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         return res.status(200).json(
-            await BalanceService.findAll(
+            (await BalanceService.findAll(
                 {
                     limit: req.query?.limit,
                     offset: req.query?.offset
                 }
-            )
+            )).filter(balance => filterUsersFromCampus(balance, req.user!))
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);
@@ -34,7 +41,7 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
 export async function getUser(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         return res.status(200).json(
-            await BalanceService.findAll(
+            (await BalanceService.findAll(
                 {
                     limit: req.query?.limit,
                     offset: req.query?.offset,
@@ -42,7 +49,7 @@ export async function getUser(req: Req, res: Res, next: Next): Promise<Resp> {
                         userId: req.params.user_id
                     }
                 }
-            )
+            )).filter(balance => filterUsersFromCampus(balance, req.user!))
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);

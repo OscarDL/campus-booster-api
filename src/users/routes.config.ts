@@ -66,6 +66,7 @@ export default (app: App): void => {
         UserMiddleware.userExistAsParam('user_id'),
         RequestMiddleware.bodyParametersNeeded('classrooms', 'array'),
         ClassroomMiddleware.classroomCanBeUnLinkedFromUser,
+        UserMiddleware.campusManagerIsNotTaken,
         UserController.removeFromClassrooms
     ]);
     // UPDATE USER
@@ -78,7 +79,17 @@ export default (app: App): void => {
         RequestMiddleware.bodyParameterHoped('campusId', 'integer'),
         CampusMiddleware.campusExistAsBody('campusId'),
         UserMiddleware.emailIsNotTaken,
+        UserMiddleware.campusManagerIsNotTaken,
         UserController.update
+    ]);
+    // RESET USER PASSWORD
+    app.patch(routePrefix + `/:user_id${regInt}/resetpassword`, [
+        ValidationMiddleware.JWTNeeded,
+        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
+		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+        UserMiddleware.userExistAsParam("user_id"),
+        RequestMiddleware.bodyParametersNeeded('personalEmail', 'email'),
+        UserController.resetUserPassword
     ]);
     // ACTIVATE USER ACCOUNT
     app.patch(routePrefix + `/:user_id${regInt}/activate`, [

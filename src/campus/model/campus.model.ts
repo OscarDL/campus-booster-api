@@ -19,7 +19,7 @@ const { db_schema, permissionLevel: roles } = config;
 export default class Campus extends S.Model implements CampusModel {
   @S.PrimaryKey
 	@S.AutoIncrement
-	@S.Column(S.DataType.BIGINT)
+	@S.Column(S.DataType.INTEGER)
 	public id!: number;
 
 	@S.AllowNull(false)
@@ -79,7 +79,11 @@ export default class Campus extends S.Model implements CampusModel {
 						if(instance[i].Users) {
 							instance[i].setDataValue(
 								"CampusManager", 
-								instance[i].Users.filter(u => u.role === roles.CampusManager)
+								instance[i].Users.find(u => u.role === roles.CampusManager)
+							);
+							instance[i].setDataValue(
+								"Users", 
+								instance[i].Users.filter(u => u.role !== roles.CampusManager)
 							);
 						}
 					}
@@ -87,8 +91,12 @@ export default class Campus extends S.Model implements CampusModel {
 					if(instance.Users) {
 						instance.setDataValue(
 							"CampusManager", 
-							instance.Users.filter(u => u.role === roles.CampusManager)
+							instance.Users.find(u => u.role === roles.CampusManager)
 						);
+            instance.setDataValue(
+              "Users", 
+              instance.Users.filter(u => u.role !== roles.CampusManager)
+            );
 					}
 				}
 			}

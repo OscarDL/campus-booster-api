@@ -40,17 +40,17 @@ export default (() => ({
         include: [
             {
                 model: ClassroomHasCourse.unscoped(),
-                required: true,
+                required: false,
                 include: [
                     {
                         model: Classroom.unscoped(),
                         required: true,
-                        include: [
-                            {
-                                model: UserHasClassroom.unscoped(),
-                                required: true
-                            }
-                        ]
+                        // include: [
+                        //     {
+                        //         model: UserHasClassroom.unscoped(),
+                        //         required: true
+                        //     }
+                        // ]
                     }
                 ]
             }
