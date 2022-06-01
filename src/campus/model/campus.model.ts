@@ -68,9 +68,6 @@ export default class Campus extends S.Model implements CampusModel {
 	public Classrooms!: Classroom[];
 
 	@S.AfterFind
-	@S.AfterCreate
-	@S.AfterUpdate
-	@S.AfterUpsert
 	static async AddCampusManager(instance: Campus | Campus[]) {
 		try {
 			if(instance) {

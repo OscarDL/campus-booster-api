@@ -166,6 +166,7 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                     role: req.body.role,
                     active: false,
                     banned: false,
+                    credits: 0,
                     personalEmail: req.body.personalEmail
                 }
             );
@@ -225,6 +226,11 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
                 userPrincipalName: email,
                 ...newPasswordField
             });
+        }
+
+        if (user && user.credits !== Number(user.credits)) {
+            // if user credits are null, it should be turned into an integer (0)
+            await UserService.update(user?.id, {credits: 0}, ["withClassrooms", "defaultScope"]);
         }
 
         await UserService.update(user?.id, req.body, ["withClassrooms", "defaultScope"]);

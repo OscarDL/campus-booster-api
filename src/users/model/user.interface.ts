@@ -22,6 +22,7 @@ export interface UserAttributes {
 	personalEmail?: string;
 	active?: boolean;
 	banned?: boolean;
+  credits?: number | null;
 	role?: typeof permissionLevel[keyof typeof permissionLevel];
 	readonly created_at?: Date;
 	readonly updated_at?: Date;

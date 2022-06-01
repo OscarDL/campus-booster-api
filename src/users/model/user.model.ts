@@ -99,6 +99,10 @@ export default class User extends S.Model implements UserModel {
 	@S.Column(S.DataType.BOOLEAN)
 	public banned!: boolean;
 
+	@S.AllowNull(true)
+	@S.Column(S.DataType.INTEGER)
+	public credits!: number;
+
 	@S.AllowNull(false)
 	@S.Default(permissionLevel.Student)
 	@S.Column(S.DataType.STRING(255))
