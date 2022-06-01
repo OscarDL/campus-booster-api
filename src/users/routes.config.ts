@@ -44,7 +44,7 @@ export default (app: App): void => {
 		RequestMiddleware.bodyParametersNeeded(['email', 'personalEmail'], 'email'),
         RequestMiddleware.bodyParametersNeeded('role', 'enum', Object.values(roles)),
         UserMiddleware.emailIsNotTaken,
-        RequestMiddleware.bodyParametersNeeded('campusId', 'integer'),
+        RequestMiddleware.bodyParameterHoped('campusId', 'integer'),
         CampusMiddleware.campusExistAsBody('campusId'),
 		UserController.create
     ]);

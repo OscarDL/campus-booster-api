@@ -7,7 +7,7 @@ import Feedback from './../../feedbacks/model/feedback.model';
 import Grade from './../../grades/model/grade.model';
 import Teacher from "./../../teachers/model/teacher.model";
 import User from "../../users/model/user.model";
-import { UserPublicFields } from "../../users/model/user.interface";
+import Campus from "../../campus/model/campus.model";
 
 export default (() => ({
     defaultScope: ({
@@ -22,6 +22,12 @@ export default (() => ({
             {
                 model: Classroom.unscoped(),
                 required: true,
+                include: [
+                    {
+                        model: Campus.unscoped(),
+                        required: true
+                    }
+                ]
             }
         ]
     }) as ScopesOptions,
