@@ -11,7 +11,7 @@ export interface ClassroomHasCourseAttributes extends
 	UnpackChildAttributes<"Classroom", ClassroomAttributes>
 {
   readonly id: number;
-	activated?: string;
+	activated?: boolean;
 	readonly created_at?: Date;
 	readonly updated_at?: Date;
 	courseId: number;
