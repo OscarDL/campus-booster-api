@@ -2,8 +2,7 @@
 import "colors.ts"; 
 import "@dulysse1/better-node";
 import chai, { expect } from 'chai';
-import dotenv from 'dotenv';
-dotenv.config();
+import "../config";
 import chaiAsPromise from 'chai-as-promised';
 chai.use(chaiAsPromise);
 import * as S from "../config/models.config";
