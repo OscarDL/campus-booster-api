@@ -91,26 +91,41 @@ export async function getByTeacher(req: Req, res: Res, next: Next): Promise<Resp
 
 export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
-        const grade = await GradeService.create(
+        const { id } = await GradeService.create(
             {
                 average: req.body.average,
                 comment: req.body.comment,
                 userId: req.body.userId,
                 classroomHasCourseId: req.body.classroomHasCourseId,
                 teacherId: req.body.teacherId
-            }
+            },
+            [
+                "withUser",
+                "withCourse",
+                "withTeacher"
+            ]
         );
-        return res.status(201).json(
-            await GradeService.findById(
-                grade.id,
-                {},
-                [
-                    "withUser",
-                    "withCourse",
-                    "withTeacher"
-                ]
-            )
+        const grade = await GradeService.findById(
+            id,
+            {},
+            [
+                "withUser",
+                "withCourse",
+                "withTeacher"
+            ]
         );
+
+        const user = grade?.User;
+        const course = grade?.ClassroomHasCourse?.Course;
+
+        if (course && user && req.body.average >= 10) {
+            await user.increment('credits', {
+                by: course.credits ?? 0,
+                where: { id: user.id }
+            });
+        }
+
+        return res.status(201).json(grade);
     } catch (err: any) {
         console.log(err);
         console.log(`${err}`.red.bold);
@@ -120,13 +135,38 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
 
 export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
-        const grade = await GradeService.update(
-            req.params.grade_id, 
-            req.body
+        const grade = await GradeService.findById(
+            req.params.grade_id,
+            {},
+            [
+                "withUser",
+                "withCourse",
+                "withTeacher"
+            ]
         );
+
+        await GradeService.update(req.params.grade_id, req.body);
+        const course = grade?.ClassroomHasCourse?.Course;
+        const user = grade?.User;
+
+        if (course && user && grade?.average && req.body.average) {
+            if (req.body.average >= 10 && grade.average < 10) {
+                await user.increment('credits', {
+                    by: course.credits ?? 0,
+                    where: { id: user.id }
+                });
+            }
+            if (grade.average >= 10 && req.body.average < 10) {
+                await user.decrement('credits', {
+                    by: course.credits ?? 0,
+                    where: { id: user.id }
+                });
+            }
+        }
+
         return res.status(203).json(
             await GradeService.findById(
-                grade.id,
+                req.params.grade_id,
                 {},
                 [
                     "withUser",
@@ -143,6 +183,28 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
 
 export async function remove(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        const grade = await GradeService.findById(
+            req.params.grade_id,
+            {},
+            [
+                "withUser",
+                "withCourse",
+                "withTeacher"
+            ]
+        );
+
+        const course = grade?.ClassroomHasCourse?.Course;
+        const user = grade?.User;
+
+        if (course && user && grade?.average) {
+            if (grade.average >= 10) {
+                await user.decrement('credits', {
+                    by: course.credits ?? 0,
+                    where: { id: user.id }
+                });
+            }
+        }
+
         return res.status(204).json(
             await GradeService.remove(
                 {

@@ -27,12 +27,12 @@
 	"resource_not_found": "Resource \"%s\" with id \"%d\" could not be found.",
 	"email_taken": "Email \"%s\" is already in use by an application user.",
 	"user_creation": "Failed to create user.",
-  "user_password_reset": "Failed to reset user password. If the user is correct, please assign them a personal email address.",
+	"user_password_reset": "Failed to reset user password. If the user is correct, please assign them a personal email address.",
 	"smtp_error": "Failed to send email to \"%s\", contact administrator.",
 	"personal_email_required": "This user does not exist in AD, so a personal email is required.",
 	"user_invalid_campus": "User \"%s\" cannot be assigned to campus \"%s\".",
 	"user_already_in_classroom": "User \"%s\" is already a member of class \"%s\".",
 	"user_not_in_classroom": "User \"%s\" is not a member of class \"%s\".",
-  "campus_manager_taken": "Campus \"%s\" already has a manager assigned.",
+	"campus_manager_taken": "Campus \"%s\" already has a manager assigned.",
 	"grant_error": "Failed to create user. Failed to add permission on Azure."
 }

@@ -3,7 +3,7 @@ export default {
     env,
     db_schema: env === 'development' ? 'dev' : 'prod',
     app_name: process.env.APP_NAME || 'Campus Booster - API',
-    app_domain: process.env.APP_DOMAINE || "campusbooster.eu",
+    app_domain: process.env.APP_DOMAIN || "campusbooster.eu",
     app_site: process.env.APP_SITE || 'http://localhost:3000',
     app_uri: process.env.APP_URI || 'http://localhost:1337',
     route_prefix: process.env.ROUTE_PREFIX || '/api/v1',

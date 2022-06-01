@@ -90,7 +90,7 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
             )
         );
     } catch (err: any) {
-        console.log(`${err}`.red.bold);
+        console.log(`${err}`);
         return next(err.isBoom ? err : boom.internal(err.name));
     }
 }
@@ -110,12 +110,9 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
             }
         );
         return res.status(203).json(
-            await CourseService.findOne(
-                {
-                    where: {
-                        id: course.id
-                    }
-                },
+            await CourseService.findById(
+                course.id,
+                {},
                 [
                     "withClassroomHasCourse",
                     "withUser",
