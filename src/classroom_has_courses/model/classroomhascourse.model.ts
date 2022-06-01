@@ -28,7 +28,7 @@ export default class ClassroomHasCourse extends S.Model implements ClassroomHasC
 	@S.AllowNull(true)
 	@S.Default(true)
 	@S.Column(S.DataType.BOOLEAN)
-	public activated!: string;
+	public activated!: boolean;
 
 	@S.ForeignKey(() => Course)
 	@S.Column({
