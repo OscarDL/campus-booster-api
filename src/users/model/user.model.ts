@@ -98,8 +98,9 @@ export default class User extends S.Model implements UserModel {
 	@S.Default(false)
 	@S.Column(S.DataType.BOOLEAN)
 	public banned!: boolean;
-
-	@S.AllowNull(true)
+  
+	@S.AllowNull(false)
+	@S.Default(0)
 	@S.Column(S.DataType.INTEGER)
 	public credits!: number;
 
@@ -146,6 +147,7 @@ export default class User extends S.Model implements UserModel {
 	}
 
 	@S.ForeignKey(() => Campus)
+  @S.AllowNull(true)
 	@S.Column({
     field: 'campus_id',
   })

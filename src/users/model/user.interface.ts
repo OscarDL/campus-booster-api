@@ -26,7 +26,7 @@ export interface UserAttributes {
 	role?: typeof permissionLevel[keyof typeof permissionLevel];
 	readonly created_at?: Date;
 	readonly updated_at?: Date;
-	campusId: number;
+	campusId?: number;
 	Campus?: CampusModel;
 	UserHasClassrooms?: UserHasClassroomModel[];
 	Feedbacks?: FeedbackModel[];
