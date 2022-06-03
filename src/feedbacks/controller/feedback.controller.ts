@@ -32,10 +32,9 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
 
 export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        const feedback = await FeedbackService.create(req.body as any);
         return res.status(201).json(
-            await FeedbackService.create(
-                req.body as any
-            )
+            await FeedbackService.findById(feedback.id)
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);
@@ -45,11 +44,9 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
 
 export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        const feedback = await FeedbackService.update(req.params.feedback_id, req.body);
         return res.status(203).json(
-            await FeedbackService.update(
-                req.params.feedback_id, 
-                req.body
-            )
+            await FeedbackService.findById(feedback.id)
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);

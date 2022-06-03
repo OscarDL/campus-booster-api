@@ -1,12 +1,12 @@
 import { UserPublicFields } from './../../users/model/user.interface';
 import { ScopesOptions } from "sequelize-typescript";
 import User from "./../../users/model/user.model";
-import { AttendanceProtectedFields } from "./attendance.interface";
+import { AbsenceProtectedFields } from "./absence.interface";
 import Planning from './../../plannings/model/planning.model';
 export default (() => ({
     defaultScope: ({
         attributes: { 
-            exclude: AttendanceProtectedFields
+            exclude: AbsenceProtectedFields
         },
         include: [
             {

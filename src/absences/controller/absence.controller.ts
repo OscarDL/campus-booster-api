@@ -1,13 +1,13 @@
 import { Req, Res, Next, Resp } from '../../../types/express';
-import * as AttendanceService from '../service/attendance.service';
+import * as AbsenceService from '../service/absence.service';
 import boom from '@hapi/boom';
 import s3 from '../../../services/aws/s3';
 
 export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         return res.status(200).json(
-            await AttendanceService.findById(
-                req.params.attendance_id,
+            await AbsenceService.findById(
+                req.params.absence_id,
                 {},
                 [
                     "withPlanning",
@@ -24,7 +24,7 @@ export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
 export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         return res.status(200).json(
-            await AttendanceService.findAll(
+            await AbsenceService.findAll(
                 {
                     limit: req.query?.limit,
                     offset: req.query?.offset
@@ -44,7 +44,7 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
 export async function getByUser(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         return res.status(200).json(
-            await AttendanceService.findAll(
+            await AbsenceService.findAll(
                 {
                     limit: req.query?.limit,
                     offset: req.query?.offset,
@@ -65,19 +65,21 @@ export async function getByUser(req: Req, res: Res, next: Next): Promise<Resp> {
 
 export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
-        if(req.files) {
+        if(req.files && req.files.length > 0) {
             req.body.fileKeys = Object.entries(req.files).map(([_, value]) => (value as any).key);
             console.log(req.body.fileKeys, req.files);
         }
-        return res.status(201).json(
-            await AttendanceService.create(
-                Object.assign(
-                    req.body,
-                    {
-                        userId: req.user?.id
-                    }
-                )
+        
+        const absence = await AbsenceService.create(
+            Object.assign(
+                req.body,
+                {
+                    userId: req.user?.id
+                }
             )
+        );
+        return res.status(203).json(
+            await AbsenceService.findById(absence.id, {}, ["withPlanning", "withUser"])
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);
@@ -87,8 +89,8 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
 
 export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
-        const attendance = await AttendanceService.findById(req.params.attendance_id); 
-        const rmFileKeys = attendance?.fileKeys?.filter(f => !req.body.fileKeys.includes(f)) ?? [];
+        let absence = await AbsenceService.findById(req.params.absence_id); 
+        const rmFileKeys = absence?.fileKeys?.filter(f => !req.body.fileKeys.includes(f)) ?? [];
         for (let i = 0; i < rmFileKeys.length; i++) {
             const fileKey = rmFileKeys[i];
             await s3.remove(fileKey);
@@ -96,11 +98,10 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
         if(req.files) {
             req.body.fileKeys.push(Object.entries(req.files).map(([_, value]) => (value as any).key));
         }
+
+        absence = await AbsenceService.update(req.params.absence_id, req.body);
         return res.status(203).json(
-            await AttendanceService.update(
-                req.params.attendance_id, 
-                req.body
-            )
+            await AbsenceService.findById(absence.id, {}, ["withPlanning", "withUser"])
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);
@@ -110,18 +111,18 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
 
 export async function remove(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
-        const attendance = await AttendanceService.findById(req.params.attendance_id); 
-        for (let i = 0; i < attendance?.fileKeys?.length!; i++) {
-            if(attendance?.fileKeys) {
-                const fileKeys = attendance?.fileKeys[i];
+        const absence = await AbsenceService.findById(req.params.absence_id); 
+        for (let i = 0; i < absence?.fileKeys?.length!; i++) {
+            if(absence?.fileKeys) {
+                const fileKeys = absence?.fileKeys[i];
                 await s3.remove(fileKeys);
             }
         }
         return res.status(204).json(
-            await AttendanceService.remove(
+            await AbsenceService.remove(
                 {
                     where: {
-                        id: attendance?.id
+                        id: absence?.id
                     }
                 }
             )
