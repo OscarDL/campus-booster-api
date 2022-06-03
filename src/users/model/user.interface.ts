@@ -5,7 +5,7 @@ import UserScope from './user.scope';
 import config from '../../../config/env.config';
 import { CampusModel } from './../../campus/model/campus.interface';
 import { FeedbackModel } from './../../feedbacks/model/feedback.interface';
-import { AttendanceModel } from './../../attendances/model/attendance.interface';
+import { AbsenceModel } from './../../absences/model/absence.interface';
 import { GradeModel } from './../../grades/model/grade.interface';
 import { BalanceModel } from './../../balances/model/balance.interface';
 import { UserHasClassroomModel } from './../../user_has_classrooms/model/user-hasclassroom.interface';
@@ -30,7 +30,7 @@ export interface UserAttributes {
 	Campus?: CampusModel;
 	UserHasClassrooms?: UserHasClassroomModel[];
 	Feedbacks?: FeedbackModel[];
-	Attendances?: AttendanceModel[];
+	Absences?: AbsenceModel[];
 	Grades?: GradeModel[];
 	ClassroomHasCourses?: ClassroomHasCourseModel[]; 
 	Balances?: BalanceModel[];

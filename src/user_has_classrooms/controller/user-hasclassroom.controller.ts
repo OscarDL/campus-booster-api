@@ -32,10 +32,9 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
 
 export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        const userhasclassroom = await UserHasClassroomService.create(req.body as any);
         return res.status(201).json(
-            await UserHasClassroomService.create(
-                req.body as any
-            )
+            await UserHasClassroomService.findById(userhasclassroom.id)
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);
@@ -45,11 +44,12 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
 
 export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        const userhasclassroom = await UserHasClassroomService.update(
+            req.params.userhasclassroom_id, 
+            req.body
+        );
         return res.status(203).json(
-            await UserHasClassroomService.update(
-                req.params.userhasclassroom_id, 
-                req.body
-            )
+            await UserHasClassroomService.findById(userhasclassroom.id)
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);

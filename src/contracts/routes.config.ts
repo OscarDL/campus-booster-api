@@ -7,8 +7,7 @@ import * as ContractMiddleware from './middleware/contract.middleware';
 import * as UserMiddleware from '../users/middleware/user.middleware';
 import config from '../../config/env.config';
 const { 
-	permissionLevel: { Student }, 
-    customRegex: { regInt } 
+    customRegex: { regInt }
 } = config;
 
 const routePrefix = config.route_prefix + '/contracts';
@@ -43,14 +42,17 @@ export default (app: App): void => {
     // CREATE A NEW CONTRACT
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ Student ]), 
-		RequestMiddleware.bodyParametersNeeded(['start_date','end_date'], 'string'),
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
+		RequestMiddleware.bodyParametersNeeded(['startDate', 'endDate', 'company', 'mission', 'type', 'email', 'phone'], 'string'),
+		RequestMiddleware.bodyParametersNeeded(['userId', 'supervisorId'], 'integer'),
+		UserMiddleware.userExistAsBody('supervisorId'),
+		UserMiddleware.userExistAsBody('userId'),
 		ContractController.create
     ]);
     // UPDATE CONTRACT
     app.patch(`${routePrefix}/:contract_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ Student ]), 
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
 		RequestMiddleware.paramParametersNeeded('contract_id', 'integer'),
         ContractMiddleware.contractExistAsParam("contract_id"),
         ContractController.update
@@ -58,7 +60,7 @@ export default (app: App): void => {
     // DELETE CONTRACT
     app.delete(`${routePrefix}/:contract_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed([ Student ]), 
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
 		RequestMiddleware.paramParametersNeeded('contract_id', 'integer'),
         ContractMiddleware.contractExistAsParam("contract_id"),
         ContractController.remove

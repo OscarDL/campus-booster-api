@@ -36,10 +36,10 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
         if(req.file) {
             req.body.img = (req.file as any).key;
         }
+
+        const tool = await ToolService.create(req.body as any);
         return res.status(201).json(
-            await ToolService.create(
-                req.body as any
-            )
+            await ToolService.findById(tool.id)
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);
@@ -49,7 +49,7 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
 
 export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
-        const tool = await ToolService.findById(req.params.tool_id);
+        let tool = await ToolService.findById(req.params.tool_id);
         if(req.file) {
             req.body.img = (req.file as any).key;
             if(tool?.img) await s3.remove(tool.img);
@@ -59,11 +59,10 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
                 req.body.img = null;
             }
         }
+
+        tool = await ToolService.update(tool?.id, req.body);
         return res.status(203).json(
-            await ToolService.update(
-                tool?.id, 
-                req.body
-            )
+            await ToolService.findById(tool.id)
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);

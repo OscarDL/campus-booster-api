@@ -2,7 +2,7 @@
 // DOC : https://www.npmjs.com/package/sequelize-typescript
 // Generate by Ulysse Dupont
 import * as S from 'sequelize-typescript';
-import { ContractModel, STATUS } from './contract.interface';
+import { ContractModel, TYPE } from './contract.interface';
 import ContractScope from './contract.scope';
 import User from './../../users/model/user.model';
 
@@ -37,12 +37,12 @@ export default class Contract extends S.Model implements ContractModel {
 	public endDate!: Date;
 
 	@S.AllowNull(true)
-	@S.Column(S.DataType.STRING(1024))
+	@S.Column(S.DataType.TEXT)
 	public mission!: string;
 
 	@S.AllowNull(true)
-	@S.Column(S.DataType.STRING(20))
-	public status!: STATUS;
+	@S.Column(S.DataType.STRING(255))
+	public type!: TYPE;
 
 	@S.AllowNull(true)
 	@S.Column(S.DataType.STRING(255))

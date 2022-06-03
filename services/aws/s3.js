@@ -68,7 +68,11 @@ exports.uploadImage = (directory) => multer({
       const fileName = `${Date.now().toString()}-${file.originalname}`;
       cb(null, `${directory}/${year}/${userName.join('_')}${userName.length ? '_' : ''}${fileName}`);
     }
-  })
+  }),
+
+  limits: {
+    fileSize: 2097152 // 2MB (in bytes) per image
+  }
 });
 
 exports.uploadDocument = (directory) => multer({
@@ -96,5 +100,9 @@ exports.uploadDocument = (directory) => multer({
       const fileName = `${Date.now().toString()}-${file.originalname}`;
       cb(null, `${directory}/${year}/${userName.join('_')}${userName.length ? '_' : ''}${fileName}`);
     }
-  })
+  }),
+
+  limits: {
+    fileSize: 5242880 // 5MB (in bytes) per document
+  }
 });
