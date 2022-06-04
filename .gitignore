@@ -12,6 +12,7 @@ pids
 *.pid
 *.seed
 *.pid.lock
+*.rest
 
 # Development
 .vscode/

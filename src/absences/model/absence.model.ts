@@ -77,8 +77,11 @@ export default class Absence extends S.Model implements AbsenceModel {
 		for (let i = 0; i < instance.fileKeys.length; i++) {
 			const fileKey = instance.fileKeys[i];
 			if(fileKey) {
-				const file = await s3.download(fileKey);
-				if(file) await files.push(file.Body); 
+				const awsFile = await s3.download(fileKey);
+				if(awsFile) {
+					const imgBase64 = Buffer.from(awsFile.Body as any).toString('base64');
+					await files.push(`data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`); 
+				}
 			}
 		}
 		return files;
