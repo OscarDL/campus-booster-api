@@ -126,15 +126,19 @@ export default class User extends S.Model implements UserModel {
 					const user = instance[i];
 					if(user.avatarKey) {
 						const awsFile = await s3.download(user.avatarKey);
-						const imgBase64 = Buffer.from(awsFile.Body as any).toString('base64');
-						user.dataValues.avatarBase64 = `data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`;
+						if(awsFile) {
+							const imgBase64 = Buffer.from(awsFile.Body as any).toString('base64');
+							user.dataValues.avatarBase64 = `data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`;
+						}
 					}
 				}
 			} else {
 				if(instance?.avatarKey) {
 					const awsFile = await s3.download(instance.avatarKey);
-					const imgBase64 = Buffer.from(awsFile.Body as any).toString('base64');
-					instance.dataValues.avatarBase64 = `data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`;
+					if(awsFile) {
+						const imgBase64 = Buffer.from(awsFile.Body as any).toString('base64');
+						instance.dataValues.avatarBase64 = `data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`;
+					}
 				}
 			}
 		} catch (err) {

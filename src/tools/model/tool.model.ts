@@ -56,15 +56,19 @@ export default class Tool extends S.Model implements ToolModel {
 					const tool = instance[i];
 					if(tool.img) {
 						const awsFile = await s3.download(tool.img);
-						const imgBase64 = Buffer.from(awsFile.Body as any).toString('base64');
-						tool.dataValues.imgBase64 = `data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`;
+						if(awsFile) {
+							const imgBase64 = Buffer.from(awsFile.Body as any).toString('base64');
+							tool.dataValues.imgBase64 = `data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`;
+						}
 					}
 				}
 			} else {
 				if(instance?.img) {
 					const awsFile = await s3.download(instance.img);
-					const imgBase64 = Buffer.from(awsFile.Body as any).toString('base64');
-					instance.dataValues.imgBase64 = `data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`;
+					if(awsFile) {
+						const imgBase64 = Buffer.from(awsFile.Body as any).toString('base64');
+						instance.dataValues.imgBase64 = `data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`;
+					}
 				}
 			}
 		} catch (err) {
