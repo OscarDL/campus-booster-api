@@ -64,12 +64,13 @@ export default (app: App): void => {
     // UPDATE ABSENCE
     app.patch(`${routePrefix}/:absence_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES.concat(Student)), 
+        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES.concat(Student)),
         RequestMiddleware.paramParametersNeeded('absence_id', 'integer'),
         AbsenceMiddleware.absenceExistAsParam("absence_id"),
         uploadMany,
-        RequestMiddleware.bodyParametersNeeded('fileKeys', "array"),
-        RequestMiddleware.bodyParameterHoped('planningId', "integer"),
+        // Upload necessary data in JSON format
+        RequestMiddleware.bodyParametersNeeded('data', 'string'),
+        AbsenceMiddleware.formatBodyParameters,
         PlanningMiddleware.planningExistAsBody('planningId'),
         AbsenceController.update
     ]);

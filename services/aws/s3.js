@@ -16,6 +16,8 @@ const AUTHORIZED_IMAGE_EXTENSIONS = [
 ];
 
 const AUTHORIZED_DOCUMENT_EXTENSIONS = [
+  'image/png',
+  'image/jpeg',
   'application/pdf',
   'application/document'
 ];
@@ -78,7 +80,7 @@ exports.uploadImage = (directory) => multer({
 exports.uploadDocument = (directory) => multer({
   fileFilter: (req, file, cb) => {
     const format = file.originalname.slice(file.originalname.lastIndexOf('.'));
-    const extensions = AUTHORIZED_IMAGE_EXTENSIONS.concat(AUTHORIZED_DOCUMENT_EXTENSIONS);
+    const extensions = AUTHORIZED_DOCUMENT_EXTENSIONS;
     return (extensions.includes(file.mimetype))
       ? cb(null, true) :
       cb(boom.badRequest(`document_format_aws`, format), false);
