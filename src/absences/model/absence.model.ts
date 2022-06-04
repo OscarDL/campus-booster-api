@@ -40,7 +40,6 @@ export default class Absence extends S.Model implements AbsenceModel {
 
 	@S.AllowNull(true)
 	@S.Default([])
-	@S.IsArray
 	@S.Column({
 		field: 'file_keys',
 		type: S.DataType.ARRAY(
@@ -80,7 +79,7 @@ export default class Absence extends S.Model implements AbsenceModel {
 				const awsFile = await s3.download(fileKey);
 				if(awsFile) {
 					const imgBase64 = Buffer.from(awsFile.Body as any).toString('base64');
-					await files.push(`data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`); 
+					files.push(`data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`); 
 				}
 			}
 		}

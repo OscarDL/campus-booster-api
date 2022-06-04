@@ -69,6 +69,10 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
             req.body.fileKeys = Object.entries(req.files).map(([_, value]) => (value as any).key);
             console.log(req.body.fileKeys, req.files);
         }
+
+        if(req.body.late === req.body.missing) {
+            return next(boom.badRequest('absence_missing_late_equal'));
+        }
         
         const absence = await AbsenceService.create(
             Object.assign(
@@ -96,7 +100,11 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
             await s3.remove(fileKey);
         }
         if(req.files) {
-            req.body.fileKeys.push(Object.entries(req.files).map(([_, value]) => (value as any).key));
+            req.body.fileKeys.concat(Object.entries(req.files).map(([_, value]) => (value as any).key));
+        }
+
+        if(req.body.late === req.body.missing) {
+            return next(boom.badRequest('absence_missing_late_equal'));
         }
 
         absence = await AbsenceService.update(req.params.absence_id, req.body);
