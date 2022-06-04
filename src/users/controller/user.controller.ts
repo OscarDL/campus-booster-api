@@ -167,6 +167,9 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                     active: false,
                     banned: false,
                     credits: 0,
+                    gender: req.body.gender,
+                    promotion: req.body.promotion,
+                    address: req.body.address,
                     personalEmail: req.body.personalEmail
                 }
             );

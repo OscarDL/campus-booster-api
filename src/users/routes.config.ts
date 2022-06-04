@@ -14,6 +14,7 @@ const {
 } = config;
 
 import s3 from '../../services/aws/s3';
+import { genders } from './model/user.interface';
 const upload = s3.uploadImage("users");
 const singleUpload = upload.single("file");
 
@@ -65,6 +66,9 @@ export default (app: App): void => {
         RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam('user_id'),
         RequestMiddleware.bodyParametersNeeded('classrooms', 'array'),
+        RequestMiddleware.bodyParameterHoped('promotion', 'integer'),
+        RequestMiddleware.bodyParameterHoped('address', 'string'),
+        RequestMiddleware.bodyParameterHoped('gender', 'enum', [ ...genders ]),
         ClassroomMiddleware.classroomCanBeUnLinkedFromUser,
         UserMiddleware.campusManagerIsNotTaken,
         UserController.removeFromClassrooms
@@ -78,6 +82,9 @@ export default (app: App): void => {
         singleUpload,
         RequestMiddleware.bodyParameterHoped('campusId', 'integer'),
         CampusMiddleware.campusExistAsBody('campusId'),
+        RequestMiddleware.bodyParameterHoped('promotion', 'integer'),
+        RequestMiddleware.bodyParameterHoped('address', 'string'),
+        RequestMiddleware.bodyParameterHoped('gender', 'enum', [ ...genders ]),
         UserMiddleware.emailIsNotTaken,
         UserMiddleware.campusManagerIsNotTaken,
         UserController.update
