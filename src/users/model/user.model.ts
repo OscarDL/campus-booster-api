@@ -2,7 +2,7 @@
 // DOC : https://www.npmjs.com/package/sequelize-typescript
 // Generate by Ulysse Dupont
 import * as S from 'sequelize-typescript';
-import { EMAIL_REGEX, UserAttributes, UserModel } from './user.interface';
+import { EMAIL_REGEX, Gender, UserAttributes, UserModel } from './user.interface';
 import UserScope from './user.scope';
 import bcrypt from 'bcrypt';
 import Campus from './../../campus/model/campus.model';
@@ -16,6 +16,7 @@ import Contract from '../../contracts/model/contract.model';
 import Teacher from '../../teachers/model/teacher.model';
 
 import config from '../../../config/env.config';
+import moment from 'moment';
 const { db_schema, permissionLevel } = config;
 
 @S.Scopes(UserScope)
@@ -98,6 +99,20 @@ export default class User extends S.Model implements UserModel {
 	@S.Default(false)
 	@S.Column(S.DataType.BOOLEAN)
 	public banned!: boolean;
+
+	@S.AllowNull(false)
+	@S.Default('')
+	@S.Column(S.DataType.STRING(255))
+	public address!: string;
+	
+	@S.AllowNull(true)
+	@S.Column(S.DataType.STRING(1))
+	public gender!: Gender;
+	
+	@S.AllowNull(false)
+	@S.Default(moment().get('year'))
+	@S.Column(S.DataType.INTEGER)
+	public promotion!: number;
   
 	@S.AllowNull(false)
 	@S.Default(0)

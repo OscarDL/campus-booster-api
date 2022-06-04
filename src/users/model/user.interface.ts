@@ -22,6 +22,9 @@ export interface UserAttributes {
 	personalEmail?: string;
 	active?: boolean;
 	banned?: boolean;
+	address?: string;
+	gender?: Gender;
+	promotion?: number;
   credits?: number | null;
 	role?: typeof permissionLevel[keyof typeof permissionLevel];
 	readonly created_at?: Date;
@@ -43,6 +46,8 @@ export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {
 export interface UserModel extends Model<UserAttributes, UserCreationAttributes>, Partial<UserAttributes> {
   dataValues?: UserAttributes;
 };
+export const genders = <const> [ "M", "F" ];
+export type Gender = typeof genders[number];
 export type UserScopesAttributes = keyof ReturnType<typeof UserScope>;
 export const UserProtectedFields = [ "azureId", "personalEmail", "avatarKey", "avatarBase64", "active", "banned" ];
 export const UserPublicFields : (keyof UserAttributes)[] = [ "id", "firstName", "lastName", "email", "role" ];
