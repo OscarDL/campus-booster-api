@@ -2,23 +2,23 @@
 // DOC : https://www.npmjs.com/package/sequelize-typescript
 // Generate by Ulysse Dupont
 import * as S from 'sequelize-typescript';
-import { AttendanceModel } from './attendance.interface';
-import AttendanceScope from './attendance.scope';
+import { AbsenceModel } from './absence.interface';
+import AbsenceScope from './absence.scope';
 import Planning from './../../plannings/model/planning.model';
 import User from './../../users/model/user.model';
 import s3 from '../../../services/aws/s3';
-import { AttendanceAttributes } from './attendance.interface';
+import { AbsenceAttributes } from './absence.interface';
 
 import config from '../../../config/env.config';
 const { db_schema } = config;
 
-@S.Scopes(AttendanceScope)
+@S.Scopes(AbsenceScope)
 @S.Table({
   timestamps: true,
   underscored: true,
   schema: db_schema
 })
-export default class Attendance extends S.Model implements AttendanceModel {
+export default class Absence extends S.Model implements AbsenceModel {
   @S.PrimaryKey
 	@S.AutoIncrement
 	@S.Column(S.DataType.INTEGER)
@@ -27,6 +27,11 @@ export default class Attendance extends S.Model implements AttendanceModel {
 	@S.AllowNull(true)
 	@S.Column(S.DataType.TEXT)
 	public reason!: string;
+
+	@S.AllowNull(true)
+	@S.Default(false)
+	@S.Column(S.DataType.BOOLEAN)
+	public late!: boolean;
 
 	@S.AllowNull(true)
 	@S.Default(false)
@@ -44,21 +49,21 @@ export default class Attendance extends S.Model implements AttendanceModel {
 	})
 	public fileKeys!: string[];
 
-	public dataValues!: AttendanceAttributes;
+	public dataValues!: AbsenceAttributes;
 
 	@S.AfterCreate
 	@S.AfterFind
 	@S.AfterUpdate
 	@S.AfterUpsert
-	static async loadS3Files(instance: (Attendance | Attendance[])): Promise<void> {
+	static async loadS3Files(instance: (Absence | Absence[])): Promise<void> {
 		try {
 			if(Array.isArray(instance)) {
 				for (let i = 0; i < instance.length; i++) {
-					const attendance = instance[i];
-					attendance.dataValues.fileBase64 = await Attendance.loadInstanceFiles(attendance);
+					const absence = instance[i];
+					absence.dataValues.fileBase64 = await Absence.loadInstanceFiles(absence);
 				}
 			} else if(instance) {
-				instance.dataValues.fileBase64 = await Attendance.loadInstanceFiles(instance);
+				instance.dataValues.fileBase64 = await Absence.loadInstanceFiles(instance);
 			}
 		} catch (err) {
 			if(err instanceof Error) {
@@ -67,7 +72,7 @@ export default class Attendance extends S.Model implements AttendanceModel {
 		}
 	}
 
-	static async loadInstanceFiles(instance: Attendance): Promise<string[]> {
+	static async loadInstanceFiles(instance: Absence): Promise<string[]> {
 		const files = new Array();
 		for (let i = 0; i < instance.fileKeys.length; i++) {
 			const fileKey = instance.fileKeys[i];

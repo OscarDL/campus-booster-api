@@ -7,7 +7,7 @@ import UserScope from './user.scope';
 import bcrypt from 'bcrypt';
 import Campus from './../../campus/model/campus.model';
 import Feedback from './../../feedbacks/model/feedback.model';
-import Attendance from './../../attendances/model/attendance.model';
+import Absence from './../../absences/model/absence.model';
 import Grade from './../../grades/model/grade.model';
 import Balance from './../../balances/model/balance.model';
 import UserHasClassroom from './../../user_has_classrooms/model/user-hasclassroom.model';
@@ -98,8 +98,9 @@ export default class User extends S.Model implements UserModel {
 	@S.Default(false)
 	@S.Column(S.DataType.BOOLEAN)
 	public banned!: boolean;
-
-	@S.AllowNull(true)
+  
+	@S.AllowNull(false)
+	@S.Default(0)
 	@S.Column(S.DataType.INTEGER)
 	public credits!: number;
 
@@ -150,6 +151,7 @@ export default class User extends S.Model implements UserModel {
 	}
 
 	@S.ForeignKey(() => Campus)
+  @S.AllowNull(true)
 	@S.Column({
     field: 'campus_id',
   })
@@ -180,13 +182,13 @@ export default class User extends S.Model implements UserModel {
 	})
 	public Feedbacks!: Feedback[];
 
-	@S.HasMany(() => Attendance, { 
+	@S.HasMany(() => Absence, { 
 		foreignKey: {
       field: 'user_id'
     },
 		onDelete: 'CASCADE'
 	})
-	public Attendances !: Attendance[];
+	public Absences !: Absence[];
 
 	@S.HasMany(() => Grade, { 
 		foreignKey: {

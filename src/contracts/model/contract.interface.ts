@@ -6,9 +6,9 @@ export interface ContractAttributes {
   readonly id: number;
 	startDate: Date;
 	endDate: Date;
-	mission?: string;
-	status: STATUS;
-	url?: string;
+	mission: string;
+	type: TYPE;
+	url: string;
 	email: string;
 	phone: string;
 	address: string;
@@ -26,4 +26,4 @@ export interface ContractModel extends Model<ContractAttributes, ContractCreatio
 };
 export type ContractScopesAttributes = keyof ReturnType<typeof ContractScope>;
 export const ContractProtectedFields = [];
-export type STATUS = "professional" | "apprenticeship" | "full-time-internship" | "part-time-internship";
+export type TYPE = "PROFESSIONAL_CONTRACT" | "APPRENTICE_CONTRACT" | "FULL_TIME_INTERNSHIP" | "PART_TIME_INTERNSHIP";

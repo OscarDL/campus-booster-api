@@ -5,9 +5,16 @@ import config from '../../../config/env.config';
 import boom from '@hapi/boom';
 import { ExpressErrorHandler } from '../../../services/express';
 import AzureService from '../../../services/azure/lib/azure.service';
+const {
+  permissionLevel: roles
+} = config;
 
 const Azure = new AzureService();
 Azure.OAuth();
+
+const allowedUsersWithoutCampus = (role: string) => (
+  ![roles.Student, roles.Assistant, roles.CampusManager].includes(role)
+);
 
 export async function login(req: Req, res: Res, next: Next): Promise<Resp> {
   try {
@@ -15,6 +22,9 @@ export async function login(req: Req, res: Res, next: Next): Promise<Resp> {
         id: req.user?.id
       };
       if (!req.user || req.user.banned) return next(boom.forbidden('banned'));
+      if (!allowedUsersWithoutCampus(req.user.role ?? '') && !req.user.campusId) {
+        return next(boom.forbidden('no_campus_assigned'));
+      }
 
       const refreshId = req.user?.id + config.jwtSecret;
       const salt = crypto.randomBytes(16).toString('base64'); 

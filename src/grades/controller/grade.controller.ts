@@ -1,5 +1,7 @@
 import { Req, Res, Next, Resp } from '../../../types/express';
 import * as GradeService from '../service/grade.service';
+import * as TeacherService from '../../teachers/service/teacher.service';
+import { ADMIN_ROLES } from '../../authorization/middlewares/auth.permission.middleware';
 import boom from '@hapi/boom';
 
 export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
@@ -89,8 +91,49 @@ export async function getByTeacher(req: Req, res: Res, next: Next): Promise<Resp
     }
 }
 
+export async function getByTeacherFromUserId(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        const teacher = await TeacherService.findOne({
+            where: {
+                userId: req.params.user_id
+            }
+        });
+
+        return res.status(200).json(
+            await GradeService.findAll(
+                {
+                    limit: req.query?.limit,
+                    offset: req.query?.offset,
+                    where: {
+                        teacherId: teacher?.id ?? 0
+                    }
+                } as any,
+                [
+                    "withCourse",
+                    "withUser",
+                    "withTeacher"
+                ]
+            )
+        );
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
 export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        if (!ADMIN_ROLES.includes(req.user?.role ?? '')) {
+            const teacher = await TeacherService.findOne({
+                where: {
+                    userId: req.user?.id
+                }
+            });
+            if (!teacher || teacher.id !== req.body.teacherId) {
+                return next(boom.unauthorized("unauthorized"));
+            }
+        }
+
         const { id } = await GradeService.create(
             {
                 average: req.body.average,
@@ -144,6 +187,11 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
                 "withTeacher"
             ]
         );
+
+        // Do not allow grade update if the user is not the grade teacher or an admin 
+        if (!grade || (!ADMIN_ROLES.includes(req.user?.role ?? '') && grade.Teacher?.userId !== req.user?.id)) {
+            return next(boom.unauthorized("unauthorized"));
+        }
 
         await GradeService.update(req.params.grade_id, req.body);
         const course = grade?.ClassroomHasCourse?.Course;

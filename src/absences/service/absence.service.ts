@@ -1,12 +1,12 @@
 import { FindOptions, UpdateOptions } from 'sequelize';
 import { 
-    AttendanceModel, 
-    AttendanceAttributes, 
-    AttendanceScopesAttributes,
-    AttendanceCreationAttributes
-} from '../model/attendance.interface';
+    AbsenceModel, 
+    AbsenceAttributes, 
+    AbsenceScopesAttributes,
+    AbsenceCreationAttributes
+} from '../model/absence.interface';
 import { models } from '../../../config/models.config'; 
-const { Attendance } = models;
+const { Absence } = models;
 /**
 * Find all rows with specified options
 *
@@ -30,10 +30,10 @@ const { Attendance } = models;
 * @return {Promise} a promise of the rows or empty array
 */
 export function findAll(
-    options?: FindOptions<AttendanceAttributes> | null,
-    scope: (AttendanceScopesAttributes | AttendanceScopesAttributes[]) = "defaultScope"
-): Promise<AttendanceModel[]> {
-    return Attendance.scope(scope).findAll(options!);
+    options?: FindOptions<AbsenceAttributes> | null,
+    scope: (AbsenceScopesAttributes | AbsenceScopesAttributes[]) = "defaultScope"
+): Promise<AbsenceModel[]> {
+    return Absence.scope(scope).findAll(options!);
 }
 /**
 * Search for a single instance. Returns the first instance found, or null if none can be found.
@@ -58,10 +58,10 @@ export function findAll(
 * @return {Promise} a promise of a row or NULL
 */
 export function findOne(
-    options?: FindOptions<AttendanceAttributes> | null,
-    scope: (AttendanceScopesAttributes | AttendanceScopesAttributes[]) = "defaultScope"
-): Promise<AttendanceModel | null> {
-    return Attendance.scope(scope).findOne(options!);
+    options?: FindOptions<AbsenceAttributes> | null,
+    scope: (AbsenceScopesAttributes | AbsenceScopesAttributes[]) = "defaultScope"
+): Promise<AbsenceModel | null> {
+    return Absence.scope(scope).findOne(options!);
 }
 /**
 * Find a row by his primary key & more find options
@@ -96,10 +96,10 @@ export function findOne(
 */
 export function findById(
     id: number | any, 
-    options?: FindOptions<AttendanceAttributes> | null,
-    scope: (AttendanceScopesAttributes | AttendanceScopesAttributes[]) = "defaultScope"
-): Promise<AttendanceModel | null> {
-    return Attendance.scope(scope).findByPk(id, options!);
+    options?: FindOptions<AbsenceAttributes> | null,
+    scope: (AbsenceScopesAttributes | AbsenceScopesAttributes[]) = "defaultScope"
+): Promise<AbsenceModel | null> {
+    return Absence.scope(scope).findByPk(id, options!);
 }
 /**
 * Create a new row in bdd with specified attributes
@@ -119,10 +119,10 @@ export function findById(
 * @return {Promise} a promise of the created row
 */
 export function create(
-    data: AttendanceCreationAttributes,
-    scope: (AttendanceScopesAttributes | AttendanceScopesAttributes[]) = "defaultScope"
-): Promise<AttendanceModel> {
-    return Attendance.scope(scope).create(data);
+    data: AbsenceCreationAttributes,
+    scope: (AbsenceScopesAttributes | AbsenceScopesAttributes[]) = "defaultScope"
+): Promise<AbsenceModel> {
+    return Absence.scope(scope).create(data);
 }
 /**
 * Create multiple rows in bdd with array of specified attributes
@@ -151,10 +151,10 @@ export function create(
 * @return {Promise} a promise of the created rows
 */
 export function createMany(
-    data: AttendanceCreationAttributes[],
-    scope: (AttendanceScopesAttributes | AttendanceScopesAttributes[]) = "defaultScope"
-): Promise<AttendanceModel[]> {
-    return Attendance.scope(scope).bulkCreate(data);
+    data: AbsenceCreationAttributes[],
+    scope: (AbsenceScopesAttributes | AbsenceScopesAttributes[]) = "defaultScope"
+): Promise<AbsenceModel[]> {
+    return Absence.scope(scope).bulkCreate(data);
 }
 /**
 * Update attributes of a row by his primary key
@@ -184,16 +184,16 @@ export function createMany(
 */
 export function update(
     id: number | any, 
-    data: Partial<AttendanceAttributes>,
-    scope: (AttendanceScopesAttributes | AttendanceScopesAttributes[]) = "defaultScope"
-): Promise<AttendanceModel> {
+    data: Partial<AbsenceAttributes>,
+    scope: (AbsenceScopesAttributes | AbsenceScopesAttributes[]) = "defaultScope"
+): Promise<AbsenceModel> {
     return new Promise((resolve, reject) => {
-        Attendance.scope(scope).findByPk(id)
-        .then((attendance) => {
-            if (!attendance) {
+        Absence.scope(scope).findByPk(id)
+        .then((absence) => {
+            if (!absence) {
                 reject("not found");
             } else {
-                attendance
+                absence
                 .update(data)
                 .then(resolve)
                 .catch(reject);
@@ -235,11 +235,11 @@ export function update(
 * affected rows (only supported in postgres and mssql with `options.returning` true).
 */
 export function updateMany(
-    options: UpdateOptions<AttendanceAttributes>, 
-    data: Partial<AttendanceAttributes>,
-    scope: (AttendanceScopesAttributes | AttendanceScopesAttributes[]) = "defaultScope"
+    options: UpdateOptions<AbsenceAttributes>, 
+    data: Partial<AbsenceAttributes>,
+    scope: (AbsenceScopesAttributes | AbsenceScopesAttributes[]) = "defaultScope"
 ): Promise<[ affectedCount: number ]> {
-    return Attendance.scope(scope).update(data, options);
+    return Absence.scope(scope).update(data, options);
 }
 /**
 * Delete multiple instances, or set their deletedAt timestamp to the current time if paranoid is enabled.
@@ -261,9 +261,9 @@ export function updateMany(
 * @return {Promise} a promise of the number of destroyed rows
 */
 export function remove(
-    options?: FindOptions<AttendanceAttributes> | null
+    options?: FindOptions<AbsenceAttributes> | null
 ): Promise<number> {
-    return Attendance.destroy(options!);
+    return Absence.destroy(options!);
 }
 /**
 * Count the number of records matching the provided where clause.
@@ -288,7 +288,7 @@ export function remove(
 * @return {Promise} a promise of the number of counted rows
 */
 export function count(
-    options?: FindOptions<AttendanceAttributes> | null
+    options?: FindOptions<AbsenceAttributes> | null
 ): Promise<number> {
-    return Attendance.count(options!);
+    return Absence.count(options!);
 }

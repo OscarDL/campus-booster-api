@@ -52,10 +52,9 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
 
 export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        const contract = await ContractService.create(req.body as any);
         return res.status(201).json(
-            await ContractService.create(
-                req.body as any
-            )
+            await ContractService.findById(contract.id)
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);
@@ -65,11 +64,9 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
 
 export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
+        const contract = await ContractService.update(req.params.contract_id, req.body);
         return res.status(203).json(
-            await ContractService.update(
-                req.params.contract_id, 
-                req.body
-            )
+            await ContractService.findById(contract.id)
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);
