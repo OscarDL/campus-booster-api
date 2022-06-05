@@ -72,7 +72,6 @@ export default (app: App): void => {
         // Upload necessary data in JSON format
         RequestMiddleware.bodyParametersNeeded('data', 'string'),
         AbsenceMiddleware.formatBodyParameters,
-        AbsenceMiddleware.forbiddenStudentChanges,
         PlanningMiddleware.planningExistAsBody('planningId'),
         AbsenceController.update
     ]);

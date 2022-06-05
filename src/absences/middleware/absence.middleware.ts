@@ -74,32 +74,6 @@ export async function studentIsUser(req: Req, res: Res, next: Next): Promise<Res
     } 
 }
 
-export async function forbiddenStudentChanges(req: Req, res: Res, next: Next): Promise<Resp> {
-    try {
-        const absence = await findById(req.params.absence_id); 
-
-        if (req.user?.role === Student) {
-            if (req.body.late && absence?.late !== req.body.late) {
-                return next(boom.forbidden('absence_type_update_forbidden'));
-            }
-            if (req.body.userId && absence?.userId !== req.body.userId) {
-                return next(boom.forbidden('absence_user_update_forbidden'));
-            }
-            if (req.body.planningId && absence?.planningId !== req.body.planningId) {
-                return next(boom.forbidden('absence_date_update_forbidden'));
-            }
-            if (req.body.period && absence?.period !== req.body.period) {
-                return next(boom.forbidden('absence_period_update_forbidden'));
-            }
-        }
-
-        next();
-    } catch (err: any) {
-        console.log(`${err}`.red.bold);
-        return next(err.isBoom ? err : boom.internal(err.name));
-    } 
-}
-
 export async function formatBodyParameters(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         const data = JSON.parse(req.body.data);
