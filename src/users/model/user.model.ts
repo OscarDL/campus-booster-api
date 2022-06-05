@@ -16,7 +16,6 @@ import Contract from '../../contracts/model/contract.model';
 import Teacher from '../../teachers/model/teacher.model';
 
 import config from '../../../config/env.config';
-import moment from 'moment';
 const { db_schema, permissionLevel } = config;
 
 @S.Scopes(UserScope)
@@ -109,8 +108,7 @@ export default class User extends S.Model implements UserModel {
 	@S.Column(S.DataType.STRING(1))
 	public gender!: Gender;
 	
-	@S.AllowNull(false)
-	@S.Default(moment().get('year'))
+	@S.AllowNull(true)
 	@S.Column(S.DataType.INTEGER)
 	public promotion!: number;
   
