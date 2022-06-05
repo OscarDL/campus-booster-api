@@ -6,7 +6,7 @@ export interface AbsenceAttributes {
   readonly id: number;
 	reason?: string;
 	late?: boolean;
-	missing?: boolean;
+	period?: PERIOD;
 	readonly created_at?: Date;
 	readonly updated_at?: Date;
 	planningId?: number;
@@ -22,3 +22,4 @@ export interface AbsenceModel extends Model<AbsenceAttributes, AbsenceCreationAt
 };
 export type AbsenceScopesAttributes = keyof ReturnType<typeof AbsenceScope>;
 export const AbsenceProtectedFields = [];
+export type PERIOD = "EARLY_MORNING" | "LATE_MORNING" | "EARLY_AFTERNOON" | "LATE_AFTERNOON" | "MORNING" | "AFTERNOON" | "FULL_DAY";

@@ -1,6 +1,10 @@
 import { Req, Res, Next, Resp, AsyncFn } from '../../../types/express';
 import boom from '@hapi/boom';
 import { findById, findOne } from '../service/absence.service';
+import config from '../../../config/env.config';
+const {
+  permissionLevel: { Student }
+} = config;
 
 export function absenceExistAsQuery(name: string): AsyncFn {
     return async(req: Req, res: Res, next: Next): Promise<Resp> => {
@@ -61,6 +65,41 @@ export async function isMyAbsenceOrIamAdmin(req: Req, res: Res, next: Next): Pro
     } 
 }
 
+export async function studentIsUser(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        return req.user?.id === req.body.userId ? next() : next(boom.badRequest('absence_user_create_different'));
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    } 
+}
+
+export async function forbiddenStudentChanges(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        const absence = await findById(req.params.absence_id); 
+
+        if (req.user?.role === Student) {
+            if (req.body.late && absence?.late !== req.body.late) {
+                return next(boom.forbidden('absence_type_update_forbidden'));
+            }
+            if (req.body.userId && absence?.userId !== req.body.userId) {
+                return next(boom.forbidden('absence_user_update_forbidden'));
+            }
+            if (req.body.planningId && absence?.planningId !== req.body.planningId) {
+                return next(boom.forbidden('absence_date_update_forbidden'));
+            }
+            if (req.body.period && absence?.period !== req.body.period) {
+                return next(boom.forbidden('absence_period_update_forbidden'));
+            }
+        }
+
+        next();
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    } 
+}
+
 export async function formatBodyParameters(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         const data = JSON.parse(req.body.data);
@@ -79,16 +118,16 @@ export async function formatBodyParameters(req: Req, res: Res, next: Next): Prom
         if (typeof data.late !== 'boolean') {
           return next(next(boom.badRequest(`body_format`, [ 'late', 'boolean' ])));
         }
-        if (typeof data.missing !== 'boolean') {
-          return next(next(boom.badRequest(`body_format`, [ 'missing', 'boolean' ])));
-        }
         req.body.late = data.late;
-        req.body.missing = data.missing;
 
         // strings
+        if (typeof data.period !== 'string') {
+          return next(next(boom.badRequest(`body_format`, [ 'period', 'string' ])));
+        }
         if (typeof data.reason !== 'string') {
           return next(next(boom.badRequest(`body_format`, [ 'reason', 'string' ])));
         }
+        req.body.period = data.period;
         req.body.reason = data.reason;
 
         req.body.fileKeys = data.fileKeys ?? [];
