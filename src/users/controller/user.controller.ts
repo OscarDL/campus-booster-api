@@ -153,7 +153,7 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
             )) {
                 return next(boom.badRequest('grant_error'));
             }
-            sendPasswordEmail(req, next, email, password);
+            if (req.body.personalEmail) sendPasswordEmail(req, next, email, password);
         }
         if (azureUser) {
             const user = await UserService.create(
@@ -268,6 +268,8 @@ export async function resetUserPassword(req: Req, res: Res, next: Next): Promise
           }
       });
 
+      req.body.lastName = user.lastName;
+      req.body.firstName = user.firstName;
       const sentEmail = await sendPasswordEmail(req, next, user.email!, newPassword);
 
       return res.status(203).json(sentEmail);
