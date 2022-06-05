@@ -7,9 +7,11 @@ import MailerService from '../../../services/mailing';
 import * as UserHasClassroomService from '../../user_has_classrooms/service/user-hasclassroom.service';
 import config from '../../../config/env.config';
 import generatePassword from 'generate-password';
+import moment from 'moment';
 
 const {
-    app_domain
+    app_domain,
+    permissionLevel: { Student }
 } = config;
 const Mailer = new MailerService();
 const Azure = new AzureService();
@@ -168,7 +170,7 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                     banned: false,
                     credits: 0,
                     gender: req.body.gender,
-                    promotion: req.body.promotion,
+                    promotion: req.body.role === Student ? moment().get('year') : undefined,
                     address: req.body.address,
                     personalEmail: req.body.personalEmail
                 }
@@ -234,6 +236,9 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
         if (user && user.credits !== Number(user.credits)) {
             // if user credits are null, it should be turned into an integer (0)
             await UserService.update(user?.id, {credits: 0}, ["withClassrooms", "defaultScope"]);
+        }
+        if (user && user.role === Student && !user.promotion) {
+          req.body.promotion = moment().get('year');
         }
 
         await UserService.update(user?.id, req.body, ["withClassrooms", "defaultScope"]);

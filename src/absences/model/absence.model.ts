@@ -2,7 +2,7 @@
 // DOC : https://www.npmjs.com/package/sequelize-typescript
 // Generate by Ulysse Dupont
 import * as S from 'sequelize-typescript';
-import { AbsenceModel } from './absence.interface';
+import { AbsenceModel, PERIOD } from './absence.interface';
 import AbsenceScope from './absence.scope';
 import Planning from './../../plannings/model/planning.model';
 import User from './../../users/model/user.model';
@@ -33,10 +33,10 @@ export default class Absence extends S.Model implements AbsenceModel {
 	@S.Column(S.DataType.BOOLEAN)
 	public late!: boolean;
 
-	@S.AllowNull(true)
-	@S.Default(false)
-	@S.Column(S.DataType.BOOLEAN)
-	public missing!: boolean;
+	@S.AllowNull(false)
+  @S.Default('FULL_DAY')
+	@S.Column(S.DataType.STRING(255))
+	public period!: PERIOD;
 
 	@S.AllowNull(true)
 	@S.Default([])
