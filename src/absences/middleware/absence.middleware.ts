@@ -1,6 +1,10 @@
 import { Req, Res, Next, Resp, AsyncFn } from '../../../types/express';
 import boom from '@hapi/boom';
 import { findById, findOne } from '../service/absence.service';
+import config from '../../../config/env.config';
+const {
+  permissionLevel: { Student }
+} = config;
 
 export function absenceExistAsQuery(name: string): AsyncFn {
     return async(req: Req, res: Res, next: Next): Promise<Resp> => {
@@ -61,6 +65,15 @@ export async function isMyAbsenceOrIamAdmin(req: Req, res: Res, next: Next): Pro
     } 
 }
 
+export async function studentIsUser(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        return req.user?.id === req.body.userId ? next() : next(boom.badRequest('absence_user_create_different'));
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    } 
+}
+
 export async function formatBodyParameters(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         const data = JSON.parse(req.body.data);
@@ -79,16 +92,16 @@ export async function formatBodyParameters(req: Req, res: Res, next: Next): Prom
         if (typeof data.late !== 'boolean') {
           return next(next(boom.badRequest(`body_format`, [ 'late', 'boolean' ])));
         }
-        if (typeof data.missing !== 'boolean') {
-          return next(next(boom.badRequest(`body_format`, [ 'missing', 'boolean' ])));
-        }
         req.body.late = data.late;
-        req.body.missing = data.missing;
 
         // strings
+        if (typeof data.period !== 'string') {
+          return next(next(boom.badRequest(`body_format`, [ 'period', 'string' ])));
+        }
         if (typeof data.reason !== 'string') {
           return next(next(boom.badRequest(`body_format`, [ 'reason', 'string' ])));
         }
+        req.body.period = data.period;
         req.body.reason = data.reason;
 
         req.body.fileKeys = data.fileKeys ?? [];

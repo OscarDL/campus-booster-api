@@ -32,7 +32,7 @@ import { exec } from "node:child_process";
 let server;
 theme(config.colors);
 const app = express();
-const clientPath = path.join(__dirname, path.sep, '..', path.sep, 'client', 'build');
+// const clientPath = path.join(__dirname, path.sep, '..', path.sep, 'client', 'build');
 
 async function execShell(cmd: string): Promise<string> {
     return new Promise((resolve, reject) => exec(cmd, (err, out) => err ? reject(err) : resolve(out)));
@@ -77,7 +77,7 @@ if (process.env.NODE_ENV !== 'production') {
         devHttpsServer(key, cert, port);
     }
 } else {
-    app.use(express.static(clientPath));
+    // app.use(express.static(clientPath));
     server = http.createServer(app);
 }
 
@@ -94,7 +94,7 @@ const corsOpts: cors.CorsOptions = {
     origin: process.env.NODE_ENV === 'development' ? [
         'http://localhost:3000', 'https://localhost:3000'
     ] : [
-        // Add production domain when ready
+        process.env.CLIENT_URL ?? ''
     ]
 };
 
@@ -181,9 +181,9 @@ routeConfig(app);
 app.use(ExpressMiddleware.NotFound());
 app.use(ExpressMiddleware.ErrorHandler());
 
-if (process.env.NODE_ENV === 'production') {
-  app.get('*', (_, res) => res.sendFile(path.join(clientPath, 'index.html')));
-}
+// if (process.env.NODE_ENV === 'production') {
+//   app.get('*', (_, res) => res.sendFile(path.join(clientPath, 'index.html')));
+// }
 
 function onError(error: any, port: number): never {
     if (error.syscall !== 'listen') {

@@ -42,7 +42,7 @@ export async function login(req: Req, res: Res, next: Next): Promise<Resp> {
       );
 
       return res.cookie('accessToken', accessToken, {
-          sameSite: 'strict',
+          sameSite: process.env.NODE_ENV === 'development',
           httpOnly: true,
           secure: true
         }).status(200).json(
@@ -74,7 +74,7 @@ export async function refreshToken(req: Req, res: Res, next: Next): Promise<Resp
         config.jwtOptions
       ),
       {
-        sameSite: 'strict',
+        sameSite:  process.env.NODE_ENV === 'development',
         httpOnly: true,
         secure: true
       }

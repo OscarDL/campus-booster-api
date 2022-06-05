@@ -8,7 +8,10 @@ export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
             await TeacherService.findById(
                 req.params.teacher_id,
                 {},
-                "withClassroom"
+                [
+                    "defaultScope",
+                    "withClassroom"
+                ]
             )
         );
     } catch (err: any) {
@@ -24,7 +27,10 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
                 {
                     limit: req.query?.limit
                 },
-                "withClassroom"
+                [
+                    "defaultScope",
+                    "withClassroom"
+                ]
             )
         );
     } catch (err: any) {

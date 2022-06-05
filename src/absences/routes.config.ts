@@ -54,9 +54,10 @@ export default (app: App): void => {
         RequestMiddleware.bodyParametersNeeded('data', 'string'),
         AbsenceMiddleware.formatBodyParameters,
         // Form-data doesn't support uploading types other than Blob or string, so we have to parse them before
-        RequestMiddleware.bodyParametersNeeded(['late', 'missing'], 'boolean'),
+        RequestMiddleware.bodyParametersNeeded(['late'], 'boolean'),
+        RequestMiddleware.bodyParametersNeeded(['reason', 'period'], 'string'),
         RequestMiddleware.bodyParametersNeeded(['userId', 'planningId'], 'integer'),
-        RequestMiddleware.bodyParametersNeeded(['reason'], 'string'),
+        AbsenceMiddleware.studentIsUser,
         PlanningMiddleware.planningExistAsBody('planningId'),
         UserMiddleware.userExistAsBody('userId'),
         AbsenceController.create
@@ -64,7 +65,7 @@ export default (app: App): void => {
     // UPDATE ABSENCE
     app.patch(`${routePrefix}/:absence_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES.concat(Student)),
+        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         RequestMiddleware.paramParametersNeeded('absence_id', 'integer'),
         AbsenceMiddleware.absenceExistAsParam("absence_id"),
         uploadMany,
@@ -77,7 +78,7 @@ export default (app: App): void => {
     // DELETE ABSENCE
     app.delete(`${routePrefix}/:absence_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES.concat(Student)), 
+        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
         RequestMiddleware.paramParametersNeeded('absence_id', 'integer'),
         AbsenceMiddleware.absenceExistAsParam("absence_id"),
         AbsenceController.remove

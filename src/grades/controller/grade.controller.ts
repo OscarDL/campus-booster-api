@@ -32,8 +32,8 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
                     offset: req.query?.offset
                 },
                 [
-                    "withUser",
                     "withCourse",
+                    "withUser",
                     "withTeacher"
                 ]
             )
@@ -57,6 +57,7 @@ export async function getByUser(req: Req, res: Res, next: Next): Promise<Resp> {
                 },
                 [
                     "withCourse",
+                    "withUser",
                     "withTeacher"
                 ]
             )

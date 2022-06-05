@@ -5,8 +5,9 @@
   "scripts": {
     "start": "pnpm build && node ./build/app.js",
     "start:dev": "nodemon",
+    "heroku-postbuild": "npm run migration",
     "build": "rimraf ./build && tsc && ts-node ./utils/uglify.ts",
-    "migration": "npm i && npm install -g pnpm && rimraf ./node_modules && pnpm import && pnpm install",
+    "migration": "npm i && npm install -g pnpm && npx rimraf ./node_modules && pnpm import && pnpm install",
     "test": "ts-mocha ./tests/*.test.ts --timeout 10000"
   },
   "author": "Ulysse Dupont",

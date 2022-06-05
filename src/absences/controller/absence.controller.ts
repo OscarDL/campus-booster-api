@@ -28,11 +28,7 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
                 {
                     limit: req.query?.limit,
                     offset: req.query?.offset
-                },
-                [
-                    "withPlanning",
-                    "withUser"
-                ]
+                }
             )
         );
     } catch (err: any) {
@@ -53,7 +49,8 @@ export async function getByUser(req: Req, res: Res, next: Next): Promise<Resp> {
                     }
                 },
                 [
-                    "withPlanning"
+                    "withPlanning",
+                    "withUser"
                 ]
             )
         );
@@ -68,10 +65,6 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
         if(req.files && req.files.length > 0) {
             req.body.fileKeys = Object.entries(req.files).map(([_, value]) => (value as any).key);
             console.log(req.body.fileKeys, req.files);
-        }
-
-        if(req.body.late === req.body.missing) {
-            return next(boom.badRequest('absence_missing_late_equal'));
         }
         
         const absence = await AbsenceService.create(
@@ -93,7 +86,7 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
 
 export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
-        let absence = await AbsenceService.findById(req.params.absence_id); 
+        let absence = await AbsenceService.findById(req.params.absence_id);
         const rmFileKeys = absence?.fileKeys?.filter(f => !req.body.fileKeys.includes(f)) ?? [];
         for (let i = 0; i < rmFileKeys.length; i++) {
             const fileKey = rmFileKeys[i];
@@ -101,10 +94,6 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
         }
         if(req.files) {
             req.body.fileKeys.concat(Object.entries(req.files).map(([_, value]) => (value as any).key));
-        }
-
-        if(req.body.late === req.body.missing) {
-            return next(boom.badRequest('absence_missing_late_equal'));
         }
 
         absence = await AbsenceService.update(req.params.absence_id, req.body);
