@@ -42,7 +42,9 @@ export default (app: App): void => {
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
-		RequestMiddleware.bodyParametersNeeded(['date'], 'string'),
+		RequestMiddleware.bodyParametersNeeded(['date', 'type', 'period'], 'string'),
+		RequestMiddleware.bodyParametersNeeded(['classroomHasCourseId'], 'integer'),
+		RequestMiddleware.bodyParametersNeeded(['remote', 'cancelled'], 'boolean'),
 		PlanningController.create
     ]);
     // UPDATE PLANNING
