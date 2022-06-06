@@ -4,7 +4,10 @@ import { ClassroomHasCourseModel } from './../../classroom_has_courses/model/cla
 export interface PlanningAttributes {
   readonly id: number;
 	date: string;
-	cancelled?: string;
+	type: TYPE;
+	period: PERIOD;
+	remote: boolean;
+	cancelled: boolean;
 	readonly created_at?: Date;
 	readonly updated_at?: Date;
 	classroomHasCourseId?: number;
@@ -16,3 +19,5 @@ export interface PlanningModel extends Model<PlanningAttributes, PlanningCreatio
 };
 export type PlanningScopesAttributes = keyof ReturnType<typeof PlanningScope>;
 export const PlanningProtectedFields = [];
+export type TYPE = 'COURSE' | 'PRACTICE_EXAM' | 'ORAL_EXAM';
+export type PERIOD = 'FULL_DAY' | 'MORNING' | 'AFTERNOON';

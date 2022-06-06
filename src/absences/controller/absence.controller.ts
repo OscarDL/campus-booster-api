@@ -28,7 +28,11 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
                 {
                     limit: req.query?.limit,
                     offset: req.query?.offset
-                }
+                },
+                [
+                    "withPlanning",
+                    "withUser"
+                ]
             )
         );
     } catch (err: any) {
@@ -76,7 +80,14 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
             )
         );
         return res.status(203).json(
-            await AbsenceService.findById(absence.id, {}, ["withPlanning", "withUser"])
+            await AbsenceService.findById(
+                absence.id,
+                {},
+                [
+                    "withPlanning",
+                    "withUser"
+                ]
+            )
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);
@@ -98,7 +109,14 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
 
         absence = await AbsenceService.update(req.params.absence_id, req.body);
         return res.status(203).json(
-            await AbsenceService.findById(absence.id, {}, ["withPlanning", "withUser"])
+            await AbsenceService.findById(
+                absence.id,
+                {},
+                [
+                    "withPlanning",
+                    "withUser"
+                ]
+            )
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);

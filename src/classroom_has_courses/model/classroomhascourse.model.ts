@@ -11,6 +11,7 @@ import Feedback from './../../feedbacks/model/feedback.model';
 import Grade from './../../grades/model/grade.model';
 import Teacher from './../../teachers/model/teacher.model';
 import config from '../../../config/env.config';
+import Project from '../../projects/model/project.model';
 const { db_schema } = config;
 
 @S.Scopes(ClassroomHasCourseScope)
@@ -65,6 +66,14 @@ export default class ClassroomHasCourse extends S.Model implements ClassroomHasC
 		onDelete: 'CASCADE'
 	})
 	public Plannings!: Planning[];
+
+	@S.HasMany(() => Project, { 
+		foreignKey: {
+      field: 'classroom_has_course_id'
+    },
+		onDelete: 'CASCADE'
+	})
+	public Projects!: Project[];
 
 	@S.HasMany(() => Feedback, { 
 		foreignKey: {
