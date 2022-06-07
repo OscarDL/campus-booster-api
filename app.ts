@@ -52,9 +52,9 @@ function devHttpsServer(key: string, cert: string, port: number): void {
     });
     server.on('error', (error) => onError(error, port));
 }
+const port = Number(process.env.PORT);
 
 if (process.env.NODE_ENV !== 'production') {
-    const port = Number(process.env.PORT);
     let key, cert;
     try {
         key = fs.readFileSync('key.pem', 'utf8');
@@ -79,6 +79,17 @@ if (process.env.NODE_ENV !== 'production') {
 } else {
     // app.use(express.static(clientPath));
     server = http.createServer(app);
+    server.listen(port, () => {
+        console.log(`\n⮕  App listening on port ${port}`.info);
+        console.log(`\n⮕  Local server: https://localhost:${port}`.rgb(249, 218, 65));
+    
+        const nets = networkInterfaces();
+        if (nets.en1 && nets.en1.some(ip => ip.family === 'IPv4')) {
+            const IP_ADDRESS = nets.en1.find(ip => ip.family === 'IPv4')?.address;
+            console.log(`\n⮕  Network server: https://${IP_ADDRESS}:${port}`.rgb(249, 174, 65));
+        }
+    });
+    server.on('error', (error) => onError(error, port));
 }
 
 // app security config
