@@ -5,7 +5,8 @@
   "scripts": {
     "start": "npm run build && node ./build/app.js",
     "start:dev": "nodemon",
-    "build": "rimraf ./build && npx tsc && ts-node ./utils/uglify.ts",
+    "tsc": "tsc",
+    "build": "rimraf ./build && npm run tsc && ts-node ./utils/uglify.ts",
     "test": "ts-mocha ./tests/*.test.ts --timeout 10000"
   },
   "author": "Ulysse Dupont",
