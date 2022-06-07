@@ -49,12 +49,18 @@ export default (app: App): void => {
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         singleUpload,
-        RequestMiddleware.bodyParametersNeeded(['firstName', 'lastName', 'birthday'], 'string'),
+        RequestMiddleware.bodyParametersNeeded(['firstName', 'lastName'], 'string'),
         RequestMiddleware.bodyParametersNeeded(['email', 'personalEmail'], 'email'),
         RequestMiddleware.bodyParametersNeeded('role', 'enum', Object.values(roles)),
-        UserMiddleware.emailIsNotTaken,
+        RequestMiddleware.bodyParameterHoped('promotion', 'integer'),
+        RequestMiddleware.bodyParameterHoped('birthday', 'string'),
+        RequestMiddleware.bodyParameterHoped('address', 'string'),
+        RequestMiddleware.bodyParameterHoped('gender', 'enum', [ ...genders ]),
         RequestMiddleware.bodyParameterHoped('campusId', 'integer'),
         CampusMiddleware.campusExistAsBody('campusId'),
+        UserMiddleware.requestedUserHasLowerRole,
+        UserMiddleware.verifyMandatoryFields,
+        UserMiddleware.emailIsNotTaken,
 		    UserController.create
     ]);
     // ADD USER TO CLASSROOMS
@@ -74,9 +80,6 @@ export default (app: App): void => {
         RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam('user_id'),
         RequestMiddleware.bodyParametersNeeded('classrooms', 'array'),
-        RequestMiddleware.bodyParameterHoped('promotion', 'integer'),
-        RequestMiddleware.bodyParameterHoped('address', 'string'),
-        RequestMiddleware.bodyParameterHoped('gender', 'enum', [ ...genders ]),
         ClassroomMiddleware.classroomCanBeUnLinkedFromUser,
         UserMiddleware.campusManagerIsNotTaken,
         UserController.removeFromClassrooms
@@ -85,16 +88,15 @@ export default (app: App): void => {
     app.patch(routePrefix + `/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
+        UserMiddleware.requestedUserHasLowerRole,
 		    RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
         singleUpload,
         RequestMiddleware.bodyParameterHoped('campusId', 'integer'),
         CampusMiddleware.campusExistAsBody('campusId'),
-        RequestMiddleware.bodyParameterHoped('promotion', 'integer'),
-        RequestMiddleware.bodyParameterHoped('address', 'string'),
-        RequestMiddleware.bodyParameterHoped('gender', 'enum', [ ...genders ]),
-        UserMiddleware.emailIsNotTaken,
         UserMiddleware.campusManagerIsNotTaken,
+        UserMiddleware.verifyMandatoryFields,
+        UserMiddleware.emailIsNotTaken,
         UserController.update
     ]);
     // RESET USER PASSWORD
@@ -109,7 +111,6 @@ export default (app: App): void => {
     // ACTIVATE USER ACCOUNT
     app.patch(routePrefix + `/:user_id${regInt}/activate`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed(Object.values(roles)),
         UserMiddleware.userExistAsParam("user_id"),
         UserController.activate
     ]);
@@ -117,14 +118,17 @@ export default (app: App): void => {
     app.delete(routePrefix + `/azure/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
+        UserMiddleware.requestedUserHasLowerRole,
 		    RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
+        UserMiddleware.dontDeleteYourself,
         UserController.removeFromAzure
     ]);
     // DELETE USER
     app.delete(routePrefix + `/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
+        UserMiddleware.requestedUserHasLowerRole,
 		    RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
         UserMiddleware.dontDeleteYourself,

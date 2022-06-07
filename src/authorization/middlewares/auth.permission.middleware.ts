@@ -2,6 +2,8 @@ import { Req, Res, Next, Resp, Fn } from '../../../types/express';
 import config from '../../../config/env.config';
 const { permissionLevel: roles } = config;
 import boom from '@hapi/boom';
+import { findById } from '../../users/service/user.service';
+import { UserModel } from '../../users/model/user.interface';
 
 type Roles = Array<typeof roles[keyof typeof roles]>;
 
@@ -28,6 +30,36 @@ export function rolesAllowed(roles: Roles): Fn {
             return next(boom.unauthorized('invalid_session')); 
         }
     }
+}
+
+export function userHasHigherRole(
+    compareSameRole: boolean,
+    loggedInUserRole: UserModel['role'],
+    requestedUserRole?: UserModel['role']
+): boolean {
+    const {
+        CampusBoosterAdmin: cba, CampusManager: cm, Assistant: a,
+        Company: c, FullProfessor: fp, Professor: p, Student: s
+    } = roles;
+
+    if (!requestedUserRole) requestedUserRole = '';
+
+    switch (loggedInUserRole) {
+        case cba: return false;
+        case cm: return [cba].concat(compareSameRole ? cm : []).includes(requestedUserRole);
+        case a: return [cba, cm].concat(compareSameRole ? a : []).includes(requestedUserRole);
+        // company is not superior to professors
+        case c: return [cba, cm, a].concat(compareSameRole ? c : []).includes(requestedUserRole);
+        case fp: return [cba, cm, a].concat(compareSameRole ? fp : []).includes(requestedUserRole);
+        case p: return [cba, cm, a, fp].concat(compareSameRole ? p : []).includes(requestedUserRole);
+        case s: return [cba, cm, a, c, fp, p].concat(compareSameRole ? s : []).includes(requestedUserRole);
+    };
+
+    return true;
+}
+
+export function userIsDifferentAndHasSameRole(loggedInUser: UserModel, requestedUser: UserModel): boolean {
+    return requestedUser.id !== loggedInUser.id && requestedUser.role === loggedInUser.role;
 }
 
 export function onlySameUserOrAdmin(req: Req, res: Res, next: Next): Resp {
