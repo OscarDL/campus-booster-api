@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "main": "build/app.js",
   "scripts": {
-    "start": "pnpm build && node ./build/app.js",
+    "start": "node ./build/app.js",
     "start:dev": "nodemon",
-    "build": "rimraf ./build && tsc && ts-node ./utils/uglify.ts",
-    "migration": "npm i && npm install -g pnpm && rimraf ./node_modules && pnpm import && pnpm install",
+    "tsc": "tsc",
+    "build": "rimraf ./build && npm run tsc && ts-node ./utils/uglify.ts",
     "test": "ts-mocha ./tests/*.test.ts --timeout 10000"
   },
   "author": "Ulysse Dupont",
@@ -42,9 +42,7 @@
     "https": "^1.0.0",
     "nodemon": "^2.0.13",
     "rimraf": "^3.0.2",
-    "ts-mocha": "^9.0.2",
-    "ts-node": "^10.2.1",
-    "typescript": "^4.4.3"
+    "ts-mocha": "^9.0.2"
   },
   "dependencies": {
     "@azure/msal-node": "^1.7.0",
@@ -57,7 +55,6 @@
     "bcrypt": "^5.0.1",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
-    "cloudinary": "^1.29.1",
     "colors.ts": "^1.0.20",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.5",
@@ -92,6 +89,8 @@
     "tsconfig-paths": "^3.11.0",
     "typescript-require": "^0.3.0",
     "uglify-js": "^3.14.2",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
   }
 }

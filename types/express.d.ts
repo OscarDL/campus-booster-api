@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction, Application } from 'express';
 import { UserModel } from '../src/users/model/user.interface';
-import { boomify } from '@types/boom';
+import boom from '@hapi/boom';
 import { IServer } from './socket';
 
 type Dictionary = ({ [k: string]: any; });
@@ -20,7 +20,7 @@ export interface ReqJWT {
 };
 
 export interface Res extends Response { io?: IServer; };
-export interface Next extends NextFunction { (err: boomify): void; };
+export interface Next extends NextFunction { (err: boom.Boom<any>): void; };
 export type Resp = Response | void;
 export interface App extends Application {};
 export type Fn<Q=Dictionary, B=Dictionary> = (req: Req<Q, B>, res: Res, next: Next) => Resp;

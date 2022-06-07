@@ -32,7 +32,7 @@ import { exec } from "node:child_process";
 let server;
 theme(config.colors);
 const app = express();
-const clientPath = path.join(__dirname, path.sep, '..', path.sep, 'client', 'build');
+// const clientPath = path.join(__dirname, path.sep, '..', path.sep, 'client', 'build');
 
 async function execShell(cmd: string): Promise<string> {
     return new Promise((resolve, reject) => exec(cmd, (err, out) => err ? reject(err) : resolve(out)));
@@ -52,9 +52,9 @@ function devHttpsServer(key: string, cert: string, port: number): void {
     });
     server.on('error', (error) => onError(error, port));
 }
+const port = Number(process.env.PORT);
 
 if (process.env.NODE_ENV !== 'production') {
-    const port = Number(process.env.PORT);
     let key, cert;
     try {
         key = fs.readFileSync('key.pem', 'utf8');
@@ -77,8 +77,19 @@ if (process.env.NODE_ENV !== 'production') {
         devHttpsServer(key, cert, port);
     }
 } else {
-    app.use(express.static(clientPath));
+    // app.use(express.static(clientPath));
     server = http.createServer(app);
+    server.listen(port, () => {
+        console.log(`\n⮕  App listening on port ${port}`.info);
+        console.log(`\n⮕  Local server: https://localhost:${port}`.rgb(249, 218, 65));
+    
+        const nets = networkInterfaces();
+        if (nets.en1 && nets.en1.some(ip => ip.family === 'IPv4')) {
+            const IP_ADDRESS = nets.en1.find(ip => ip.family === 'IPv4')?.address;
+            console.log(`\n⮕  Network server: https://${IP_ADDRESS}:${port}`.rgb(249, 174, 65));
+        }
+    });
+    server.on('error', (error) => onError(error, port));
 }
 
 // app security config
@@ -94,7 +105,7 @@ const corsOpts: cors.CorsOptions = {
     origin: process.env.NODE_ENV === 'development' ? [
         'http://localhost:3000', 'https://localhost:3000'
     ] : [
-        // Add production domain when ready
+        process.env.CLIENT_URL ?? ''
     ]
 };
 
@@ -181,9 +192,9 @@ routeConfig(app);
 app.use(ExpressMiddleware.NotFound());
 app.use(ExpressMiddleware.ErrorHandler());
 
-if (process.env.NODE_ENV === 'production') {
-  app.get('*', (_, res) => res.sendFile(path.join(clientPath, 'index.html')));
-}
+// if (process.env.NODE_ENV === 'production') {
+//   app.get('*', (_, res) => res.sendFile(path.join(clientPath, 'index.html')));
+// }
 
 function onError(error: any, port: number): never {
     if (error.syscall !== 'listen') {
