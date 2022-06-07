@@ -1,5 +1,6 @@
 import { Req, Res, Next, Resp } from '../../../types/express';
 import * as UserService from '../service/user.service';
+import * as TeacherService from '../../teachers/service/teacher.service';
 import boom from '@hapi/boom';
 import s3 from '../../../services/aws/s3';
 import AzureService from '../../../services/azure';
@@ -71,6 +72,40 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
                     req.isAdmin ? "defaultScope" : "iamNotAdmin"
                 ]
             )).filter(user => (req.isAdmin || !req.user?.campusId) ? true : user.campusId === req.user?.campusId)
+        );
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
+export async function getUsersForTeacher(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        const teachers = await TeacherService.findAll(
+            {
+                where: {
+                    userId: req.params.user_id
+                }
+            },
+            [
+                "withClassroom"
+            ]
+        );
+        const classrooms = teachers.map(teacher => teacher.ClassroomHasCourse?.id) ?? [];
+
+        return res.status(200).json(
+            (await UserService.findAll(
+                {
+                    limit: req.query?.limit
+                },
+                [ 
+                    "withClassrooms",
+                    req.isAdmin ? "defaultScope" : "iamNotAdmin"
+                ]
+            )).filter(user => {
+              const IDs = user.UserHasClassrooms?.map(u => u.Classroom?.ClassroomHasCourses?.map(c => c?.id))?.flat();
+              return IDs?.some(id => classrooms.includes(id));
+            })
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);

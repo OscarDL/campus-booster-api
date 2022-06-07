@@ -49,5 +49,20 @@ export interface UserModel extends Model<UserAttributes, UserCreationAttributes>
 export const genders = <const> [ "M", "F" ];
 export type Gender = typeof genders[number];
 export type UserScopesAttributes = keyof ReturnType<typeof UserScope>;
-export const UserProtectedFields = [ "azureId", "personalEmail", "avatarKey", "avatarBase64", "active", "banned" ];
-export const UserPublicFields : (keyof UserAttributes)[] = [ "id", "firstName", "lastName", "email", "role" ];
+export const UserProtectedFields: (keyof UserAttributes)[] = [
+  "azureId",
+  "personalEmail",
+  "avatarKey",
+  "avatarBase64",
+  "active",
+  "banned",
+  "credits",
+  "address"
+];
+export const UserPublicFields: (keyof UserAttributes)[] = [
+  "id",
+  "firstName",
+  "lastName",
+  "email",
+  "role"
+];

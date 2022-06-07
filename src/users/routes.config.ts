@@ -27,11 +27,19 @@ export default (app: App): void => {
         PermissionMiddleware.rolesAllowed(Object.values(roles)),
         UserController.getAll
     ]);
+    // GET USERS IN ANY CLASSROOM OF TEACHER
+    app.get(routePrefix + `/teacher/:user_id${regInt}`, [
+        ValidationMiddleware.JWTNeeded,
+        PermissionMiddleware.onlySameUserOrAdmin,
+		    RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+        UserMiddleware.userExistAsParam("user_id"),
+        UserController.getUsersForTeacher
+    ]);
     // GET USER BY ID
     app.get(routePrefix + `/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(Object.values(roles)),
-		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+		    RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
         UserMiddleware.iamAdminOrItsaStudent,
         UserController.getById
@@ -41,13 +49,13 @@ export default (app: App): void => {
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         singleUpload,
-		RequestMiddleware.bodyParametersNeeded(['firstName', 'lastName', 'birthday'], 'string'),
-		RequestMiddleware.bodyParametersNeeded(['email', 'personalEmail'], 'email'),
+        RequestMiddleware.bodyParametersNeeded(['firstName', 'lastName', 'birthday'], 'string'),
+        RequestMiddleware.bodyParametersNeeded(['email', 'personalEmail'], 'email'),
         RequestMiddleware.bodyParametersNeeded('role', 'enum', Object.values(roles)),
         UserMiddleware.emailIsNotTaken,
         RequestMiddleware.bodyParameterHoped('campusId', 'integer'),
         CampusMiddleware.campusExistAsBody('campusId'),
-		UserController.create
+		    UserController.create
     ]);
     // ADD USER TO CLASSROOMS
     app.post(routePrefix + `/:user_id${regInt}/classrooms/add`, [
@@ -77,7 +85,7 @@ export default (app: App): void => {
     app.patch(routePrefix + `/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
-		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+		    RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
         singleUpload,
         RequestMiddleware.bodyParameterHoped('campusId', 'integer'),
@@ -93,7 +101,7 @@ export default (app: App): void => {
     app.patch(routePrefix + `/:user_id${regInt}/resetpassword`, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
-		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+		    RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
         RequestMiddleware.bodyParametersNeeded('personalEmail', 'email'),
         UserController.resetUserPassword
@@ -101,6 +109,7 @@ export default (app: App): void => {
     // ACTIVATE USER ACCOUNT
     app.patch(routePrefix + `/:user_id${regInt}/activate`, [
         ValidationMiddleware.JWTNeeded,
+        PermissionMiddleware.rolesAllowed(Object.values(roles)),
         UserMiddleware.userExistAsParam("user_id"),
         UserController.activate
     ]);
@@ -108,7 +117,7 @@ export default (app: App): void => {
     app.delete(routePrefix + `/azure/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
-		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+		    RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
         UserController.removeFromAzure
     ]);
@@ -116,7 +125,7 @@ export default (app: App): void => {
     app.delete(routePrefix + `/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
-		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+		    RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
         UserMiddleware.dontDeleteYourself,
         UserController.remove
