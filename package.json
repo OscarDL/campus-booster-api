@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "main": "build/app.js",
   "scripts": {
-    "start": "npm build && node ./build/app.js",
+    "start": "npm run build && node ./build/app.js",
     "start:dev": "nodemon",
     "build": "rimraf ./build && tsc && ts-node ./utils/uglify.ts",
-    "migration": "npm i && npm install -g pnpm rimraf tsc && npx rimraf ./node_modules && pnpm import && pnpm install",
     "test": "ts-mocha ./tests/*.test.ts --timeout 10000"
   },
   "author": "Ulysse Dupont",
@@ -57,7 +56,6 @@
     "bcrypt": "^5.0.1",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
-    "cloudinary": "^1.29.1",
     "colors.ts": "^1.0.20",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.5",
