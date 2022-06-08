@@ -207,7 +207,7 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                     banned: false,
                     credits: 0,
                     gender: req.body.gender,
-                    promotion: req.body.role === Student ? moment().get('year') : undefined,
+                    promotion: req.body.role === Student ? (req.body.promotion ?? moment().get('year')) : undefined,
                     address: req.body.address,
                     personalEmail: req.body.personalEmail
                 }
