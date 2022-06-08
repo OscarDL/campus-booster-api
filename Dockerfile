@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 COPY package.json ./
 
 # Post install has auto-build
-RUN npm run migration
+RUN npm i
 
 # Bundle app source
 COPY . .
