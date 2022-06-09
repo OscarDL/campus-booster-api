@@ -7,7 +7,13 @@
     "start:dev": "nodemon",
     "tsc": "tsc",
     "build": "rimraf ./build && npm run tsc && ts-node ./utils/uglify.ts",
-    "test": "ts-mocha ./tests/*.test.ts --timeout 10000"
+    "test": "ts-mocha ./tests/*.test.ts --timeout 10000",
+    "format:check": "npx prettier . --check",
+    "format:fix": "npx prettier . --write",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   },
   "author": "Ulysse Dupont",
   "license": "ISC",
@@ -40,7 +46,10 @@
     "@types/uuid": "^8.3.3",
     "@types/validator": "^13.6.3",
     "https": "^1.0.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.1",
     "nodemon": "^2.0.13",
+    "prettier": "2.6.2",
     "rimraf": "^3.0.2",
     "ts-mocha": "^9.0.2"
   },
@@ -86,11 +95,11 @@
     "sequelize": "^6.6.5",
     "sequelize-typescript": "^2.1.0",
     "socket.io": "^4.2.0",
+    "ts-node": "^10.2.1",
     "tsconfig-paths": "^3.11.0",
+    "typescript": "^4.4.3",
     "typescript-require": "^0.3.0",
     "uglify-js": "^3.14.2",
-    "uuid": "^8.3.2",
-    "ts-node": "^10.2.1",
-    "typescript": "^4.4.3"
+    "uuid": "^8.3.2"
   }
 }
