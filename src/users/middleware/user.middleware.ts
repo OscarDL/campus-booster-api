@@ -3,9 +3,9 @@ import boom from '@hapi/boom';
 import { findById, findOne } from '../service/user.service';
 import * as CampusService from '../../campus/service/campus.service';
 import config from "../../../config/env.config";
+import { userHasHigherRole, userIsDifferentAndHasSameRole } from '../../authorization/middlewares/auth.permission.middleware';
 const {
-    permissionLevel: { CampusManager, Student },
-    app_domain
+    permissionLevel: { CampusManager, Student }
 } = config;
 
 export function userExistAsQuery(name: string): AsyncFn {
@@ -140,5 +140,50 @@ export async function userIsInClassroom(req: Req, res: Res, next: Next): Promise
     } catch (err: any) {
         console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
+export async function verifyMandatoryFields(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        if(req.body.role === Student) {
+            if (!req.body.birthday || !req.body.address || !req.body.promotion || !req.body.personalEmail) {
+                return next(boom.badRequest('incomplete_user_form'));
+            }
+        }
+        return next();
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
+export async function requestedUserHasLowerRole(req: Req, res: Res, next: Next) {
+    try {
+        if(!req.user) throw new Error('Login required.');
+        if(req.user?.active) {
+            const userRole = req.user?.role;
+
+            if(req.params && req.params.user_id) {
+                const user = await findById(req.params.user_id);
+
+                if (user && (
+                  userHasHigherRole(false, userRole, user.role) || userIsDifferentAndHasSameRole(user, req.user)
+                )) {
+                    return next(boom.badRequest('unauthorized_user_role_update'));
+                }
+            } else if(req.body.role) {
+                if (userHasHigherRole(true, userRole, req.body.role)) {
+                    return next(boom.badRequest('unauthorized_user_role_create'));
+                }
+            } else {
+                return next(boom.badRequest('params_missing_user_id'));
+            }
+        } else {
+            return next(boom.notAcceptable('activate_acount'));
+        }
+        next();
+    } catch (e: any) {
+        console.log(`${e}`.red.bold);
+        return next(boom.unauthorized('invalid_session'));
     }
 }

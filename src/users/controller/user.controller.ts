@@ -71,7 +71,10 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
                     "withClassrooms",
                     req.isAdmin ? "defaultScope" : "iamNotAdmin"
                 ]
-            )).filter(user => (req.isAdmin || !req.user?.campusId) ? true : user.campusId === req.user?.campusId)
+            )).filter(user => !req.user?.campusId ? true : (
+              // Also retrieve administrators for assistants & campus managers
+              req.isAdmin ? (user.campusId === req.user.campusId || !user.campusId) : user.campusId === req.user.campusId
+            ))
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);
@@ -188,7 +191,6 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
             )) {
                 return next(boom.badRequest('grant_error'));
             }
-            if (req.body.personalEmail) sendPasswordEmail(req, next, email, password);
         }
         if (azureUser) {
             const user = await UserService.create(
@@ -205,11 +207,30 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
                     banned: false,
                     credits: 0,
                     gender: req.body.gender,
-                    promotion: req.body.role === Student ? moment().get('year') : undefined,
+                    promotion: req.body.role === Student ? (req.body.promotion ?? moment().get('year')) : undefined,
                     address: req.body.address,
                     personalEmail: req.body.personalEmail
                 }
             );
+
+            if (!isNew && req.body.personalEmail) {
+                // Reset password for non-new users
+                await Azure.updateUser(user.email!, {
+                    accountEnabled: true,
+                    surname: req.body.lastName,
+                    givenName: req.body.firstName,
+                    displayName: `${req.body.firstName} ${req.body.lastName}`,
+                    mailNickname: email.split('@')[0],
+                    userPrincipalName: email,
+                    passwordProfile: {
+                        password,
+                        forceChangePasswordNextSignIn: true
+                    },
+                });
+            }
+
+            await sendPasswordEmail(req, next, email, password);
+
             return res.status(201).json({ 
                 user: await UserService.findById(user.id, {}, ["withClassrooms" ,"defaultScope"]), isNew 
             });
@@ -238,14 +259,14 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
             }
         }
 
-        if (user && firstName && lastName && email && personalEmail &&
-            (user.firstName !== firstName || user.lastName !== lastName || user.email !== email || user.personalEmail !== personalEmail)
+        if (user && firstName && lastName && email &&
+            (user.firstName !== firstName || user.lastName !== lastName || user.email !== email)
         ) {
             let newPassword = '';
             let newPasswordField = {};
 
             // Reset password if personal email changed
-            if (user.personalEmail !== personalEmail) {
+            if (personalEmail && user.personalEmail !== personalEmail) {
                 newPassword = generateNewPassword(16);
                 newPasswordField = {
                     passwordProfile: {
