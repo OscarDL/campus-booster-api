@@ -12,20 +12,6 @@ export default {
     jwtOptions: {
         expiresIn: process.env.JWT_EXPIRES || '30m' // expires after 30 minutes
     },
-    colors: {
-        MLG: [ 'rainbow', 'bold' ],
-        input: 'magenta',
-        verbose: 'cyan',
-        prompt: 'grey',
-        info: [ 'blue', 'italic' ],
-        data: 'blue',
-        help: 'cyan',
-        logs: [ 'grey', 'italic' ],
-        warning: 'brightRed',
-        debug: [ 'yellow', 'bold' ],
-        error: ['red', 'bold' ],
-        success: 'green'
-    },
     permissionLevel: {
         Student: "STUDENT",
         Professor: "PROFESSOR",
