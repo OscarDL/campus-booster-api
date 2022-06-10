@@ -41,10 +41,16 @@ export async function login(req: Req, res: Res, next: Next): Promise<Resp> {
         config.jwtOptions
       );
 
-      return res.cookie('accessToken', accessToken, {
+      return res.cookie(
+        'accessToken',
+        accessToken,
+        {
+          domain: process.env.CLIENT_URL,
+          sameSite: 'none',
           httpOnly: true,
           secure: true
-        }).status(200).json(
+        }
+      ).status(200).json(
         {
           user : req.user,
           refreshToken: Buffer.from(hash).toString('base64')
@@ -73,6 +79,8 @@ export async function refreshToken(req: Req, res: Res, next: Next): Promise<Resp
         config.jwtOptions
       ),
       {
+        domain: process.env.CLIENT_URL,
+        sameSite: 'none',
         httpOnly: true,
         secure: true
       }
