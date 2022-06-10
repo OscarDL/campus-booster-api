@@ -1,3 +1,6 @@
+
+import 'colors.ts';
+import '@dulysse1/better-node';
 import './config';
 import S from './config/models.config';
 S.login();
@@ -10,7 +13,6 @@ import https from 'https';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import express from 'express';
-import { theme } from 'colors.ts';
 import { Server } from 'socket.io';
 import compression from 'compression';
 import { networkInterfaces } from 'os';
@@ -19,18 +21,15 @@ import responseTime from 'response-time';
 import rateLimit from 'express-rate-limit';
 
 import { IServer } from './types/socket';
-import config from './config/env.config';
 import routeConfig from './config/routes.config';
 import socketConfig from './config/sockets.config';
 import ExpressMiddleware from './services/express';
 import { Next, Req, Res, Resp } from './types/express';
 import { authSocketMiddleware } from './services/socket';
 import { i18n } from './services/i18n';
-import '@dulysse1/better-node';
 import { exec } from "node:child_process";
 
 let server;
-theme(config.colors);
 const app = express();
 // const clientPath = path.join(__dirname, path.sep, '..', path.sep, 'client', 'build');
 
