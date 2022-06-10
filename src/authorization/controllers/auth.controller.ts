@@ -45,7 +45,7 @@ export async function login(req: Req, res: Res, next: Next): Promise<Resp> {
         'accessToken',
         accessToken,
         {
-          domain: process.env.CLIENT_URL,
+          domain: config.app_domain,
           sameSite: 'none',
           httpOnly: true,
           secure: true
@@ -79,7 +79,7 @@ export async function refreshToken(req: Req, res: Res, next: Next): Promise<Resp
         config.jwtOptions
       ),
       {
-        domain: process.env.CLIENT_URL,
+        domain: config.app_domain,
         sameSite: 'none',
         httpOnly: true,
         secure: true
