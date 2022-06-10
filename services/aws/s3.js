@@ -2,7 +2,6 @@
 const aws = require('aws-sdk');
 const multer = require('multer');
 const multerS3 = require('multer-s3-transform');
-const config = require('../../config/env.config').default;
 const moment = require('moment');
 const boom = require('@hapi/boom');
 const mime = require("mime-types");
@@ -22,10 +21,21 @@ const AUTHORIZED_DOCUMENT_EXTENSIONS = [
   'application/document'
 ];
 
+const envKeys = [ 
+  "AWS_BUCKET", 
+  "AWS_SECRET_ACCESS_KEY", 
+  "AWS_ACCESS_KEY_ID", 
+  "AWS_REGION" 
+];
+
+envKeys.forEach(key => {
+  if(!process.env[key]) throw new Error(`Missing .env key ${key} for AWS s3 service.`);
+});
+
 const s3 = new aws.S3({
-  secretAccessKey: config.aws.secretAccessKey,
-  accessKeyId: config.aws.accessKeyId,
-  region: config.aws.region
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  region: process.env.AWS_REGION
 });
 
 exports.upload = (fileKey, Body) => {
@@ -55,7 +65,7 @@ exports.uploadImage = (directory) => multer({
 
   storage: multerS3({
     s3: s3,
-    bucket: config.aws.bucket,
+    bucket: process.env.AWS_BUCKET,
     ContentDisposition: 'inline',
     contentType: multerS3.AUTO_CONTENT_TYPE,
     acl: 'public-read',
@@ -87,7 +97,7 @@ exports.uploadDocument = (directory) => multer({
   },
   storage: multerS3({
     s3: s3,
-    bucket: config.aws.bucket,
+    bucket: process.env.AWS_BUCKET,
     ContentDisposition: 'inline',
     contentType: multerS3.AUTO_CONTENT_TYPE,
     acl: 'public-read',
