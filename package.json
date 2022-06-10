@@ -10,7 +10,8 @@
     "test": "ts-mocha ./tests/*.test.ts --timeout 10000",
     "format:check": "npx prettier . --check",
     "format:fix": "npx prettier . --write",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "localhost": "node ./docker/localhost.js && nodemon"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

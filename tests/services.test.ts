@@ -1,7 +1,6 @@
 "use strict"
 import "@dulysse1/better-node";
 import chai, { expect } from 'chai';
-import EncryptionService from '../services/encryption';
 import Moderator from '../services/moderator';
 import fs from 'fs';
 import path from 'path';
@@ -12,21 +11,6 @@ import chaiAsPromise from 'chai-as-promised';
 chai.use(chaiAsPromise);
 
 describe('Services:', () => {
-    describe('Encryption with crypto:', () => {   
-        const message = 'Hello world!';
-        it('AES Encryption is working', () => {
-            expect(
-                EncryptionService.cipher(message).split(':')
-            ).to.have.length(2); 
-        });
-        it('Encryption/Decryption', () => {
-            expect(
-                EncryptionService.decipher(
-                    EncryptionService.cipher(message)
-                )
-            ).to.be.equal(message);
-        });
-    });
     describe('Moderator service:', () => { 
         const message = 'Petit con!'; 
         const moderator = new Moderator('french');
