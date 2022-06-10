@@ -59,6 +59,7 @@ export function userHasHigherRole(
 }
 
 export function userIsDifferentAndHasSameRole(loggedInUser: UserModel, requestedUser: UserModel): boolean {
+    if (loggedInUser.role === roles.CampusBoosterAdmin) return false;
     return requestedUser.id !== loggedInUser.id && requestedUser.role === loggedInUser.role;
 }
 

@@ -259,34 +259,34 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
             }
         }
 
-        if (user && firstName && lastName && email &&
-            (user.firstName !== firstName || user.lastName !== lastName || user.email !== email)
-        ) {
-            let newPassword = '';
-            let newPasswordField = {};
+        if (user && firstName && lastName && email) {
+          let newPassword = '';
+          let newPasswordField = {};
+          
+          // Reset password if personal email changed
+          if (personalEmail && user.personalEmail !== personalEmail) {
+            newPassword = generateNewPassword(16);
+            newPasswordField = {
+              passwordProfile: {
+                password: newPassword,
+                forceChangePasswordNextSignIn: true
+              }
+            };
+            
+            await sendPasswordEmail(req, next, email, newPassword);
+            await UserService.update(user.id, {active: false});
+          }
 
-            // Reset password if personal email changed
-            if (personalEmail && user.personalEmail !== personalEmail) {
-                newPassword = generateNewPassword(16);
-                newPasswordField = {
-                    passwordProfile: {
-                        password: newPassword,
-                        forceChangePasswordNextSignIn: true
-                    }
-                };
-
-                await sendPasswordEmail(req, next, email, newPassword);
-                await UserService.update(user.id, {active: false});
-            }
-
+          if (user.firstName !== firstName || user.lastName !== lastName || user.email !== email || user.personalEmail !== personalEmail) {
             await Azure.updateUser(user.email!, {
-                surname: lastName,
-                givenName: firstName,
-                displayName: (firstName && lastName) ? `${firstName} ${lastName}` : undefined,
-                mailNickname: email.split('@')[0],
-                userPrincipalName: email,
-                ...newPasswordField
+              surname: lastName,
+              givenName: firstName,
+              displayName: (firstName && lastName) ? `${firstName} ${lastName}` : undefined,
+              mailNickname: email.split('@')[0],
+              userPrincipalName: email,
+              ...newPasswordField
             });
+          }
         }
 
         if (user && user.credits !== Number(user.credits)) {
