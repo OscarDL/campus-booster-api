@@ -45,7 +45,7 @@ export async function login(req: Req, res: Res, next: Next): Promise<Resp> {
         'accessToken',
         accessToken,
         {
-          sameSite: 'none',
+          sameSite: 'strict',
           httpOnly: true,
           secure: true
         }).status(200).json(
@@ -77,7 +77,7 @@ export async function refreshToken(req: Req, res: Res, next: Next): Promise<Resp
         config.jwtOptions
       ),
       {
-        sameSite: 'none',
+        sameSite: 'strict',
         httpOnly: true,
         secure: true
       }
