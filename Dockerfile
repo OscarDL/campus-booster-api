@@ -6,13 +6,17 @@ WORKDIR /usr/src/app
 # Install api dependencies
 COPY package.json ./
 
-# Run scripts
+# Install dependencies
 RUN npm i
-RUN npm run build
 
 # Bundle app source
 COPY . .
 
+# Build App source 
+RUN npm run build
+
+# Expose PORT 1337
 EXPOSE 1337
 
+# START SERVER
 CMD [ "npm", "start" ]
