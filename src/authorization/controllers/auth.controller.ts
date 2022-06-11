@@ -43,7 +43,8 @@ export async function login(req: Req, res: Res, next: Next): Promise<Resp> {
 
       return res.cookie('accessToken', accessToken, {
           httpOnly: true,
-          secure: true
+          secure: true,
+          path: '/'
         }).status(200).json(
         {
           user : req.user,
