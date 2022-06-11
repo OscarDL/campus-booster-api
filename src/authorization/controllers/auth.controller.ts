@@ -48,9 +48,9 @@ export async function login(req: Req, res: Res, next: Next): Promise<Resp> {
           ...(config.env === 'production' ? {domain: config.app_domain} : {}),
           sameSite: 'none',
           httpOnly: true,
-          secure: true
-        }
-      ).status(200).json(
+          secure: true,
+          path: '/'
+        },
         {
           user : req.user,
           refreshToken: Buffer.from(hash).toString('base64')
@@ -82,7 +82,8 @@ export async function refreshToken(req: Req, res: Res, next: Next): Promise<Resp
         ...(config.env === 'production' ? {domain: config.app_domain} : {}),
         sameSite: 'none',
         httpOnly: true,
-        secure: true
+        secure: true,
+        path: '/'
       }
     ).sendStatus(200);
   } catch (err: any) {
