@@ -169,7 +169,7 @@ export async function requestedUserHasLowerRole(req: Req, res: Res, next: Next) 
                 if (user && (
                   userHasHigherRole(false, userRole, user.role) || userIsDifferentAndHasSameRole(user, req.user)
                 )) {
-                    return next(boom.badRequest('unauthorized_user_role_update'));
+                    return next(boom.badRequest('unauthorized_user_role_update_delete'));
                 }
             } else if(req.body.role) {
                 if (userHasHigherRole(true, userRole, req.body.role)) {

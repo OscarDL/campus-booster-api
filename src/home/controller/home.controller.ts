@@ -67,7 +67,7 @@ export async function getSummary(req: Req, res: Res, next: Next): Promise<Resp> 
 
             summary.upcomingCourses = (await PlanningService.findAll())
             .filter(planning => user.UserHasClassrooms?.map(uhc => uhc.classroomId).includes(planning.ClassroomHasCourse?.classroomId))
-            .filter(planning => moment().isSameOrBefore(moment(planning.date)))
+            .filter(planning => moment().isSameOrBefore(moment(planning.date), 'day'))
             .sort((a, b) => moment(a.date).diff(moment(b.date))).slice(0, 3);
         }
 

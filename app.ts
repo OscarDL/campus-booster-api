@@ -15,9 +15,11 @@ import morgan from 'morgan';
 import express from 'express';
 import { Server } from 'socket.io';
 import compression from 'compression';
+import { i18n } from './services/i18n';
 import { networkInterfaces } from 'os';
 import cookieParser from 'cookie-parser';
 import responseTime from 'response-time';
+import { exec } from "node:child_process";
 import rateLimit from 'express-rate-limit';
 
 import { IServer } from './types/socket';
@@ -26,12 +28,9 @@ import socketConfig from './config/sockets.config';
 import ExpressMiddleware from './services/express';
 import { Next, Req, Res, Resp } from './types/express';
 import { authSocketMiddleware } from './services/socket';
-import { i18n } from './services/i18n';
-import { exec } from "node:child_process";
 
 let server;
 const app = express();
-// const clientPath = path.join(__dirname, path.sep, '..', path.sep, 'client', 'build');
 
 async function execShell(cmd: string): Promise<string> {
     return new Promise((resolve, reject) => exec(cmd, (err, out) => err ? reject(err) : resolve(out)));
@@ -76,7 +75,6 @@ if (process.env.NODE_ENV !== 'production') {
         devHttpsServer(key, cert, port);
     }
 } else {
-    // app.use(express.static(clientPath));
     server = http.createServer(app);
     server.listen(port, () => {
         console.log(`\n⮕  App listening on port ${port}`.info);
@@ -94,7 +92,7 @@ if (process.env.NODE_ENV !== 'production') {
 // app security config
 const corsOpts: cors.CorsOptions = {
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     allowedHeaders: [
         'Accept', 'Authorization', 'Content-Type', 'X-Requested-With', 'Range', 'Lang', 'X-Forwarded-Proto'
     ],
@@ -104,7 +102,7 @@ const corsOpts: cors.CorsOptions = {
     origin: process.env.NODE_ENV === 'development' ? [
         'https://localhost:3000'
     ] : [
-        ...((process.env.CLIENT_URLS ?? '').split(','))
+        process.env.CLIENT_URL ?? ''
     ]
 };
 
