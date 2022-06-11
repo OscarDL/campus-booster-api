@@ -96,7 +96,7 @@ const corsOpts: cors.CorsOptions = {
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: [
-        'Accept', 'Authorization', 'Content-Type', 'X-Requested-With', 'Range', 'Lang'
+        'Accept', 'Authorization', 'Content-Type', 'X-Requested-With', 'Range', 'Lang', 'X-Forwarded-Proto'
     ],
     exposedHeaders: [
         'Content-Length'
@@ -160,7 +160,8 @@ app.use(cookieParser());
 app.use(responseTime());
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true }));
-
+app.enable('trust proxy');
+app.set("trust proxy", true);
 
 // Socket.io instance
 const io = new Server(
