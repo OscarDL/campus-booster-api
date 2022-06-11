@@ -6,8 +6,9 @@ WORKDIR /usr/src/app
 # Install api dependencies
 COPY package.json ./
 
-# Post install has auto-build
+# Run scripts
 RUN npm i
+RUN npm run build
 
 # Bundle app source
 COPY . .
