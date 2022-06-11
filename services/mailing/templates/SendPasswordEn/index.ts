@@ -1,4 +1,5 @@
 import path from "path";
+const ASSETS_PATH = "services/mailing/assets"
 
 export function template(email: string, username: string, password: string): string {
     return `
@@ -309,57 +310,57 @@ export function template(email: string, username: string, password: string): str
 export const attachments = [
     {
         filename: 'supinfo.png',
-        path: path.join(__dirname, '/images/supinfo.png'),
+        path: path.join(process.cwd(), ASSETS_PATH, 'supinfo.png'),
         cid: 'supinfo'
     },
     {
         filename: 'background.png',
-        path: path.join(__dirname, '/images/background.png'),
+        path: path.join(process.cwd(), ASSETS_PATH, 'background.png'),
         cid: 'background'
     },
     {
         filename: 'competences.png',
-        path: path.join(__dirname, '/images/competences.png'),
+        path: path.join(process.cwd(), ASSETS_PATH, 'competences.png'),
         cid: 'competences'
     },
     {
         filename: 'facebook.png',
-        path: path.join(__dirname, '/images/facebook.png'),
+        path: path.join(process.cwd(), ASSETS_PATH, 'facebook.png'),
         cid: 'facebook'
     },
     {
         filename: 'faq.png',
-        path: path.join(__dirname, '/images/faq.png'),
+        path: path.join(process.cwd(), ASSETS_PATH, 'faq.png'),
         cid: 'faq'
     },
     {
         filename: 'font.png',
-        path: path.join(__dirname, '/images/font.png'),
+        path: path.join(process.cwd(), ASSETS_PATH, 'font.png'),
         cid: 'font'
     },
     {
         filename: 'instagram.png',
-        path: path.join(__dirname, '/images/instagram.png'),
+        path: path.join(process.cwd(), ASSETS_PATH, 'instagram.png'),
         cid: 'instagram'
     },
     {
         filename: 'linkedin.png',
-        path: path.join(__dirname, '/images/linkedin.png'),
+        path: path.join(process.cwd(), ASSETS_PATH, 'linkedin.png'),
         cid: 'linkedin'
     },
     {
         filename: 'programme.png',
-        path: path.join(__dirname, '/images/programme.png'),
+        path: path.join(process.cwd(), ASSETS_PATH, 'programme.png'),
         cid: 'programme'
     },
     {
         filename: 'twitter.png',
-        path: path.join(__dirname, '/images/twitter.png'),
+        path: path.join(process.cwd(), ASSETS_PATH, 'twitter.png'),
         cid: 'twitter'
     },
     {
         filename: 'youtube.png',
-        path: path.join(__dirname, '/images/youtube.png'),
+        path: path.join(process.cwd(), ASSETS_PATH, 'youtube.png'),
         cid: 'youtube'
     }
 ]

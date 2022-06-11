@@ -46,12 +46,11 @@ export async function login(req: Req, res: Res, next: Next): Promise<Resp> {
         'accessToken',
         accessToken,
         {
-          ...(config.env === 'production' ? {domain: config.app_domain} : {}),
+          ...(config.env === 'production' ? { domain } : {}),
           sameSite: 'none',
           httpOnly: true,
           secure: true,
           path: '/',
-          domain
         }).status(200).json(
         {
           user : req.user,
@@ -81,12 +80,11 @@ export async function refreshToken(req: Req, res: Res, next: Next): Promise<Resp
         config.jwtOptions
       ),
       {
-        ...(config.env === 'production' ? {domain: config.app_domain} : {}),
+        ...(config.env === 'production' ? { domain } : {}),
         sameSite: 'none',
         httpOnly: true,
         secure: true,
         path: '/',
-        domain
       }
     ).sendStatus(200);
   } catch (err: any) {
