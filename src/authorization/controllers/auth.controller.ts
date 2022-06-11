@@ -74,7 +74,8 @@ export async function refreshToken(req: Req, res: Res, next: Next): Promise<Resp
       ),
       {
         httpOnly: true,
-        secure: true
+        secure: true,
+        path: '/'
       }
     ).sendStatus(200);
   } catch (err: any) {
