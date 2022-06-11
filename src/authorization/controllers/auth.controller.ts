@@ -6,7 +6,8 @@ import boom from '@hapi/boom';
 import { ExpressErrorHandler } from '../../../services/express';
 import AzureService from '../../../services/azure/lib/azure.service';
 const {
-  permissionLevel: roles
+  permissionLevel: roles,
+  app_domain: domain
 } = config;
 
 const Azure = new AzureService();
@@ -49,8 +50,9 @@ export async function login(req: Req, res: Res, next: Next): Promise<Resp> {
           sameSite: 'none',
           httpOnly: true,
           secure: true,
-          path: '/'
-        },
+          path: '/',
+          domain
+        }).status(200).json(
         {
           user : req.user,
           refreshToken: Buffer.from(hash).toString('base64')
@@ -83,7 +85,8 @@ export async function refreshToken(req: Req, res: Res, next: Next): Promise<Resp
         sameSite: 'none',
         httpOnly: true,
         secure: true,
-        path: '/'
+        path: '/',
+        domain
       }
     ).sendStatus(200);
   } catch (err: any) {
