@@ -70,14 +70,9 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
             req.body.fileKeys = Object.entries(req.files).map(([_, value]) => (value as any).key);
             console.log(req.body.fileKeys, req.files);
         }
-        
+
         const absence = await AbsenceService.create(
-            Object.assign(
-                req.body,
-                {
-                    userId: req.user?.id
-                }
-            )
+            Object.assign(req.body)
         );
         return res.status(203).json(
             await AbsenceService.findById(
