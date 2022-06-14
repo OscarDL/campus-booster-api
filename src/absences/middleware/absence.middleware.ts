@@ -67,6 +67,7 @@ export async function isMyAbsenceOrIamAdmin(req: Req, res: Res, next: Next): Pro
 
 export async function studentIsUser(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
+        if (req.isAdmin) return next();
         return req.user?.id === req.body.userId ? next() : next(boom.badRequest('absence_user_create_different'));
     } catch (err: any) {
         console.log(`${err}`.red.bold);

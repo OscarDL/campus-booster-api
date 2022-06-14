@@ -6,7 +6,7 @@ export default {
     app_domain: process.env.APP_DOMAIN || "campusbooster.eu",
     app_site: process.env.APP_SITE || 'http://localhost:3000',
     app_uri: process.env.APP_URI || 'http://localhost:1337',
-    route_prefix: process.env.ROUTE_PREFIX || '/api/v1',
+    route_prefix: env === 'development' ? '/api/v1' : '',
     author: process.env.AUTHOR || 'Campus Booster',
     jwtSecret: process.env.JWT_SECRET || '',
     jwtOptions: {

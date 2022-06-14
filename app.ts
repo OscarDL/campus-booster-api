@@ -145,7 +145,7 @@ app.use(morgan('combined', {
 
 // Security middleware
 app.use(rateLimit({
-    windowMs: 30000, // 30 seconds
+    windowMs: 60000, // 60 seconds
     max: 100 // limit each IP to 100 requests per windowMs
 }));
 
