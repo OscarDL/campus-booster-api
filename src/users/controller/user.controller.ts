@@ -12,7 +12,7 @@ import moment from 'moment';
 
 const {
     app_domain,
-    permissionLevel: { Student }
+    permissionLevel: { Student, CampusBoosterAdmin }
 } = config;
 const Mailer = new MailerService();
 const Azure = new AzureService();
@@ -71,10 +71,14 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
                     "withClassrooms",
                     req.isAdmin ? "defaultScope" : "iamNotAdmin"
                 ]
-            )).filter(user => !req.user?.campusId ? true : (
-              // Also retrieve administrators for assistants & campus managers
-              req.isAdmin ? (user.campusId === req.user.campusId || !user.campusId) : user.campusId === req.user.campusId
-            ))
+            )).filter(user => {
+                if (!req.user?.campusId) return true;
+                // Also retrieve administrators for assistants & campus managers
+                if (req.isAdmin) {
+                    return user.campusId === req.user.campusId || user.role === CampusBoosterAdmin;
+                }
+                return user.campusId === req.user.campusId;
+            })
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);
