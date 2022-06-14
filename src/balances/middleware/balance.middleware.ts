@@ -46,17 +46,3 @@ export function balanceExistAsParam(name: string): AsyncFn {
         }
     }
 }
-
-export async function itsMyBalanceOrIAmAdmin(req: Req, res: Res, next: Next): Promise<Resp> {
-    try {
-        return req.isAdmin ? next() : await findOne({
-            where: {
-                id: req.params.balance_id,
-                userId: req.user?.id
-            }
-        }) ? next() : next(boom.badRequest("missing_access_rights"));
-    } catch (err: any) {
-        console.log(`${err}`.red.bold);
-        return next(err.isBoom ? err : boom.internal(err.name));
-    }
-}
