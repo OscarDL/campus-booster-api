@@ -7,6 +7,7 @@ import {
 } from '../model/absence.interface';
 import { models } from '../../../config/models.config'; 
 const { Absence } = models;
+console.log(models);
 /**
 * Find all rows with specified options
 *
