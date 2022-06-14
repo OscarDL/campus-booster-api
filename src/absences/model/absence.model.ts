@@ -14,6 +14,7 @@ const { db_schema } = config;
 
 @S.Scopes(AbsenceScope)
 @S.Table({
+	tableName: 'absences',
   timestamps: true,
   underscored: true,
   schema: db_schema
