@@ -300,12 +300,13 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
         if (user && user.role === Student && !user.promotion) {
             req.body.promotion = moment().get('year');
         }
-console.log(req.body);
+
         await UserService.update(
             user?.id,
             {
                 ...req.body,
-                // campusId: req.body.campusId,
+                gender: req.body.gender ?? null,
+                campusId: req.body.campusId ?? null
             },
             [
                 "withClassrooms",
