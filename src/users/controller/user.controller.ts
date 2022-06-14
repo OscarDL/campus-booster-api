@@ -298,10 +298,20 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
             await UserService.update(user?.id, {credits: 0}, ["withClassrooms", "defaultScope"]);
         }
         if (user && user.role === Student && !user.promotion) {
-          req.body.promotion = moment().get('year');
+            req.body.promotion = moment().get('year');
         }
-
-        await UserService.update(user?.id, req.body, ["withClassrooms", "defaultScope"]);
+console.log(req.body);
+        await UserService.update(
+            user?.id,
+            {
+                ...req.body,
+                // campusId: req.body.campusId,
+            },
+            [
+                "withClassrooms",
+                "defaultScope"
+            ]
+        );
         return res.status(203).json(
             await UserService.findById(user?.id, {}, ["withClassrooms", "defaultScope"])
         );

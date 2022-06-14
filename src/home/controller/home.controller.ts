@@ -63,9 +63,10 @@ export async function getSummary(req: Req, res: Res, next: Next): Promise<Resp> 
 
             summary.annualCredits = grades
             .filter(grade => grade.ClassroomHasCourse?.Course?.year === getUserCurrentYear(user))
+            .filter(grade => grade.average && grade.average >= 10)
             .reduce((total, grade) => (grade.ClassroomHasCourse?.Course?.credits ?? 0) + total, 0);
 
-            summary.latestGrades = grades.sort((a, b) => moment(a.created_at).diff(moment(b.created_at))).slice(0, 3);
+            summary.latestGrades = grades.sort((a, b) => moment(b.created_at).diff(moment(a.created_at))).slice(0, 3);
 
             summary.upcomingCourses = (await PlanningService.findAll())
             .filter(planning => user.UserHasClassrooms?.map(uhc => uhc.classroomId).includes(planning.ClassroomHasCourse?.classroomId))
