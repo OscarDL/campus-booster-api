@@ -12,8 +12,8 @@ const {
 const Azure = new AzureService();
 Azure.OAuth();
 
-const allowedUsersWithoutCampus = (role: string) => (
-  ![roles.Student, roles.Assistant, roles.CampusManager].includes(role)
+const userNeedsCampus = (role: string) => (
+  [roles.Student, roles.Company, roles.Assistant, roles.CampusManager].includes(role)
 );
 
 export async function login(req: Req, res: Res, next: Next): Promise<Resp> {
@@ -22,7 +22,7 @@ export async function login(req: Req, res: Res, next: Next): Promise<Resp> {
         id: req.user?.id
       };
       if (!req.user || req.user.banned) return next(boom.forbidden('banned'));
-      if (!allowedUsersWithoutCampus(req.user.role ?? '') && !req.user.campusId) {
+      if (userNeedsCampus(req.user.role ?? '') && !req.user.campusId) {
         return next(boom.forbidden('no_campus_assigned'));
       }
 
@@ -45,7 +45,7 @@ export async function login(req: Req, res: Res, next: Next): Promise<Resp> {
         'accessToken',
         accessToken,
         {
-          sameSite: 'none',
+          sameSite: 'strict',
           httpOnly: true,
           secure: true
         }).status(200).json(
@@ -77,7 +77,7 @@ export async function refreshToken(req: Req, res: Res, next: Next): Promise<Resp
         config.jwtOptions
       ),
       {
-        sameSite: 'none',
+        sameSite: 'strict',
         httpOnly: true,
         secure: true
       }
