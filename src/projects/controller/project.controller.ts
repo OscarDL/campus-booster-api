@@ -49,7 +49,6 @@ export async function getByUser(req: Req, res: Res, next: Next): Promise<Resp> {
                   limit: req.query?.limit
               },
               [
-                  // "withUser",
                   "withClassroomHasCourse"
               ]
           )).filter(project => (

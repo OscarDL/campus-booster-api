@@ -7,6 +7,7 @@ import PlanningScope from './planning.scope';
 import ClassroomHasCourse from './../../classroom_has_courses/model/classroomhascourse.model';
 
 import config from '../../../config/env.config';
+import Absence from '../../absences/model/absence.model';
 const { db_schema } = config;
 
 @S.Scopes(PlanningScope)
@@ -58,4 +59,12 @@ export default class Planning extends S.Model implements PlanningModel {
 		onDelete: 'CASCADE'
 	})
 	public ClassroomHasCourse!: ClassroomHasCourse;
+
+	@S.HasMany(() => Absence, { 
+		foreignKey: {
+      field: 'planning_id'
+    },
+		onDelete: 'CASCADE'
+	})
+	public Absences !: Absence[];
 }
