@@ -77,17 +77,9 @@ export async function refreshToken(req: Req, res: Res, next: Next): Promise<Resp
         config.jwtOptions
       ),
       {
-<<<<<<< HEAD
-        ...(config.env === 'production' ? { domain } : {}),
-        sameSite: 'none',
-        httpOnly: true,
-        secure: true,
-        path: '/',
-=======
         sameSite: 'none',
         httpOnly: true,
         secure: true
->>>>>>> 31ae2626ab6c2856473f55999dd8bec8f13b7f05
       }
     ).sendStatus(200);
   } catch (err: any) {
