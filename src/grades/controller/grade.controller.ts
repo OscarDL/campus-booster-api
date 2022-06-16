@@ -127,7 +127,8 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
         if (!ADMIN_ROLES.includes(req.user?.role ?? '')) {
             const teacher = await TeacherService.findOne({
                 where: {
-                    userId: req.user?.id
+                    userId: req.user?.id,
+                    classroomHasCourseId: req.body.classroomHasCourseId
                 }
             });
             if (!teacher || teacher.id !== req.body.teacherId) {
