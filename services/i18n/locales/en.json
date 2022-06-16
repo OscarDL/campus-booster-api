@@ -5,7 +5,7 @@
     "azure_ad_denied": "You are not allowed to use this app.",
     "access_denied": "You have been denied access to this content.",
     "banned": "Your account has been banned.",
-    "no_campus_assigned": "You do not have a campus assigned to sign in, please contact your campus manager.",
+    "no_campus_assigned": "You do not have a campus assigned, please contact your campus manager.",
     "missing_access_rights": "You don't have access rights.",
     "activate_acount": "Your account has not been activated.",
     "invalid_session": "Your session is invalid.",
