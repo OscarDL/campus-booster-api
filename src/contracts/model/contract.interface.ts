@@ -19,6 +19,8 @@ export interface ContractAttributes {
 	User?: UserModel;
 	supervisorId: number;
 	Supervisor?: TeacherModel;
+	fileKeys?: string[];
+	fileBase64?: string[];
 };
 export interface ContractCreationAttributes extends Optional<ContractAttributes, 'id'> {}
 export interface ContractModel extends Model<ContractAttributes, ContractCreationAttributes>, Partial<ContractAttributes> {

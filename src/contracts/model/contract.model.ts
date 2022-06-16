@@ -2,10 +2,10 @@
 // DOC : https://www.npmjs.com/package/sequelize-typescript
 // Generate by Ulysse Dupont
 import * as S from 'sequelize-typescript';
-import { ContractModel, TYPE } from './contract.interface';
+import { ContractModel, TYPE, ContractAttributes } from './contract.interface';
 import ContractScope from './contract.scope';
 import User from './../../users/model/user.model';
-
+import s3 from '../../../services/aws/s3';
 import config from '../../../config/env.config';
 import Teacher from './../../teachers/model/teacher.model';
 const { db_schema } = config;
@@ -63,6 +63,54 @@ export default class Contract extends S.Model implements ContractModel {
 	@S.AllowNull(true)
 	@S.Column(S.DataType.STRING(255))
 	public company!: string;
+
+	@S.AllowNull(true)
+	@S.Default([])
+	@S.Column({
+		field: 'file_keys',
+		type: S.DataType.ARRAY(
+			S.DataType.STRING(1024)
+		)
+	})
+	public fileKeys!: string[];
+
+	public dataValues!: ContractAttributes;
+
+	@S.AfterCreate
+	@S.AfterFind
+	@S.AfterUpdate
+	@S.AfterUpsert
+	static async loadS3Files(instance: (Contract | Contract[])): Promise<void> {
+		try {
+			if(Array.isArray(instance)) {
+				for (let i = 0; i < instance.length; i++) {
+					const absence = instance[i];
+					absence.dataValues.fileBase64 = await Contract.loadInstanceFiles(absence);
+				}
+			} else if(instance) {
+				instance.dataValues.fileBase64 = await Contract.loadInstanceFiles(instance);
+			}
+		} catch (err) {
+			if(err instanceof Error) {
+				console.log(err.message.red.bold);
+			}
+		}
+	}
+
+	static async loadInstanceFiles(instance: Contract): Promise<string[]> {
+		const files = new Array();
+		for (let i = 0; i < instance.fileKeys.length; i++) {
+			const fileKey = instance.fileKeys[i];
+			if(fileKey) {
+				const awsFile = await s3.download(fileKey);
+				if(awsFile) {
+					const imgBase64 = Buffer.from(awsFile.Body as any).toString('base64');
+					files.push(`data:${awsFile.ContentType ?? 'images/png'};base64,${imgBase64}`); 
+				}
+			}
+		}
+		return files;
+	}
 
 	@S.ForeignKey(() => User)
 	@S.Column({

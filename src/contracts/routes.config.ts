@@ -10,6 +10,10 @@ const {
     customRegex: { regInt }
 } = config;
 
+import s3 from '../../services/aws/s3';
+const upload = s3.uploadDocument("absences");
+const uploadMany = upload.array("files", 5);
+
 const routePrefix = config.route_prefix + '/contracts';
 
 export default (app: App): void => {
@@ -43,6 +47,7 @@ export default (app: App): void => {
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
+        uploadMany,
 		RequestMiddleware.bodyParametersNeeded(['startDate', 'endDate', 'company', 'mission', 'type', 'email', 'phone'], 'string'),
 		RequestMiddleware.bodyParametersNeeded(['userId', 'supervisorId'], 'integer'),
 		UserMiddleware.userExistAsBody('supervisorId'),
@@ -55,6 +60,7 @@ export default (app: App): void => {
 		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
 		RequestMiddleware.paramParametersNeeded('contract_id', 'integer'),
         ContractMiddleware.contractExistAsParam("contract_id"),
+        uploadMany,
         ContractController.update
     ]);
     // DELETE CONTRACT
