@@ -10,8 +10,8 @@ export interface ClassroomAttributes extends
   readonly id?: number;
 	name: string;
 	promotion: number;
-	readonly created_at?: Date;
-	readonly updated_at?: Date;
+	readonly createdAt?: Date;
+	readonly updatedAt?: Date;
 	campusId?: number;
 	Campus?: CampusModel;
 	ClassroomHasCourses?: ClassroomHasCourseModel[];

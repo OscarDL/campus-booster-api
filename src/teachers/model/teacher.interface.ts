@@ -7,8 +7,8 @@ import { GradeModel } from './../../grades/model/grade.interface';
 export interface TeacherAttributes {
   readonly id: number;
 	active?: string;
-	readonly created_at?: Date;
-	readonly updated_at?: Date;
+	readonly createdAt?: Date;
+	readonly updatedAt?: Date;
 	userId?: number;
 	User?: UserModel;
 	classroomHasCourseId?: number;

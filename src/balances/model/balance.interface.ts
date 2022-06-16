@@ -11,8 +11,8 @@ export interface BalanceAttributes {
 	debit: number;
 	credit: number;
 	status: BalanceStatus;
-	readonly created_at?: Date;
-	readonly updated_at?: Date;
+	readonly createdAt?: Date;
+	readonly updatedAt?: Date;
 	userId: number;
 	User?: UserModel;
 };

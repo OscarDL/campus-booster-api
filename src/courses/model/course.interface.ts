@@ -12,8 +12,8 @@ export interface CourseAttributes extends
 	credits: number;
 	speciality: boolean;
 	description: string;
-	readonly created_at?: Date;
-	readonly updated_at?: Date;
+	readonly createdAt?: Date;
+	readonly updatedAt?: Date;
 	ClassroomHasCourses?: ClassroomHasCourseModel[];
 };
 export interface CourseCreationAttributes extends Optional<CourseAttributes, 'id'> {}

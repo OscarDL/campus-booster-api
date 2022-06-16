@@ -27,8 +27,8 @@ export interface UserAttributes {
 	promotion?: number;
   credits?: number | null;
 	role?: typeof permissionLevel[keyof typeof permissionLevel];
-	readonly created_at?: Date;
-	readonly updated_at?: Date;
+	readonly createdAt?: Date;
+	readonly updatedAt?: Date;
 	campusId?: number;
 	Campus?: CampusModel;
 	UserHasClassrooms?: UserHasClassroomModel[];

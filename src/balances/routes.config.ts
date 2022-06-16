@@ -50,8 +50,8 @@ export default (app: App): void => {
         RequestMiddleware.bodyParametersNeeded('userId', 'integer'),
         RequestMiddleware.bodyParametersNeeded('debit', 'float'),
         RequestMiddleware.bodyParametersNeeded('credit', 'float'),
-        RequestMiddleware.bodyParametersNeeded("status", "enum", [...balanceStatus]),
-        RequestMiddleware.bodyParametersNeeded('description', "string"),
+        RequestMiddleware.bodyParametersNeeded('status', 'enum', [...balanceStatus]),
+        RequestMiddleware.bodyParametersNeeded('description', 'string'),
 		    RequestMiddleware.bodyParametersNeeded('dateRequested', 'string'),
 		    RequestMiddleware.bodyParameterHoped('dateConfirmed', 'string'),
 		    BalanceController.create
@@ -61,13 +61,14 @@ export default (app: App): void => {
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(ADMIN), 
         RequestMiddleware.paramParametersNeeded('balance_id', 'integer'),
-        BalanceMiddleware.balanceExistAsParam("balance_id"),
+        BalanceMiddleware.balanceExistAsParam('balance_id'),
+        RequestMiddleware.bodyParameterHoped('userId', 'integer'),
+        RequestMiddleware.bodyParameterHoped('debit', 'float'),
+        RequestMiddleware.bodyParameterHoped('credit', 'float'),
+        RequestMiddleware.bodyParameterHoped('status', 'enum', [...balanceStatus]),
+        RequestMiddleware.bodyParameterHoped('description', 'string'),
         RequestMiddleware.bodyParameterHoped('dateRequested', 'string'),
         RequestMiddleware.bodyParameterHoped('dateConfirmed', 'string'),
-        RequestMiddleware.bodyParameterHoped('description', "string"),
-        RequestMiddleware.bodyParameterHoped('debit', "string"),
-        RequestMiddleware.bodyParameterHoped('credit', "string"),
-        RequestMiddleware.bodyParameterHoped("status", "enum", [...balanceStatus]),
         BalanceController.update
     ]);
     // DELETE BALANCE

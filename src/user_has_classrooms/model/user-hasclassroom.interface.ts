@@ -8,8 +8,8 @@ export interface UserHasClassroomAttributes extends
 {
   readonly id: number;
 	active?: boolean;
-	readonly created_at?: Date;
-	readonly updated_at?: Date;
+	readonly createdAt?: Date;
+	readonly updatedAt?: Date;
 	classroomId: number;
 	userId: number;
 	User?: UserModel;

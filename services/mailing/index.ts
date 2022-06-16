@@ -2,8 +2,8 @@ import mailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 
 // TEMPLATE CONFIG
-import * as SendPasswordFr from './templates/SendPasswordFr';
-import * as SendPasswordEn from './templates/SendPasswordEn';
+import * as SendPasswordFr from './templates/send-password-fr';
+import * as SendPasswordEn from './templates/send-password-en';
 
 const Config = <const> [
     {

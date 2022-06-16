@@ -7,8 +7,8 @@ export interface AbsenceAttributes {
 	reason?: string;
 	late?: boolean;
 	period?: PERIOD;
-	readonly created_at?: Date;
-	readonly updated_at?: Date;
+	readonly createdAt?: Date;
+	readonly updatedAt?: Date;
 	planningId?: number;
 	Planning?: PlanningModel;
 	userId?: number;

@@ -9,8 +9,8 @@ export interface FeedbackAttributes {
 	pedagogy: string;
 	technicalCompetence: string;
 	fluencyInSpeaking: string;
-	readonly created_at?: Date;
-	readonly updated_at?: Date;
+	readonly createdAt?: Date;
+	readonly updatedAt?: Date;
 	userId: number;
 	User?: UserModel;
 	teacherId: number;

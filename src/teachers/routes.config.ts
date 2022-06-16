@@ -45,8 +45,8 @@ export default (app: App): void => {
         RequestMiddleware.paramParametersNeeded('teacher_id', 'integer'),
         TeacherMiddleware.teacherExistAsParam("teacher_id"),
         RequestMiddleware.bodyParameterHoped("userId", "integer"),
-        RequestMiddleware.bodyParameterHoped("classroomHasCourseId", "integer"),
         UserMiddleware.userExistAsBody("userId"),
+        RequestMiddleware.bodyParameterHoped("classroomHasCourseId", "integer"),
         ClassroomHasCourseMiddleware.classroomhascourseExistAsBody("classroomHasCourseId"),
         TeacherController.update
     ]);

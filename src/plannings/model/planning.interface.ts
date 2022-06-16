@@ -8,8 +8,8 @@ export interface PlanningAttributes {
 	period: PERIOD;
 	remote: boolean;
 	cancelled: boolean;
-	readonly created_at?: Date;
-	readonly updated_at?: Date;
+	readonly createdAt?: Date;
+	readonly updatedAt?: Date;
 	classroomHasCourseId?: number;
 	ClassroomHasCourse?: ClassroomHasCourseModel;
 };

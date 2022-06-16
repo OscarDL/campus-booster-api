@@ -5,8 +5,7 @@
   "scripts": {
     "start": "node ./build/app.js",
     "start:dev": "nodemon",
-    "tsc": "tsc",
-    "build": "rimraf ./build && npm run tsc && ts-node ./utils/uglify.ts",
+    "build": "rimraf ./build && tsc && ts-node ./utils/uglify.ts",
     "test": "ts-mocha ./tests/*.test.ts --timeout 10000",
     "format:check": "npx prettier . --check",
     "format:fix": "npx prettier . --write",
