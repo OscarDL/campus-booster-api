@@ -10,8 +10,8 @@ export interface ToolAttributes {
 	category: Category;
 	imgBase64?: string;
 	description?: string;
-	readonly created_at?: Date;
-	readonly updated_at?: Date;
+	readonly createdAt?: Date;
+	readonly updatedAt?: Date;
 };
 export interface ToolCreationAttributes extends Optional<ToolAttributes, 'id'> {}
 export interface ToolModel extends Model<ToolAttributes, ToolCreationAttributes>, Partial<ToolAttributes> {

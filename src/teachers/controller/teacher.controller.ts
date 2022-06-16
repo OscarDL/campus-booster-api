@@ -42,6 +42,14 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
 export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
         const teacher = await TeacherService.create(req.body);
+        const existingTeacher = await TeacherService.findOne({
+            where: {
+                userId: req.body.userId,
+                classroomHasCourseId: req.body.classroomHasCourseId
+            }
+        });
+
+        if (existingTeacher) return next(boom.conflict('teacher_classroom_exists'));
 
         return res.status(201).json(
             await TeacherService.findById(
@@ -65,6 +73,14 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
             req.params.teacher_id, 
             req.body
         );
+        const existingTeacher = await TeacherService.findOne({
+            where: {
+                userId: req.body.userId,
+                classroomHasCourseId: req.body.classroomHasCourseId
+            }
+        });
+
+        if (existingTeacher) return next(boom.conflict('teacher_classroom_exists'));
 
         return res.status(203).json(
             await TeacherService.findById(

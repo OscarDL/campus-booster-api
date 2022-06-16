@@ -12,8 +12,8 @@ export interface ClassroomHasCourseAttributes extends
 {
   readonly id: number;
 	activated?: boolean;
-	readonly created_at?: Date;
-	readonly updated_at?: Date;
+	readonly createdAt?: Date;
+	readonly updatedAt?: Date;
 	courseId: number;
 	classroomId: number;
 	Course?: CourseModel;

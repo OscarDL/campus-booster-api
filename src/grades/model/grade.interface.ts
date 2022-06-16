@@ -7,8 +7,8 @@ export interface GradeAttributes {
   readonly id: number;
 	average: number;
 	comment?: string;
-	readonly created_at?: Date;
-	readonly updated_at?: Date;
+	readonly createdAt?: Date;
+	readonly updatedAt?: Date;
 	userId: number;
 	classroomHasCourseId: number;
 	User?: UserModel;

@@ -10,8 +10,8 @@ export interface CampusAttributes {
 	city: string;
 	open?: string;
 	virtual?: string;
-	readonly created_at?: Date;
-	readonly updated_at?: Date;
+	readonly createdAt?: Date;
+	readonly updatedAt?: Date;
 	Users?: UserModel[];
 	Classrooms?: ClassroomModel[];
 	CampusManager: UserModel;

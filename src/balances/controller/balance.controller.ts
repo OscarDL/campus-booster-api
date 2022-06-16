@@ -49,7 +49,7 @@ export async function getUser(req: Req, res: Res, next: Next): Promise<Resp> {
                         userId: req.params.user_id
                     }
                 }
-            )).filter(balance => filterUsersFromCampus(balance, req.user!))
+            )).filter(balance => balance.userId === (req.user?.id ?? 0))
         );
     } catch (err: any) {
         console.log(`${err}`.red.bold);

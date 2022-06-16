@@ -1,7 +1,7 @@
 const env = process.env.NODE_ENV || 'development';
 export default {
     env,
-    db_schema: env === 'development' ? 'dev' : 'prod',
+    db_schema: env === 'development' ? 'prod' : 'prod',
     app_name: process.env.APP_NAME || 'Campus Booster - API',
     app_domain: process.env.APP_DOMAIN || "campusbooster.eu",
     app_site: process.env.APP_SITE || 'http://localhost:3000',
