@@ -49,7 +49,7 @@ export default (app: App): void => {
 		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         uploadMany,
 		RequestMiddleware.bodyParametersNeeded(['startDate', 'endDate', 'company', 'mission', 'type', 'email', 'phone'], 'string'),
-		RequestMiddleware.bodyParametersNeeded(['userId', 'supervisorId'], 'integer'),
+		RequestMiddleware.bodyParametersNeeded(['userId', 'supervisorId'], 'string'),
 		UserMiddleware.userExistAsBody('supervisorId'),
 		UserMiddleware.userExistAsBody('userId'),
 		ContractController.create
