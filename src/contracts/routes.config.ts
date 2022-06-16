@@ -11,7 +11,7 @@ const {
 } = config;
 
 import s3 from '../../services/aws/s3';
-const upload = s3.uploadDocument("absences");
+const upload = s3.uploadDocument("contracts");
 const uploadMany = upload.array("files", 5);
 
 const routePrefix = config.route_prefix + '/contracts';

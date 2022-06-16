@@ -8,7 +8,6 @@ export interface ContractAttributes {
 	endDate: Date;
 	mission: string;
 	type: TYPE;
-	url: string;
 	email: string;
 	phone: string;
 	address: string;

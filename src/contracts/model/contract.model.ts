@@ -12,6 +12,8 @@ const { db_schema } = config;
 
 @S.Scopes(ContractScope)
 @S.Table({
+  tableName: 'contracts',
+	modelName: 'Contract',
   timestamps: true,
   underscored: true,
   schema: db_schema
@@ -43,10 +45,6 @@ export default class Contract extends S.Model implements ContractModel {
 	@S.AllowNull(true)
 	@S.Column(S.DataType.STRING(255))
 	public type!: TYPE;
-
-	@S.AllowNull(true)
-	@S.Column(S.DataType.STRING(255))
-	public url!: string;
 
 	@S.AllowNull(true)
 	@S.Column(S.DataType.STRING(255))
