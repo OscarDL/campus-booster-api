@@ -92,12 +92,13 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
 export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
         let absence = await AbsenceService.findById(req.params.absence_id);
+        if(req.body.fileKeys) req.body.fileKeys = JSON.parse(req.body.fileKeys);
         const rmFileKeys = absence?.fileKeys?.filter(f => !req.body.fileKeys.includes(f)) ?? [];
         for (let i = 0; i < rmFileKeys.length; i++) {
             const fileKey = rmFileKeys[i];
             await s3.remove(fileKey);
         }
-        if(req.files) {
+        if(req.files?.length) {
             req.body.fileKeys.concat(Object.entries(req.files).map(([_, value]) => (value as any).key));
         }
 
