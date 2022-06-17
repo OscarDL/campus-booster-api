@@ -9,6 +9,7 @@ Azure.OAuth();
 
 export async function decryptToken(req: Req, res: Res, next: Next): Promise<Resp> {
   try {
+    console.log(req.body.azureId)
     const user = await Azure.getUser(req.body.azureId);
     if(!user) return next(boom.badRequest(`azure_ad_denied`));
 

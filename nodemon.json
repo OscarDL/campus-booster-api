@@ -1,6 +1,6 @@
 {
     "watch": ["*"],
-    "ext": ".ts,.js,.csv,.json,.env",
+    "ext": ".ts,.js,.csv,.json,.env,.yaml",
     "ignore": ["/tests", "/node_modules"],
     "exec": "ts-node -r tsconfig-paths/register ./app.ts",
     "start:dev": "nodemon"

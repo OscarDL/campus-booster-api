@@ -28,6 +28,9 @@ import socketConfig from './config/sockets.config';
 import ExpressMiddleware from './services/express';
 import { Next, Req, Res, Resp } from './types/express';
 import { authSocketMiddleware } from './services/socket';
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
+const swaggerDocument = YAML.load('./swagger.yaml');
 
 let server;
 const app = express();
@@ -47,6 +50,7 @@ function devHttpsServer(key: string, cert: string, port: number): void {
             const IP_ADDRESS = nets.en1.find(ip => ip.family === 'IPv4')?.address;
             console.log(`\n⮕  Network server: https://${IP_ADDRESS}:${port}`.rgb(249, 174, 65));
         }
+        console.log(`\n⮕  Documentation:  https://localhost:${port}/doc`.black.bg_yellow);
     });
     server.on('error', (error) => onError(error, port));
 }
@@ -85,6 +89,7 @@ if (process.env.NODE_ENV !== 'production') {
             const IP_ADDRESS = nets.en1.find(ip => ip.family === 'IPv4')?.address;
             console.log(`\n⮕  Network server: https://${IP_ADDRESS}:${port}`.rgb(249, 174, 65));
         }
+        console.log(`\n⮕  Documentation:  https://localhost:${port}/doc`.black.bg_yellow);
     });
     server.on('error', (error) => onError(error, port));
 }
@@ -160,6 +165,7 @@ app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.enable('trust proxy');
 app.set("trust proxy", true);
+app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument, { explorer: false }));
 
 // Socket.io instance
 const io = new Server(
