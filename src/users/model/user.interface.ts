@@ -13,13 +13,13 @@ const { permissionLevel } = config;
 export const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 export interface UserAttributes {
 	readonly id?: number;
-	azureId?: string;
+	azureId: string;
   avatar?: string | null;
 	firstName: string;
 	lastName: string;
 	birthday: Date;
 	email: string;
-	personalEmail?: string;
+	personalEmail: string;
 	active?: boolean;
 	banned?: boolean;
 	address?: string;

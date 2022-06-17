@@ -41,7 +41,7 @@ export async function getAll(req: Req, res: Res, next: Next): Promise<Resp> {
 export async function getByUser(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
         const user = await UserService.findById(req.params?.user_id, {}, 'withClassrooms');
-        if(!user) return next(boom.badRequest('resource_not_found', ['user', req.params?.user_id]));
+        if(!user) return next(boom.notFound('resource_not_found', ['user', req.params?.user_id]));
 
         return res.status(200).json(
           (await ProjectService.findAll(

@@ -28,47 +28,51 @@ export default abstract class ExpressMiddlewares {
 
     static ErrorHandler(): any {
         return async (err: any, req: Req, res: Res, next: Next): Promise<Resp> => {
-            if(err && req.file) {
-                await s3.remove((req.file as any).key);
-            }
-            if(err && req.files) {
-                const files = req.files as Express.Multer.File[];
-                for (let i = 0; i < files.length; i++) {
-                    const file = files[i];
-                    await s3.remove((file as any).key);
+            try {
+                if(err && req.file) {
+                    await s3.remove((req.file as any).key);
                 }
-            }
-            if (err.isBoom) {
-                if(err.data) {
-                    if(Array.isArray(err.data)) {
-                        return res.end(
-                            res.status(err.output.statusCode).__(
-                                err.output.payload.message,
-                                ...err.data
-                            )
-                        );
+                if(err && req.files) {
+                    const files = req.files as Express.Multer.File[];
+                    for (let i = 0; i < files.length; i++) {
+                        const file = files[i];
+                        await s3.remove((file as any).key);
+                    }
+                }
+                if (err.isBoom) {
+                    if(err.data) {
+                        if(Array.isArray(err.data)) {
+                            return res.end(
+                                res.status(err.output.statusCode).__(
+                                    err.output.payload.message,
+                                    ...err.data
+                                )
+                            );
+                        } else {
+                            return res.end(
+                                res.status(err.output.statusCode).__(
+                                    err.output.payload.message,
+                                    err.data
+                                )
+                            );
+                        }
                     } else {
                         return res.end(
                             res.status(err.output.statusCode).__(
-                                err.output.payload.message,
-                                err.data
+                                err.output.payload.message
                             )
                         );
                     }
                 } else {
-                    return res.end(
-                        res.status(err.output.statusCode).__(
-                            err.output.payload.message
-                        )
-                    );
+                    if(err instanceof Error) {
+                        console.log(err.message.red.bold);
+                    } else {
+                        console.log(JSON.stringify(err).red.bold);
+                    }
+                    return res.end(res.status(500).__('internal'));
                 }
-            } else {
-                if(err instanceof Error) {
-                    console.log(err.message.red.bold);
-                } else {
-                    console.log(JSON.stringify(err).red.bold);
-                }
-                return res.end(res.status(500).__('internal'));
+            } catch (error) {
+                return res.status(500).send('An internal error occured.');
             }
         }
     }

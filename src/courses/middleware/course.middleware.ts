@@ -9,7 +9,7 @@ export function courseExistAsQuery(name: string): AsyncFn {
         try {
             if(req.query[name]) {
                 const course = await findById(req.query[name]);
-                return (!course) ? next(boom.badRequest(`resource_not_found`, [ "Course", req.query[name]])) : next();
+                return (!course) ? next(boom.notFound(`resource_not_found`, [ "Course", req.query[name]])) : next();
             }
             return next();
         } catch (err: any) {
@@ -24,7 +24,7 @@ export function courseExistAsBody(name: string): AsyncFn {
         try {
             if(req.body[name]) {
                 const course = await findById(req.body[name]);
-                return (!course) ? next(boom.badRequest(`resource_not_found`, [ "Course", req.body[name]])) : next();
+                return (!course) ? next(boom.notFound(`resource_not_found`, [ "Course", req.body[name]])) : next();
             }
             return next();
         } catch (err: any) {
@@ -39,7 +39,7 @@ export function courseExistAsParam(name: string): AsyncFn {
         try {
             if(req.params[name]) { 
                 const course = await findById(req.params[name]);
-                return (!course) ? next(boom.badRequest(`resource_not_found`, [ "Course", req.params[name]])) : next();
+                return (!course) ? next(boom.notFound(`resource_not_found`, [ "Course", req.params[name]])) : next();
             }
             return next();
         } catch (err: any) {
@@ -62,7 +62,7 @@ export async function courseCanBeLinkedToClassroom(req: Req, res: Res, next: Nex
           if(typeof id === "number") {
               const course = await findById(id);
               if(!course) {
-                  return next(boom.badRequest(`resource_not_found`, [ "Course", id]));
+                  return next(boom.notFound(`resource_not_found`, [ "Course", id]));
               }
               const classroom = await ClassroomService.findById(req.params.classroom_id);
               if(classroomHasCourses.some(c => c.courseId === id)) {
@@ -92,7 +92,7 @@ export async function courseCanBeUnLinkedFromClassroom(req: Req, res: Res, next:
           if(typeof id === "number") {
               const course = await findById(id);
               if(!course) {
-                  return next(boom.badRequest(`resource_not_found`, [ "Course", id]));
+                  return next(boom.notFound(`resource_not_found`, [ "Course", id]));
               }
               const classroom = await ClassroomService.findById(req.params.classroom_id);
               if(!classroomHasCourses.some(c => c.courseId === id)) {

@@ -30,7 +30,7 @@ export default class User extends S.Model implements UserModel {
   @S.Column(S.DataType.INTEGER)
 	public id!: number;
 
-	@S.AllowNull(true)
+	@S.AllowNull(false)
 	@S.Column({
     field: 'azure_id',
     type: S.DataType.STRING(255)
@@ -64,7 +64,7 @@ export default class User extends S.Model implements UserModel {
   })
 	public email!: string;
 
-	@S.AllowNull(true)
+	@S.AllowNull(false)
 	@S.IsEmail
 	@S.Is('emailFormat', (email) => {
 		if(!EMAIL_REGEX.test(email)) {

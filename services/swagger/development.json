@@ -9,15 +9,468 @@
             "url": "https://opensource.org/licenses/MIT"
         }
     },
-    "host": "api.campusbooster.eu/",
-    "basePath": "/",
+
+    "schemes": ["https"],
+    "basePath": "/api/v1/",
+    "host": "localhost:1337",
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+
     "tags": [
         {
-            "name": "Users",
-            "description": "API for users in the system"
+            "name": "Auth"
+        },
+        {
+            "name": "Users"
         }
     ],
-    "schemes": ["http"],
-    "consumes": ["application/json"],
-    "produces": ["application/json"]
+
+    "components": {
+        "securityScemes": {
+            "cookieAuth": {
+                "in": "cookie",
+                "type": "apiKey",
+                "name": "accessToken"
+            }
+        }
+    },
+
+    "security": {
+        "cookieAuth": []
+    },
+
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "Sign in as a Campus Booster user.",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "azureId",
+                        "description": "Azure ID (ObjectID) of the user trying to connect.",
+                        "schema": {
+                            "type": "object",
+                            "required": ["azureId"],
+                            "properties": {
+                                "azureId": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "get": {
+                "tags": ["Auth"],
+                "summary": "Sign out a user from Campus Booster.",
+                "responses": {
+                    "200": {}
+                }
+            }
+        },
+        "/auth/refresh": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "Refresh the access token of a signed in user.",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "refreshToken",
+                        "description": "Refresh token of the user.",
+                        "schema": {
+                            "type": "object",
+                            "required": ["refreshToken"],
+                            "properties": {
+                                "refreshToken": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "type": "object",
+                        "properties": {
+                            "refreshToken": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/users": {
+            "get": {
+                "tags": ["Users"],
+                "summary": "Returns the list of all users.",
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Users"],
+                "summary": "Create a new user in the database.",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "user",
+                        "description": "User fields to assign to the new user.",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}": {
+            "get": {
+                "tags": ["Users"],
+                "summary": "Returns a specific user from the given ID.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "user_id",
+                        "required": "true",
+                        "description": "User ID to identify which user to retrieve."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["Users"],
+                "summary": "Update an existing user in the database.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "user_id",
+                        "required": "true",
+                        "description": "User ID to identify which user to edit."
+                    },
+                    {
+                        "in": "body",
+                        "name": "user",
+                        "description": "New fields to assign to an existing user. Only keep the fields you want to change.",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "203": {
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Users"],
+                "summary": "Delete an existing user from the database.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "user_id",
+                        "required": "true",
+                        "description": "User ID to identify which user to delete."
+                    }
+                ],
+                "responses": {
+                    "204": {}
+                }
+            }
+        },
+        "/users/azure/{user_id}": {
+            "delete": {
+                "tags": ["Users"],
+                "summary": "Delete an existing user from Azure.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "user_id",
+                        "required": "true",
+                        "description": "User ID to identify which user to delete."
+                    }
+                ],
+                "responses": {
+                    "204": {}
+                }
+            }
+        },
+        "/users/activate/{user_id}": {
+            "patch": {
+                "tags": ["Users"],
+                "summary": "Activate a user account for Campus Booster.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "user_id",
+                        "required": "true",
+                        "description": "User ID to identify which user to activate."
+                    }
+                ],
+                "responses": {
+                    "203": {
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/resetpassword/{user_id}": {
+            "patch": {
+                "tags": ["Users"],
+                "summary": "Reset the password of a user account.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "user_id",
+                        "required": "true",
+                        "description": "User ID to identify which user to reset the password for."
+                    }
+                ],
+                "responses": {
+                    "203": {
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/teacher/{user_id}": {
+            "get": {
+                "tags": ["Users"],
+                "summary": "Retrieve all users for a specific teacher (in a classroom).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "user_id",
+                        "required": "true",
+                        "description": "User ID to identify which teacher to retrieve the users for."
+                    }
+                ],
+                "responses": {
+                    "203": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/classrooms/add/{user_id}": {
+            "patch": {
+                "tags": ["Users"],
+                "summary": "Add a specific user to a specific classroom.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "user_id",
+                        "required": "true",
+                        "description": "User ID to identify which user to add to the given classrooms."
+                    },
+                    {
+                        "in": "body",
+                        "description": "Classrooms to assign to the given user.",
+                        "schema": {
+                            "type": "object",
+                            "required": ["classrooms"],
+                            "properties": {
+                                "classrooms": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "203": {
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/classrooms/remove/{user_id}": {
+            "patch": {
+                "tags": ["Users"],
+                "summary": "Remove a specific user from a specific classroom.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "user_id",
+                        "required": "true",
+                        "description": "User ID to identify which user to remove from the given classrooms."
+                    },
+                    {
+                        "in": "body",
+                        "description": "Classrooms to remove from the given user.",
+                        "schema": {
+                            "type": "object",
+                            "required": ["classrooms"],
+                            "properties": {
+                                "classrooms": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "203": {
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            }
+        }
+    },
+
+    "definitions": {
+        "User": {
+            "required": [
+                "azureId",
+                "firstName",
+                "lastName",
+                "email",
+                "personalEmail",
+                "birthday",
+                "active",
+                "banned",
+                "role",
+                "address",
+                "credits"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "azureId": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "personalEmail": {
+                    "type": "string"
+                },
+                "birthday": {
+                    "type": "string"
+                },
+                "avatarKey": {
+                    "type": "string"
+                },
+                "active": {
+                    "type": "boolean"
+                },
+                "banned": {
+                    "type": "boolean"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "campusId": {
+                    "type": "integer"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "credits": {
+                    "type": "integer"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "promotion": {
+                    "type": "integer"
+                }
+            }
+        }
+    },
+
+    "responses": {
+        "BadRequest": {
+            "description": "The request is invalid or incomplete.",
+            "schema": {
+                "type": "string"
+            }
+        },
+        "Unauthorized": {
+            "description": "You are not allowed to perform this request.",
+            "schema": {
+                "type": "string"
+            }
+        },
+        "NotFound": {
+            "description": "The resource could not be found.",
+            "schema": {
+                "type": "string"
+            }
+        },
+        "Internal": {
+            "description": "An internal error occurred.",
+            "schema": {
+                "type": "string"
+            }
+        }
+    }
 }

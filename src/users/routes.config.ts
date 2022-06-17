@@ -64,7 +64,7 @@ export default (app: App): void => {
 		    UserController.create
     ]);
     // ADD USER TO CLASSROOMS
-    app.post(routePrefix + `/:user_id${regInt}/classrooms/add`, [
+    app.post(routePrefix + `/classrooms/add/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
@@ -74,7 +74,7 @@ export default (app: App): void => {
         UserController.addToClassrooms
     ]);
     // REMOVE USER FROM CLASSROOMS
-    app.post(routePrefix + `/:user_id${regInt}/classrooms/remove`, [
+    app.post(routePrefix + `/classrooms/remove/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
@@ -100,7 +100,7 @@ export default (app: App): void => {
         UserController.update
     ]);
     // RESET USER PASSWORD
-    app.patch(routePrefix + `/:user_id${regInt}/resetpassword`, [
+    app.patch(routePrefix + `/resetpassword/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
 		    RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
@@ -109,7 +109,7 @@ export default (app: App): void => {
         UserController.resetUserPassword
     ]);
     // ACTIVATE USER ACCOUNT
-    app.patch(routePrefix + `/:user_id${regInt}/activate`, [
+    app.patch(routePrefix + `/activate/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
         UserMiddleware.userExistAsParam("user_id"),
         UserController.activate

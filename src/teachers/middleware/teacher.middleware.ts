@@ -7,7 +7,7 @@ export function teacherExistAsQuery(name: string): AsyncFn {
         try {
             if(req.query[name]) {
                 const teacher = await findById(req.query[name]);
-                return (!teacher) ? next(boom.badRequest(`resource_not_found`, [ "Teacher", req.query[name]])) : next();
+                return (!teacher) ? next(boom.notFound(`resource_not_found`, [ "Teacher", req.query[name]])) : next();
             }
             return next();
         } catch (err: any) {
@@ -22,7 +22,7 @@ export function teacherExistAsBody(name: string): AsyncFn {
         try {
             if(req.body[name]) {
                 const teacher = await findById(req.body[name]);
-                return (!teacher) ? next(boom.badRequest(`resource_not_found`, [ "Teacher", req.body[name]])) : next();
+                return (!teacher) ? next(boom.notFound(`resource_not_found`, [ "Teacher", req.body[name]])) : next();
             }
             return next();
         } catch (err: any) {
@@ -37,7 +37,7 @@ export function teacherExistAsParam(name: string): AsyncFn {
         try {
             if(req.params[name]) { 
                 const teacher = await findById(req.params[name]);
-                return (!teacher) ? next(boom.badRequest(`resource_not_found`, [ "Teacher", req.params[name]])) : next();
+                return (!teacher) ? next(boom.notFound(`resource_not_found`, [ "Teacher", req.params[name]])) : next();
             }
             return next();
         } catch (err: any) {

@@ -11,7 +11,7 @@ export function absenceExistAsQuery(name: string): AsyncFn {
         try {
             if(req.query[name]) {
                 const absence = await findById(req.query[name]);
-                return (!absence) ? next(boom.badRequest(`resource_not_found`, [ "Absence", req.query[name]])) : next();
+                return (!absence) ? next(boom.notFound(`resource_not_found`, [ "Absence", req.query[name]])) : next();
             }
             return next();
         } catch (err: any) {
@@ -26,7 +26,7 @@ export function absenceExistAsBody(name: string): AsyncFn {
         try {
             if(req.body[name]) {
                 const absence = await findById(req.body[name]);
-                return (!absence) ? next(boom.badRequest(`resource_not_found`, [ "Absence", req.body[name]])) : next();
+                return (!absence) ? next(boom.notFound(`resource_not_found`, [ "Absence", req.body[name]])) : next();
             }
             return next();
         } catch (err: any) {
@@ -41,7 +41,7 @@ export function absenceExistAsParam(name: string): AsyncFn {
         try {
             if(req.params[name]) { 
                 const absence = await findById(req.params[name]);
-                return (!absence) ? next(boom.badRequest(`resource_not_found`, [ "Absence", req.params[name]])) : next();
+                return (!absence) ? next(boom.notFound(`resource_not_found`, [ "Absence", req.params[name]])) : next();
             }
             return next();
         } catch (err: any) {

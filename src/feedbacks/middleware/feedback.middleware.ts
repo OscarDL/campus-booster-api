@@ -7,7 +7,7 @@ export function feedbackExistAsQuery(name: string): AsyncFn {
         try {
             if(req.query[name]) {
                 const feedback = await findById(req.query[name]);
-                return (!feedback) ? next(boom.badRequest(`resource_not_found`, [ "Feedback", req.query[name]])) : next();
+                return (!feedback) ? next(boom.notFound(`resource_not_found`, [ "Feedback", req.query[name]])) : next();
             }
             return next();
         } catch (err: any) {
@@ -22,7 +22,7 @@ export function feedbackExistAsBody(name: string): AsyncFn {
         try {
             if(req.body[name]) {
                 const feedback = await findById(req.body[name]);
-                return (!feedback) ? next(boom.badRequest(`resource_not_found`, [ "Feedback", req.body[name]])) : next();
+                return (!feedback) ? next(boom.notFound(`resource_not_found`, [ "Feedback", req.body[name]])) : next();
             }
             return next();
         } catch (err: any) {
@@ -37,7 +37,7 @@ export function feedbackExistAsParam(name: string): AsyncFn {
         try {
             if(req.params[name]) { 
                 const feedback = await findById(req.params[name]);
-                return (!feedback) ? next(boom.badRequest(`resource_not_found`, [ "Feedback", req.params[name]])) : next();
+                return (!feedback) ? next(boom.notFound(`resource_not_found`, [ "Feedback", req.params[name]])) : next();
             }
             return next();
         } catch (err: any) {

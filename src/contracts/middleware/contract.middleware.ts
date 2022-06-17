@@ -7,7 +7,7 @@ export function contractExistAsQuery(name: string): AsyncFn {
         try {
             if(req.query[name]) {
                 const contract = await findById(req.query[name]);
-                return (!contract) ? next(boom.badRequest(`resource_not_found`, [ "Contract", req.query[name]])) : next();
+                return (!contract) ? next(boom.notFound(`resource_not_found`, [ "Contract", req.query[name]])) : next();
             }
             return next();
         } catch (err: any) {
@@ -22,7 +22,7 @@ export function contractExistAsBody(name: string): AsyncFn {
         try {
             if(req.body[name]) {
                 const contract = await findById(req.body[name]);
-                return (!contract) ? next(boom.badRequest(`resource_not_found`, [ "Contract", req.body[name]])) : next();
+                return (!contract) ? next(boom.notFound(`resource_not_found`, [ "Contract", req.body[name]])) : next();
             }
             return next();
         } catch (err: any) {
@@ -37,7 +37,7 @@ export function contractExistAsParam(name: string): AsyncFn {
         try {
             if(req.params[name]) { 
                 const contract = await findById(req.params[name]);
-                return (!contract) ? next(boom.badRequest(`resource_not_found`, [ "Contract", req.params[name]])) : next();
+                return (!contract) ? next(boom.notFound(`resource_not_found`, [ "Contract", req.params[name]])) : next();
             }
             return next();
         } catch (err: any) {

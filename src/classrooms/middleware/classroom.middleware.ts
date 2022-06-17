@@ -9,7 +9,7 @@ export function classroomExistAsQuery(name: string): AsyncFn {
         try {
             if(req.query[name]) {
                 const classroom = await findById(req.query[name]);
-                return (!classroom) ? next(boom.badRequest(`resource_not_found`, [ "Classroom", req.query[name]])) : next();
+                return (!classroom) ? next(boom.notFound(`resource_not_found`, [ "Classroom", req.query[name]])) : next();
             }
             return next();
         } catch (err: any) {
@@ -24,7 +24,7 @@ export function classroomExistAsBody(name: string): AsyncFn {
         try {
             if(req.body[name]) {
                 const classroom = await findById(req.body[name]);
-                return (!classroom) ? next(boom.badRequest(`resource_not_found`, [ "Classroom", req.body[name]])) : next();
+                return (!classroom) ? next(boom.notFound(`resource_not_found`, [ "Classroom", req.body[name]])) : next();
             }
             return next();
         } catch (err: any) {
@@ -39,7 +39,7 @@ export function classroomExistAsParam(name: string): AsyncFn {
         try {
             if(req.params[name]) { 
                 const classroom = await findById(req.params[name]);
-                return (!classroom) ? next(boom.badRequest(`resource_not_found`, [ "Classroom", req.params[name]])) : next();
+                return (!classroom) ? next(boom.notFound(`resource_not_found`, [ "Classroom", req.params[name]])) : next();
             }
             return next();
         } catch (err: any) {
@@ -62,7 +62,7 @@ export async function classroomCanBeLinkedToUser(req: Req, res: Res, next: Next)
             if(typeof id === "number") {
                 const classroom = await findById(id);
                 if(!classroom) {
-                    return next(boom.badRequest(`resource_not_found`, [ "Classroom", id]));
+                    return next(boom.notFound(`resource_not_found`, [ "Classroom", id]));
                 }
                 const user = await UserService.findById(req.params.user_id);
                 if(classroom.campusId && user?.campusId !== classroom.campusId) {
@@ -95,7 +95,7 @@ export async function classroomCanBeUnLinkedFromUser(req: Req, res: Res, next: N
             if(typeof id === "number") {
                 const classroom = await findById(id);
                 if(!classroom) {
-                    return next(boom.badRequest(`resource_not_found`, [ "Classroom", id]));
+                    return next(boom.notFound(`resource_not_found`, [ "Classroom", id]));
                 }
                 const user = await UserService.findById(req.params.user_id);
                 if(!userHasClassrooms.some(m => m.classroomId === id)) {

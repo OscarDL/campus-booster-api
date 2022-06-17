@@ -79,7 +79,7 @@ export default class MailerService<
             if (error) {
               console.log(`\n✖ SMTP Error: ${error.message}`.red);
             } else {
-              console.log("\n⮕ SMTP Server is ready to send emails 📩".magenta);
+              console.log("\n⮕  SMTP Server is ready to send emails 📩".magenta);
             }
         });
     }
