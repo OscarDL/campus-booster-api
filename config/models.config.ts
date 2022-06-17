@@ -47,9 +47,9 @@ export function login(): Promise<Sequelize> {
             logging: false
         }).then(() => {
             console.log(
-                `\n⮕  Database environment: ${Config.env.toLocaleUpperCase()} ${Config.env === 'production' ? '🔥' : '🛠️'}`.rgb(198, 98, 255)
+                `\n⮕  Database environment: ${Config.env.toLocaleUpperCase()} ${Config.env === 'production' ? '🔥' : '🛠️'}`.blue
             );
-            console.log('\n✅ Database is synchronized'.green);
+            console.log('\n⮕ Database is synchronized ✅'.green);
             return resolve(sequelize);
         }).catch((err) => {
             console.log(err);

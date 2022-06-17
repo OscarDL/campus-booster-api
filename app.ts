@@ -21,6 +21,7 @@ import cookieParser from 'cookie-parser';
 import responseTime from 'response-time';
 import { exec } from "node:child_process";
 import rateLimit from 'express-rate-limit';
+import swaggerUi from 'swagger-ui-express';
 
 import { IServer } from './types/socket';
 import routeConfig from './config/routes.config';
@@ -28,12 +29,12 @@ import socketConfig from './config/sockets.config';
 import ExpressMiddleware from './services/express';
 import { Next, Req, Res, Resp } from './types/express';
 import { authSocketMiddleware } from './services/socket';
-import swaggerUi from 'swagger-ui-express';
-import YAML from 'yamljs';
-const swaggerDocument = YAML.load('./swagger.yaml');
+import swaggerDevDocument from './services/swagger/development.json';
+import swaggerProdDocument from './services/swagger/production.json';
 
 let server;
 const app = express();
+const isProduction = process.env.NODE_ENV === 'production';
 
 async function execShell(cmd: string): Promise<string> {
     return new Promise((resolve, reject) => exec(cmd, (err, out) => err ? reject(err) : resolve(out)));
@@ -42,21 +43,21 @@ async function execShell(cmd: string): Promise<string> {
 function devHttpsServer(key: string, cert: string, port: number): void {
     server = https.createServer({key, cert}, app);
     server.listen(port, () => {
-        console.log(`\n⮕  App listening on port ${port}`.info);
-        console.log(`\n⮕  Local server: https://localhost:${port}`.rgb(249, 218, 65));
+        console.log(`\n⮕  App listening on port ${port}`.green);
+        console.log(`\n⮕  Local server: https://localhost:${port}`.yellow);
     
         const nets = networkInterfaces();
         if (nets.en1 && nets.en1.some(ip => ip.family === 'IPv4')) {
             const IP_ADDRESS = nets.en1.find(ip => ip.family === 'IPv4')?.address;
-            console.log(`\n⮕  Network server: https://${IP_ADDRESS}:${port}`.rgb(249, 174, 65));
+            console.log(`\n⮕  Network server: https://${IP_ADDRESS}:${port}`.blue);
         }
-        console.log(`\n⮕  Documentation:  https://localhost:${port}/doc`.black.bg_yellow);
+        console.log(`\n⮕  Documentation:  https://localhost:${port}/doc`.cyan);
     });
     server.on('error', (error) => onError(error, port));
 }
 const port = Number(process.env.PORT);
 
-if (process.env.NODE_ENV !== 'production') {
+if (!isProduction) {
     let key, cert;
     try {
         key = fs.readFileSync('key.pem', 'utf8');
@@ -82,14 +83,14 @@ if (process.env.NODE_ENV !== 'production') {
     server = http.createServer(app);
     server.listen(port, () => {
         console.log(`\n⮕  App listening on port ${port}`.info);
-        console.log(`\n⮕  Local server: https://localhost:${port}`.rgb(249, 218, 65));
+        console.log(`\n⮕  Local server: https://localhost:${port}`.yellow);
     
         const nets = networkInterfaces();
         if (nets.en1 && nets.en1.some(ip => ip.family === 'IPv4')) {
             const IP_ADDRESS = nets.en1.find(ip => ip.family === 'IPv4')?.address;
-            console.log(`\n⮕  Network server: https://${IP_ADDRESS}:${port}`.rgb(249, 174, 65));
+            console.log(`\n⮕  Network server: https://${IP_ADDRESS}:${port}`.yellow);
         }
-        console.log(`\n⮕  Documentation:  https://localhost:${port}/doc`.black.bg_yellow);
+        console.log(`\n⮕  Documentation:  https://localhost:${port}/doc`.cyan);
     });
     server.on('error', (error) => onError(error, port));
 }
@@ -104,7 +105,7 @@ const corsOpts: cors.CorsOptions = {
     exposedHeaders: [
         'Content-Length'
     ],
-    origin: process.env.NODE_ENV === 'development' ? [
+    origin: !isProduction ? [
         'https://localhost:3000'
     ] : [
         process.env.CLIENT_URL ?? ''
@@ -117,7 +118,7 @@ const contentSecurityPolicy = {
         styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
         scriptSrc: ["'self'", "'unsafe-inline'"],
         fontSrc: ["'self'", 'fonts.gstatic.com'],
-        imgSrc: ["'self'"],
+        imgSrc: ["'self'", 'data:'],
         connectSrc: ["'self'"]
     }
 };
@@ -163,9 +164,8 @@ app.use(cookieParser());
 app.use(responseTime());
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true }));
-app.enable('trust proxy');
-app.set("trust proxy", true);
-app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument, { explorer: false }));
+
+app.use('/swagger/api-docs', swaggerUi.serve, swaggerUi.setup(!isProduction ? swaggerDevDocument : swaggerProdDocument));
 
 // Socket.io instance
 const io = new Server(
@@ -195,10 +195,6 @@ routeConfig(app);
 
 app.use(ExpressMiddleware.NotFound());
 app.use(ExpressMiddleware.ErrorHandler());
-
-// if (process.env.NODE_ENV === 'production') {
-//   app.get('*', (_, res) => res.sendFile(path.join(clientPath, 'index.html')));
-// }
 
 function onError(error: any, port: number): never {
     if (error.syscall !== 'listen') {
