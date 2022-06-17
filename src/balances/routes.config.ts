@@ -54,6 +54,7 @@ export default (app: App): void => {
         RequestMiddleware.bodyParametersNeeded('description', 'string'),
 		    RequestMiddleware.bodyParametersNeeded('dateRequested', 'string'),
 		    RequestMiddleware.bodyParameterHoped('dateConfirmed', 'string'),
+        BalanceMiddleware.userIsStudent,
 		    BalanceController.create
     ]);
     // UPDATE BALANCE
@@ -69,6 +70,7 @@ export default (app: App): void => {
         RequestMiddleware.bodyParameterHoped('description', 'string'),
         RequestMiddleware.bodyParameterHoped('dateRequested', 'string'),
         RequestMiddleware.bodyParameterHoped('dateConfirmed', 'string'),
+        BalanceMiddleware.userIsStudent,
         BalanceController.update
     ]);
     // DELETE BALANCE

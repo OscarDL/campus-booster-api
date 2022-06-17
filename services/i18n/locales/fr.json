@@ -33,6 +33,7 @@
     "unauthorized_user_role_update": "Vous n'êtes pas autorisé à mettre à jour ou à supprimer des utilisateurs ayant un rôle similaire ou supérieur au vôtre.",
     "user_password_reset": "La réinitialisation du mot de passe de l'utilisateur a échoué. Si l'utilisateur est correct, veuillez lui attribuer une adresse électronique personnelle.",
     "smtp_error": "Echec de l'envoie de l'email à \"%s\", contactez l'administrateur.",
+    "balance_user_is_not_student": "L'utilisateur fourni dans la requête n'est pas un étudiant.",
     "teacher_classroom_exists": "Vous ne pouvez pas assigner un professeur à une classe pour laquelle il est déjà professeur.",
     "absence_missing_late_equal": "L'élève ne peut pas être marqué comme étant en retard et manquant en même temps.",
     "absence_user_create_different": "Vous ne pouvez pas créer une absence pour un autre élève.",

@@ -94,8 +94,9 @@ export async function personalEmailIsNotTaken(req: Req, res: Res, next: Next): P
 
 export async function iamAdminOrItsaStudent(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
+        let userId = req.params.user_id || req.body.userId;
         return req.isAdmin ? next() : 
-            (await findById(req.params.user_id))?.role === Student ? 
+            (await findById(userId))?.role === Student ? 
         next() : next(boom.badRequest('missing_access_rights'));
     } catch (err: any) {
         console.log(`${err}`.red.bold);

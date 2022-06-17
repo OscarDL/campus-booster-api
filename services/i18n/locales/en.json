@@ -33,6 +33,7 @@
     "unauthorized_user_role_update": "You are not allowed to update or delete users with a similar or higher role than you.",
     "user_password_reset": "Failed to reset user password. If the user is correct, please assign them a personal email address.",
     "smtp_error": "Failed to send email to \"%s\", contact administrator.",
+    "balance_user_is_not_student": "The user provided in the request is not a student.",
     "teacher_classroom_exists": "You cannot assign a teacher to a classroom they're already teacher for.",
     "absence_missing_late_equal": "Student cannot be marked as late and missing at the same time.",
     "absence_user_create_different": "You cannot create an absence for a different student.",

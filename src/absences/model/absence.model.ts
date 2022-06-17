@@ -45,7 +45,7 @@ export default class Absence extends S.Model implements AbsenceModel {
 	@S.Column({
 		field: 'file_keys',
 		type: S.DataType.ARRAY(
-			S.DataType.STRING(1024)
+			S.DataType.TEXT
 		)
 	})
 	public fileKeys!: string[];

@@ -67,7 +67,7 @@ export default class Contract extends S.Model implements ContractModel {
 	@S.Column({
 		field: 'file_keys',
 		type: S.DataType.ARRAY(
-			S.DataType.STRING(1024)
+			S.DataType.TEXT
 		)
 	})
 	public fileKeys!: string[];
