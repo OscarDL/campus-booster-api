@@ -1,4 +1,7 @@
-<img src="https://www.supinfo.com/wp-content/uploads/2020/11/Capture-décran-2020-11-27-à-16.02.29.png" alt="Logo" width="200px">
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/27915933/174158191-d209ecc6-7466-41aa-87e4-fcf60536dffe.png" alt="Logo" width="150px"/>
+  <h1 align="center">Campus Booster</h1>
+</p>
 
 # Private API Campus Booster
 
