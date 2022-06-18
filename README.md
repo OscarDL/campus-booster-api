@@ -94,97 +94,98 @@ Response:
 
 ## AVAILABLE SERVICES:
 
-Config:
-      ✔ Login: (4849ms)
-    Models:
+<li>Config:
+  <ul>✔ Login:</ul>
+    <li>Models:</li>
       Model Absence:
-        ✔ Find all absence: (398ms)
-        ✔ Find one absence: (406ms)
-        ✔ Find by ID absence: (379ms)
-        ✔ Count absence: (90ms)
+        <ul>✔ Find all absence:</ul>
+        <ul>✔ Find one absence:</ul>
+        <ul>✔ Find by ID absence:</ul>
+        <ul>✔ Count absence:</ul>
       Model Balance:
-        ✔ Find all balance: (92ms)
-        ✔ Find one balance: (179ms)
-        ✔ Find by ID balance: (181ms)
-        ✔ Count balance: (89ms)
+        <ul>✔ Find all balance:</ul>
+        <ul>✔ Find one balance:</ul>
+        <ul>✔ Find by ID balance:</ul>
+        <ul>✔ Count balance:</ul>
       Model Campus:
-        ✔ Find all campus: (105ms)
-        ✔ Find one campus: (179ms)
-        ✔ Find by ID campus: (181ms)
-        ✔ Count campus: (89ms)
+        <ul>✔ Find all campus:</ul>
+        <ul>✔ Find one campus:</ul>
+        <ul>✔ Find by ID campus:</ul>
+        <ul>✔ Count campus:</ul>
       Model Classroom:
-        ✔ Find all classroom: (247ms)
-        ✔ Find one classroom: (199ms)
-        ✔ Find by ID classroom: (192ms)
-        ✔ Count classroom: (92ms)
+        <ul>✔ Find all classroom:</ul>
+        <ul>✔ Find one classroom:</ul>
+        <ul>✔ Find by ID classroom:</ul>
+        <ul>✔ Count classroom:</ul>
       Model ClassroomHasCourse:
-        ✔ Find all classroomhascourse: (100ms)
-        ✔ Find one classroomhascourse: (185ms)
-        ✔ Find by ID classroomhascourse: (91ms)
-        ✔ Count classroomhascourse: (90ms)
+        <ul>✔ Find all classroomhascourse:</ul>
+        <ul>✔ Find one classroomhascourse:</ul>
+        <ul>✔ Find by ID classroomhascourse:</ul>
+        <ul>✔ Count classroomhascourse:</ul>
       Model Contract:
-        ✔ Find all contract: (112ms)
-        ✔ Find one contract: (182ms)
-        ✔ Find by ID contract: (90ms)
-        ✔ Count contract: (90ms)
+        <ul>✔ Find all contract:</ul>
+        <ul>✔ Find one contract:</ul>
+        <ul>✔ Find by ID contract:</ul>
+        <ul>✔ Count contract:</ul>
       Model Course:
-        ✔ Find all course: (92ms)
-        ✔ Find one course: (178ms)
-        ✔ Find by ID course: (179ms)
-        ✔ Count course: (90ms)
+        <ul>✔ Find all course:</ul>
+        <ul>✔ Find one course:</ul>
+        <ul>✔ Find by ID course:</ul>
+        <ul>✔ Count course:</ul>
       Model Feedback:
-        ✔ Find all feedback: (101ms)
-        ✔ Find one feedback: (178ms)
-        ✔ Find by ID feedback: (178ms)
-        ✔ Count feedback: (88ms)
+        <ul>✔ Find all feedback:</ul>
+        <ul>✔ Find one feedback:</ul>
+        <ul>✔ Find by ID feedback:</ul>
+        <ul>✔ Count feedback:</ul>
       Model Grade:
-        ✔ Find all grade: (104ms)
-        ✔ Find one grade: (180ms)
-        ✔ Find by ID grade: (89ms)
-        ✔ Count grade: (90ms)
+        <ul>✔ Find all grade:</ul>
+        <ul>✔ Find one grade:</ul>
+        <ul>✔ Find by ID grade:</ul>
+        <ul>✔ Count grade:</ul>
       Model Planning:
-        ✔ Find all planning: (93ms)
-        ✔ Find one planning: (185ms)
-        ✔ Find by ID planning: (185ms)
-        ✔ Count planning: (90ms)
+        <ul>✔ Find all planning:</ul>
+        <ul>✔ Find one planning:</ul>
+        <ul>✔ Find by ID planning:</ul>
+        <ul>✔ Count planning:</ul>
       Model Teacher:
-        ✔ Find all teacher: (90ms)
-        ✔ Find one teacher: (178ms)
-        ✔ Find by ID teacher: (178ms)
-        ✔ Count teacher: (89ms)
+        <ul>✔ Find all teacher:</ul>
+        <ul>✔ Find one teacher:</ul>
+        <ul>✔ Find by ID teacher:</ul>
+        <ul>✔ Count teacher:</ul>
       Model Tool:
-        ✔ Find all tool: (2293ms)
-        ✔ Find one tool: (325ms)
-        ✔ Find by ID tool: (404ms)
-        ✔ Count tool: (89ms)
+        <ul>✔ Find all tool:</ul>
+        <ul>✔ Find one tool:</ul>
+        <ul>✔ Find by ID tool:</ul>
+        <ul>✔ Count tool:</ul>
       Model User:
-        ✔ Find all user: (195ms)
-        ✔ Find one user: (179ms)
-        ✔ Find by ID user: (179ms)
-        ✔ Count user: (89ms)
+        <ul>✔ Find all user:</ul>
+        <ul>✔ Find one user:</ul>
+        <ul>✔ Find by ID user:</ul>
+        <ul>✔ Count user:</ul>
       Model UserHasClassroom:
-        ✔ Find all userhasclassroom: (93ms)
-        ✔ Find one userhasclassroom: (182ms)
-        ✔ Find by ID userhasclassroom: (90ms)
-        ✔ Count userhasclassroom: (90ms)
+        <ul>✔ Find all userhasclassroom:</ul>
+        <ul>✔ Find one userhasclassroom:</ul>
+        <ul>✔ Find by ID userhasclassroom:</ul>
+        <ul>✔ Count userhasclassroom:</ul>
 
-  Services:
+  <li>Services:</li>
     Encryption with crypto:
-      ✔ AES Encryption is working
-      ✔ Encryption/Decryption
+       <ul>✔ AES Encryption is working</ul>
+       <ul>✔ Encryption/Decryption</ul>
     Moderator service:
-      ✔ Detect insult:
-      ✔ Censor insult:
+       <ul>✔ Detect insult:</ul>
+       <ul>✔ Censor insult:</ul>
     AWS service:
-      ✔ Upload file: (137ms)
-      ✔ Download file: (138ms)
-      ✔ Remove file: (78ms)
+       <ul>✔ Upload file:</ul>
+       <ul>✔ Download file:</ul>
+       <ul>✔ Remove file:</ul>
     Azure AD service:
-      ✔ Get User list: (566ms)
-      ✔ Get User by email: (107ms)
-      ✔ Get User avatar by email: (94ms)
-      ✔ Get Group list: (121ms)
-      ✔ Get Group members from a group: (110ms)
+       <ul>✔ Get User list:</ul>
+       <ul>✔ Get User by email:</ul>
+       <ul>✔ Get User avatar by email:</ul>
+       <ul>✔ Get Group list:</ul>
+       <ul>✔ Get Group members from a group:</ul>
+</li>
 
 ## CONTACT:
 Campus Booster [Admin](mailto:ulysse.dupont@supinfo.com?subject=[GitHub]%20Source%20Han%20Sans) \
