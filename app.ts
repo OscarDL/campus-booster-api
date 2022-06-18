@@ -51,7 +51,7 @@ function devHttpsServer(key: string, cert: string, port: number): void {
             const IP_ADDRESS = nets.en1.find(ip => ip.family === 'IPv4')?.address;
             console.log(`\n⮕  Network server: https://${IP_ADDRESS}:${port}`.blue);
         }
-        console.log(`\n⮕  Documentation:  https://localhost:${port}/doc`.cyan);
+        console.log(`\n⮕  Documentation:  https://localhost:${port}/swagger/api-docs`.cyan);
     });
     server.on('error', (error) => onError(error, port));
 }
@@ -90,7 +90,7 @@ if (!isProduction) {
             const IP_ADDRESS = nets.en1.find(ip => ip.family === 'IPv4')?.address;
             console.log(`\n⮕  Network server: https://${IP_ADDRESS}:${port}`.yellow);
         }
-        console.log(`\n⮕  Documentation:  https://localhost:${port}/doc`.cyan);
+        console.log(`\n⮕  Documentation:  https://localhost:${port}/swagger/api-docs`.cyan);
     });
     server.on('error', (error) => onError(error, port));
 }

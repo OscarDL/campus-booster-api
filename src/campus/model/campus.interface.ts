@@ -8,8 +8,8 @@ export interface CampusAttributes {
 	address: string;
 	postCode: string;
 	city: string;
-	open?: string;
-	virtual?: string;
+	open?: boolean;
+	virtual?: boolean;
 	readonly createdAt?: Date;
 	readonly updatedAt?: Date;
 	Users?: UserModel[];

@@ -6,7 +6,7 @@ import { FeedbackModel } from './../../feedbacks/model/feedback.interface';
 import { GradeModel } from './../../grades/model/grade.interface';
 export interface TeacherAttributes {
   readonly id: number;
-	active?: string;
+	active?: boolean;
 	readonly createdAt?: Date;
 	readonly updatedAt?: Date;
 	userId?: number;

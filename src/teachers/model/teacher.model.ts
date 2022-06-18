@@ -27,7 +27,7 @@ export default class Teacher extends S.Model implements TeacherModel {
 	@S.AllowNull(true)
 	@S.Default(true)
 	@S.Column(S.DataType.BOOLEAN)
-	public active!: string;
+	public active!: boolean;
 
 	@S.ForeignKey(() => User)
 	@S.Column(
