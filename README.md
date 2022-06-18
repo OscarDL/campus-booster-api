@@ -9,7 +9,7 @@ Node.js typescript REST API
 
 ### Open the project
 
-[open API online](https://campusbooster.herokuapp.com/)
+[Open API online](https://api.campusbooster.eu/)
 
 ### How to install?
 
