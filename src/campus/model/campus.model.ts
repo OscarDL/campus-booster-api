@@ -44,12 +44,12 @@ export default class Campus extends S.Model implements CampusModel {
 	@S.AllowNull(false)
 	@S.Default(true)
 	@S.Column(S.DataType.BOOLEAN)
-	public open!: string;
+	public open!: boolean;
 
 	@S.AllowNull(false)
 	@S.Default(false)
 	@S.Column(S.DataType.BOOLEAN)
-	public virtual!: string;
+	public virtual!: boolean;
 
 	@S.HasMany(() => User, { 
 		foreignKey: {
