@@ -14,7 +14,6 @@ const {
 } = config;
 
 const routePrefix = config.route_prefix + '/grades';
-const GRADE_PERMISSIONS = Object.values(roles).filter(role => role !== roles.Student);
 
 export default (app: App): void => {
     // GET ALL GRADES
@@ -46,11 +45,12 @@ export default (app: App): void => {
     // GET GRADE BY TEACHER
     app.get(`${routePrefix}/teacher/:teacher_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.rolesAllowed(GRADE_PERMISSIONS),
+		    PermissionMiddleware.rolesAllowed(Object.values(roles)),
         RequestMiddleware.queryParameterHoped('offset', 'float'),
         RequestMiddleware.queryParameterHoped('limit', 'integer'),
 		    RequestMiddleware.paramParametersNeeded('teacher_id', 'integer'),
         TeacherMiddleware.teacherExistAsParam('teacher_id'),
+        TeacherMiddleware.teacherIsInClassroom,
         GradeController.getByTeacher
     ]);
     // GET GRADE BY TEACHER FROM USER
@@ -66,7 +66,7 @@ export default (app: App): void => {
     // CREATE A NEW GRADE
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed(GRADE_PERMISSIONS), 
+        PermissionMiddleware.rolesAllowed(Object.values(roles)),
         RequestMiddleware.bodyParametersNeeded(['average'], 'float'),
         RequestMiddleware.bodyParameterHoped("comment", "string"),
         RequestMiddleware.bodyParametersNeeded(["userId", "teacherId", "classroomHasCourseId"], "integer"),
@@ -80,7 +80,7 @@ export default (app: App): void => {
     // UPDATE GRADE
     app.patch(`${routePrefix}/:grade_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed(GRADE_PERMISSIONS), 
+        PermissionMiddleware.rolesAllowed(Object.values(roles)), 
         RequestMiddleware.paramParametersNeeded('grade_id', 'integer'),
         GradeMiddleware.gradeExistAsParam("grade_id"),
         RequestMiddleware.bodyParameterHoped('average', 'float'),
@@ -88,14 +88,16 @@ export default (app: App): void => {
         RequestMiddleware.bodyParameterBlocked("userId"),
         RequestMiddleware.bodyParameterBlocked("teacherId"),
         RequestMiddleware.bodyParameterBlocked("classroomHasCourseId"),
+        TeacherMiddleware.teacherIsInClassroom,
         GradeController.update
     ]);
     // DELETE GRADE
     app.delete(`${routePrefix}/:grade_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed(GRADE_PERMISSIONS), 
+        PermissionMiddleware.rolesAllowed(Object.values(roles)), 
         RequestMiddleware.paramParametersNeeded('grade_id', 'integer'),
         GradeMiddleware.gradeExistAsParam("grade_id"),
+        TeacherMiddleware.teacherIsInClassroom,
         GradeController.remove
     ]);
 }

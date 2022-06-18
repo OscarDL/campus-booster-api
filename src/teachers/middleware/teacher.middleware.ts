@@ -49,8 +49,10 @@ export function teacherExistAsParam(name: string): AsyncFn {
 
 export async function teacherIsInClassroom(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
-        if(req.body.classroomHasCourseId && req.body.teacherId) {
-            const teacher = await findById(req.body.teacherId, {}, "withClassroom");
+        const teacherId = req.body.teacherId ?? req.params.teacherId;
+
+        if(req.body.classroomHasCourseId && teacherId) {
+            const teacher = await findById(teacherId, {}, "withClassroom");
             return (teacher?.classroomHasCourseId === req.body.classroomHasCourseId) ? next() :
             next(boom.badRequest('missing_access_rights'));
         }
