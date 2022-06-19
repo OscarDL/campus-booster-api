@@ -1,8 +1,8 @@
 import { Req, Res, Next, Resp } from '../../../types/express';
 import * as ContractService from '../service/contract.service';
+import * as TeacherService from '../../teachers/service/teacher.service';
 import boom from '@hapi/boom';
 import s3 from '../../../services/aws/s3';
-import * as TeacherService from '../../teachers/service/teacher.service';
 import * as UserService from '../../users/service/user.service';
 
 export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
@@ -31,6 +31,21 @@ export async function getByUser(req: Req, res: Res, next: Next): Promise<Resp> {
                 }
             )
         );
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    }
+}
+
+export async function getBySupervisor(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        return res.status(200).json(await ContractService.findAll(
+            {
+                where: {
+                    supervisorId: req.params.user_id
+                }
+            }
+        ));
     } catch (err: any) {
         console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));
