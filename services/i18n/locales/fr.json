@@ -47,5 +47,6 @@
     "user_not_in_classroom": "L'utilisateur \"%s\"n'est pas membre de la classe \"%s\".",
     "campus_manager_taken": "Le campus \"%s\" a déjà un gestionnaire assigné.",
     "grant_error": "Echec de la création de l'utilisateur. L'ajout de permission sur Azure a échoué.",
-    "An internal server error occurred": "Erreur inconnue du serveur."
+    "An internal server error occurred": "Erreur inconnue du serveur.",
+    "supervisor_not_found": "\"%s\" doit être assigné comme professeur avant la création du contrat."
 }

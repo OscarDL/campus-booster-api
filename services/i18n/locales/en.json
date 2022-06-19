@@ -47,5 +47,6 @@
     "user_not_in_classroom": "User \"%s\" is not a member of class \"%s\".",
     "campus_manager_taken": "Campus \"%s\" already has a manager assigned.",
     "grant_error": "Failed to create user. Failed to add permission on Azure.",
-    "An internal server error occurred": "Unknown server error."
+    "An internal server error occurred": "Unknown server error.",
+    "supervisor_not_found": "\"%s\" must be assigned as a teacher before the contract is created."
 }

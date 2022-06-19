@@ -2,6 +2,8 @@ import { Req, Res, Next, Resp } from '../../../types/express';
 import * as ContractService from '../service/contract.service';
 import boom from '@hapi/boom';
 import s3 from '../../../services/aws/s3';
+import * as TeacherService from '../../teachers/service/teacher.service';
+import * as UserService from '../../users/service/user.service';
 
 export async function getById(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
@@ -56,6 +58,18 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
         if(req.files && req.files.length > 0) {
             req.body.fileKeys = Object.entries(req.files).map(([_, value]) => (value as any).key);
         }
+        if(req.body.supervisorId) {
+            const user = await UserService.findById(req.body.supervisorId);
+            const teacher = await TeacherService.findOne({
+                where: {
+                    userId: req.body.supervisorId
+                }
+            });
+            if(!teacher) {
+                return next(boom.badRequest("supervisor_not_found", `${user?.firstName} ${user?.lastName}`));
+            } 
+            req.body.supervisorId = teacher?.id;
+        }
         const contract = await ContractService.create(req.body as any);
         return res.status(201).json(
             await ContractService.findById(contract.id)
@@ -78,7 +92,18 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
         if(req.files?.length) {
             req.body.fileKeys = req.body.fileKeys.concat(...Object.entries(req.files).map(([_, value]) => (value as any).key));
         }
-
+        if(req.body.supervisorId) {
+            const user = await UserService.findById(req.body.supervisorId);
+            const teacher = await TeacherService.findOne({
+                where: {
+                    userId: req.body.supervisorId
+                }
+            });
+            if(!teacher) {
+                return next(boom.badRequest("supervisor_not_found", `${user?.firstName} ${user?.lastName}`));
+            } 
+            req.body.supervisorId = teacher?.id;
+        }
         contract = await ContractService.update(req.params.contract_id, req.body);
         return res.status(203).json(
             await ContractService.findById(contract.id)
