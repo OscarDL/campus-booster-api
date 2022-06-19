@@ -51,7 +51,7 @@ function devHttpsServer(key: string, cert: string, port: number): void {
             const IP_ADDRESS = nets.en1.find(ip => ip.family === 'IPv4')?.address;
             console.log(`\n⮕  Network server: https://${IP_ADDRESS}:${port}`.blue);
         }
-        console.log(`\n⮕  Documentation:  https://localhost:${port}/swagger/api-docs`.cyan);
+        console.log(`\n⮕  Documentation:  https://localhost:${port}/api-docs`.cyan);
     });
     server.on('error', (error) => onError(error, port));
 }
@@ -90,7 +90,7 @@ if (!isProduction) {
             const IP_ADDRESS = nets.en1.find(ip => ip.family === 'IPv4')?.address;
             console.log(`\n⮕  Network server: https://${IP_ADDRESS}:${port}`.yellow);
         }
-        console.log(`\n⮕  Documentation:  https://localhost:${port}/swagger/api-docs`.cyan);
+        console.log(`\n⮕  Documentation:  https://localhost:${port}/api-docs`.cyan);
     });
     server.on('error', (error) => onError(error, port));
 }
@@ -165,7 +165,7 @@ app.use(responseTime());
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/swagger/api-docs', swaggerUi.serve, swaggerUi.setup(!isProduction ? swaggerDevDocument : swaggerProdDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(!isProduction ? swaggerDevDocument : swaggerProdDocument));
 
 // Socket.io instance
 const io = new Server(

@@ -27,3 +27,8 @@ export interface GradeModelAttributes {
 }
 export type GradeScopesAttributes = keyof ReturnType<typeof GradeScope>;
 export const GradeProtectedFields = [];
+export const GradePublicFields: (keyof GradeAttributes)[] = [
+  "id",
+  "teacherId",
+  "classroomHasCourseId"
+];
