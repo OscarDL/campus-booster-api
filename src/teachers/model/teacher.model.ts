@@ -10,6 +10,7 @@ import Feedback from './../../feedbacks/model/feedback.model';
 import Grade from './../../grades/model/grade.model';
 
 import config from '../../../config/env.config';
+import Contract from './../../contracts/model/contract.model';
 const { db_schema } = config;
 
 @S.Scopes(TeacherScope)
@@ -76,4 +77,12 @@ export default class Teacher extends S.Model implements TeacherModel {
 		onDelete: 'CASCADE'
 	})
 	public Grades!: Grade[];
+
+	@S.HasMany(() => Contract, { 
+		foreignKey: {
+      field: 'supervisor_id'
+    },
+		onDelete: 'CASCADE'
+	})
+	public Contracts!: Contract[];
 }
