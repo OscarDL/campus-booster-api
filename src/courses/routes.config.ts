@@ -20,16 +20,16 @@ export default (app: App): void => {
         PermissionMiddleware.rolesAllowed(Object.values(roles)), 
         RequestMiddleware.queryParameterHoped('offset', 'float'),
         RequestMiddleware.queryParameterHoped('limit', 'integer'),
-		    CourseController.getAll
+		CourseController.getAll
     ]);
     // GET ALL COURSES BY USER
     app.get(routePrefix + `/user/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.onlySameUserOrAdmin,
+		PermissionMiddleware.onlySameUserOrAdmin,
         RequestMiddleware.queryParameterHoped('offset', 'float'),
         RequestMiddleware.queryParameterHoped('limit', 'integer'),
         UserMiddleware.userExistAsParam('user_id'),
-		    CourseController.getByUser
+		CourseController.getByUser
     ]);
     // GET COURSE BY ID
     app.get(`${routePrefix}/:course_id${regInt}`, [
@@ -46,7 +46,7 @@ export default (app: App): void => {
 		RequestMiddleware.bodyParametersNeeded(['name', 'description', 'link'], 'string'),
         RequestMiddleware.bodyParametersNeeded(['credits', 'year'], 'integer'),
         RequestMiddleware.bodyParameterHoped('speciality', 'boolean'),
-		    CourseController.create
+		CourseController.create
     ]);
     // UPDATE COURSE
     app.patch(`${routePrefix}/:course_id${regInt}`, [
