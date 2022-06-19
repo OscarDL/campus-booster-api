@@ -94,28 +94,29 @@ export async function getByTeacher(req: Req, res: Res, next: Next): Promise<Resp
 
 export async function getByTeacherFromUserId(req: Req, res: Res, next: Next): Promise<Resp> {
     try {
-        const teacher = await TeacherService.findOne({
+        const teacherIds = (await TeacherService.findAll({
             where: {
                 userId: req.params.user_id
             }
-        });
+        })).map(teacher => teacher.id);
 
-        return res.status(200).json(
-            await GradeService.findAll(
+        const grades = [];
+        for (const teacherId of teacherIds) {
+            grades.push(...(await GradeService.findAll(
                 {
-                    limit: req.query?.limit,
-                    offset: req.query?.offset,
                     where: {
-                        teacherId: teacher?.id ?? 0
+                        teacherId
                     }
-                } as any,
+                },
                 [
                     "withCourse",
                     "withUser",
                     "withTeacher"
                 ]
-            )
-        );
+            )));
+        };
+
+        return res.status(200).json([...new Set(grades.flat())]);
     } catch (err: any) {
         console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));

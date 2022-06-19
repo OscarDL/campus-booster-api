@@ -70,10 +70,6 @@ export async function create(req: Req, res: Res, next: Next): Promise<Resp>  {
 
 export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
     try {
-        const teacher = await TeacherService.update(
-            req.params.teacher_id, 
-            req.body
-        );
         const existingTeacher = await TeacherService.findOne({
             where: {
                 userId: req.body.userId,
@@ -82,6 +78,8 @@ export async function update(req: Req, res: Res, next: Next): Promise<Resp>  {
         });
 
         if (existingTeacher) return next(boom.conflict('teacher_classroom_exists'));
+
+        const teacher = await TeacherService.update(req.params.teacher_id, req.body);
 
         return res.status(203).json(
             await TeacherService.findById(
