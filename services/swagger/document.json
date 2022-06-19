@@ -11,14 +11,17 @@
     },
 
     "schemes": ["https"],
-    "basePath": "/api/v1/",
-    "host": "localhost:1337",
+    "basePath": "",
+    "host": "",
     "consumes": ["application/json"],
     "produces": ["application/json"],
 
     "tags": [
         {
             "name": "Auth"
+        },
+        {
+            "name": "Home"
         },
         {
             "name": "Users"
@@ -152,7 +155,48 @@
                 }
             }
         },
-
+        "/home/summary": {
+            "get": {
+                "tags": ["Home"],
+                "summary": "Returns the summary of Campus Booster.",
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "campus": {
+                                    "type": "number"
+                                },
+                                "courses": {
+                                    "type": "number"
+                                },
+                                "students": {
+                                    "type": "number"
+                                },
+                                "contracts": {
+                                    "type": "number"
+                                },
+                                "annualCredits": {
+                                    "type": "number"
+                                },
+                                "latestGrades": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Grade"
+                                    }
+                                },
+                                "upcomingCourses": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Planning"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "tags": ["Users"],
@@ -522,6 +566,31 @@
                 }
             }
         },
+        "/absences/user/{user_id}": {
+            "get": {
+                "tags": ["Absences"],
+                "summary": "Returns absences from the user ID.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "user_id",
+                        "required": "true",
+                        "description": "User ID to identify which absence to retrieve."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Absence"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/balances": {
             "get": {
                 "tags": ["Balances"],
@@ -622,6 +691,31 @@
                 ],
                 "responses": {
                     "204": {}
+                }
+            }
+        },
+        "/balances/user/{user_id}": {
+            "get": {
+                "tags": ["Balances"],
+                "summary": "Returns balances from the user ID.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "user_id",
+                        "required": "true",
+                        "description": "User ID to identify which balance to retrieve."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Balance"
+                            }
+                        }
+                    }
                 }
             }
         },
@@ -934,6 +1028,103 @@
                 }
             }
         },
+        "/classrooms/user/{user_id}": {
+            "get": {
+                "tags": ["Classrooms"],
+                "summary": "Returns classrooms from the user ID.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "user_id",
+                        "required": "true",
+                        "description": "User ID to identify which classrooms to retrieve."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Classroom"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/classrooms/{classroom_id}/courses/add": {
+            "post": {
+                "tags": ["Classrooms"],
+                "summary": "Returns classroom with added course.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "classroom_id",
+                        "required": "true",
+                        "description": "Classroom ID to identify which classroom to retrieve."
+                    },
+                    {
+                        "in": "body",
+                        "name": "courses",
+                        "description": "Array of course ID.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "number"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Classroom"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/classrooms/{classroom_id}/courses/remove": {
+            "post": {
+                "tags": ["Classrooms"],
+                "summary": "Returns classroom with removed course.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "classroom_id",
+                        "required": "true",
+                        "description": "Classroom ID to identify which classroom to retrieve."
+                    },
+                    {
+                        "in": "body",
+                        "name": "courses",
+                        "description": "Array of course ID.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "number"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Classroom"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/contracts": {
             "get": {
                 "tags": ["Contracts"],
@@ -1037,6 +1228,31 @@
                 }
             }
         },
+        "/contracts/user/{user_id}": {
+            "get": {
+                "tags": ["Contracts"],
+                "summary": "Returns contracts from the user ID.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "user_id",
+                        "required": "true",
+                        "description": "User ID to identify which contracts to retrieve."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Contract"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/courses": {
             "get": {
                 "tags": ["Courses"],
@@ -1137,6 +1353,31 @@
                 ],
                 "responses": {
                     "204": {}
+                }
+            }
+        },
+        "/courses/user/{user_id}": {
+            "get": {
+                "tags": ["Courses"],
+                "summary": "Returns courses from the user ID.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "user_id",
+                        "required": "true",
+                        "description": "User ID to identify which courses to retrieve."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Course"
+                            }
+                        }
+                    }
                 }
             }
         },
@@ -1346,6 +1587,81 @@
                 }
             }
         },
+        "/grades/user/{user_id}": {
+            "get": {
+                "tags": ["Grades"],
+                "summary": "Returns grades from the user ID.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "user_id",
+                        "required": "true",
+                        "description": "User ID to identify which grades to retrieve."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Grade"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/grades/teacher/{teacher_id}": {
+            "get": {
+                "tags": ["Grades"],
+                "summary": "Returns grades from the teacher ID.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "teacher_id",
+                        "required": "true",
+                        "description": "Teacher ID to identify which grades to retrieve."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Grade"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/grades/teacher/user/{user_id}": {
+            "get": {
+                "tags": ["Grades"],
+                "summary": "Returns grades from the teacher by user ID.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "user_id",
+                        "required": "true",
+                        "description": "User ID to identify which grades to retrieve."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Grade"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/plannings": {
             "get": {
                 "tags": ["Plannings"],
@@ -1449,6 +1765,56 @@
                 }
             }
         },
+        "/plannings/user/{user_id}": {
+            "get": {
+                "tags": ["Plannings"],
+                "summary": "Returns planning from the user ID.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "user_id",
+                        "required": "true",
+                        "description": "User ID to identify which plannings to retrieve."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Planning"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/plannings/classroom/{classroom_id}": {
+            "get": {
+                "tags": ["Plannings"],
+                "summary": "Returns planning from the classroom ID.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "classroom_id",
+                        "required": "true",
+                        "description": "Classroom ID to identify which plannings to retrieve."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Planning"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/projects": {
             "get": {
                 "tags": ["Projects"],
@@ -1549,6 +1915,56 @@
                 ],
                 "responses": {
                     "204": {}
+                }
+            }
+        },
+        "/projects/user/{user_id}": {
+            "get": {
+                "tags": ["Projects"],
+                "summary": "Returns projects from the user ID.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "user_id",
+                        "required": "true",
+                        "description": "User ID to identify which projects to retrieve."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Project"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/projects/classroom/{classroom_id}": {
+            "get": {
+                "tags": ["Projects"],
+                "summary": "Returns projects from the classroom ID.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "type": "integer",
+                        "name": "classroom_id",
+                        "required": "true",
+                        "description": "Classroom ID to identify which projects to retrieve."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Project"
+                            }
+                        }
+                    }
                 }
             }
         },
