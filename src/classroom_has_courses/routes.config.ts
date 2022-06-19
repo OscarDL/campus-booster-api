@@ -18,34 +18,31 @@ export default (app: App): void => {
     // GET ALL CLASSROOMHASCOURSES
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-        PermissionMiddleware.rolesAllowed(Object.values(roles).filter(role => role !== roles.Company)), 
+        PermissionMiddleware.rolesAllowed(Object.values(roles)), 
         ClassroomHasCourseController.getAll
     ]);
     // GET CLASSROOMHASCOURSE BY ID
     app.get(`${routePrefix}/:classroomhascourse_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed(Object.values(roles).filter(role => role !== roles.Company)), 
-		RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
+        PermissionMiddleware.rolesAllowed(Object.values(roles)), 
+        RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
         ClassroomHasCourseMiddleware.classroomhascourseExistAsParam("classroomhascourse_id"),
         ClassroomHasCourseController.getById
     ]);
     // CREATE A NEW CLASSROOMHASCOURSE
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES.concat(roles.FullProfessor)),
-        RequestMiddleware.bodyParametersNeeded([
-            "courseId",
-            "classroomId"
-        ], "integer"),
+		    PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
+        RequestMiddleware.bodyParametersNeeded(["courseId", "classroomId"], "integer"),
         CourseMiddleware.courseExistAsBody("courseId"),
         ClassroomMiddleware.classroomExistAsBody("classroomId"),
-		ClassroomHasCourseController.create
+		    ClassroomHasCourseController.create
     ]);
     // UPDATE CLASSROOMHASCOURSE
     app.patch(`${routePrefix}/:classroomhascourse_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES.concat(roles.FullProfessor)),
-		RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
+        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
+        RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
         ClassroomHasCourseMiddleware.classroomhascourseExistAsParam("classroomhascourse_id"),
         RequestMiddleware.bodyParameterHoped("classroomId", "integer"),
         RequestMiddleware.bodyParameterHoped("courseId", "integer"),
@@ -56,8 +53,8 @@ export default (app: App): void => {
     // DELETE CLASSROOMHASCOURSE
     app.delete(`${routePrefix}/:classroomhascourse_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
-		RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
+        PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
+        RequestMiddleware.paramParametersNeeded('classroomhascourse_id', 'integer'),
         ClassroomHasCourseMiddleware.classroomhascourseExistAsParam("classroomhascourse_id"),
         ClassroomHasCourseController.remove
     ]);

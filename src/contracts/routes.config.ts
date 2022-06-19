@@ -7,7 +7,8 @@ import * as ContractMiddleware from './middleware/contract.middleware';
 import * as UserMiddleware from '../users/middleware/user.middleware';
 import config from '../../config/env.config';
 const { 
-    customRegex: { regInt }
+    customRegex: { regInt },
+    permissionLevel: roles
 } = config;
 
 import s3 from '../../services/aws/s3';
@@ -43,12 +44,22 @@ export default (app: App): void => {
         UserMiddleware.userExistAsParam('user_id'),
         ContractController.getByUser
     ]);
+    // GET CONTRACT BY SUPERVISOR
+    app.get(`${routePrefix}/supervisor/:user_id${regInt}`, [
+        ValidationMiddleware.JWTNeeded,
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES.concat(roles.Company)),
+        RequestMiddleware.queryParameterHoped('offset', 'float'),
+        RequestMiddleware.queryParameterHoped('limit', 'integer'),
+		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+        UserMiddleware.userExistAsParam('user_id'),
+        ContractController.getBySupervisor
+    ]);
     // CREATE A NEW CONTRACT
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         uploadMany,
-		RequestMiddleware.bodyParametersNeeded(['startDate', 'endDate', 'company', 'mission', 'type', 'email', 'phone'], 'string'),
+		RequestMiddleware.bodyParametersNeeded(['startDate', 'endDate', 'company', 'mission', 'type', 'email', 'phone', 'userId', 'supervisorId'], 'string'),
         ContractMiddleware.formatBodyParameters,
 		RequestMiddleware.bodyParametersNeeded(['userId', 'supervisorId'], 'integer'),
 		UserMiddleware.userExistAsBody('supervisorId'),
