@@ -20,10 +20,10 @@ export default (app: App): void => {
     // GET ALL BALANCES
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.rolesAllowed(ADMIN), 
+		PermissionMiddleware.rolesAllowed(ADMIN), 
         RequestMiddleware.queryParameterHoped('limit', 'integer'),
         RequestMiddleware.queryParameterHoped('offset', 'float'),
-		    BalanceController.getAll
+		BalanceController.getAll
     ]);
     // GET USER BALANCES
     app.get(routePrefix + `/user/:user_id${regInt}`, [
@@ -33,7 +33,7 @@ export default (app: App): void => {
         RequestMiddleware.queryParameterHoped('offset', 'float'),
         RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam('user_id'),
-		    BalanceController.getUser
+		BalanceController.getUser
     ]);
     // GET BALANCE BY ID
     app.get(`${routePrefix}/:balance_id${regInt}`, [
@@ -52,10 +52,10 @@ export default (app: App): void => {
         RequestMiddleware.bodyParametersNeeded('credit', 'float'),
         RequestMiddleware.bodyParametersNeeded('status', 'enum', [...balanceStatus]),
         RequestMiddleware.bodyParametersNeeded('description', 'string'),
-		    RequestMiddleware.bodyParametersNeeded('dateRequested', 'string'),
-		    RequestMiddleware.bodyParameterHoped('dateConfirmed', 'string'),
+		RequestMiddleware.bodyParametersNeeded('dateRequested', 'string'),
+		RequestMiddleware.bodyParameterHoped('dateConfirmed', 'string'),
         BalanceMiddleware.userIsStudent,
-		    BalanceController.create
+		BalanceController.create
     ]);
     // UPDATE BALANCE
     app.patch(`${routePrefix}/:balance_id${regInt}`, [

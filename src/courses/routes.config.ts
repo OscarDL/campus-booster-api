@@ -17,7 +17,7 @@ export default (app: App): void => {
     // GET ALL COURSES
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-    PermissionMiddleware.rolesAllowed(Object.values(roles).filter(role => role !== roles.Company)), 
+        PermissionMiddleware.rolesAllowed(Object.values(roles).filter(role => role !== roles.Company)), 
         RequestMiddleware.queryParameterHoped('offset', 'float'),
         RequestMiddleware.queryParameterHoped('limit', 'integer'),
 		CourseController.getAll
@@ -42,7 +42,7 @@ export default (app: App): void => {
     // CREATE A NEW COURSE
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
+		PermissionMiddleware.rolesAllowed([ roles.CampusBoosterAdmin ]), 
 		RequestMiddleware.bodyParametersNeeded(['name', 'description', 'link'], 'string'),
         RequestMiddleware.bodyParametersNeeded(['credits', 'year'], 'integer'),
         RequestMiddleware.bodyParameterHoped('speciality', 'boolean'),
@@ -51,7 +51,7 @@ export default (app: App): void => {
     // UPDATE COURSE
     app.patch(`${routePrefix}/:course_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
+		PermissionMiddleware.rolesAllowed([ roles.CampusBoosterAdmin ]), 
 		RequestMiddleware.paramParametersNeeded('course_id', 'integer'),
         CourseMiddleware.courseExistAsParam("course_id"),
         RequestMiddleware.bodyParameterHoped('name', 'string'),
@@ -65,7 +65,7 @@ export default (app: App): void => {
     // DELETE COURSE
     app.delete(`${routePrefix}/:course_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
+		PermissionMiddleware.rolesAllowed([ roles.CampusBoosterAdmin ]), 
 		RequestMiddleware.paramParametersNeeded('course_id', 'integer'),
         CourseMiddleware.courseExistAsParam("course_id"),
         CourseController.remove

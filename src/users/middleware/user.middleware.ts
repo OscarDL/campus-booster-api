@@ -58,16 +58,15 @@ export async function emailIsNotTaken(req: Req, res: Res, next: Next): Promise<R
 
     try {
         const user = await findOne({where: { email: req.body.email }});
-
         // Check only if email is taken by someone else
         if (user?.id) {
-            if (user.email !== req.body.email) {
+            if (!req.body.id) { // for user creation
                 return next(boom.conflict('email_taken', req.body.email));
+            } else { // for user edit
+                if (user.id !== req.body.id) return next(boom.conflict('email_taken', req.body.email));
             }
-            return next();
         }
-
-        return user ? next(boom.conflict('email_taken', req.body.email)) : next();
+        return next();
     } catch (err: any) {
         console.log(`${err}`.red.bold);
         return next(err.isBoom ? err : boom.internal(err.name));
