@@ -48,7 +48,7 @@ export default (app: App): void => {
         ValidationMiddleware.JWTNeeded,
 		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         uploadMany,
-		RequestMiddleware.bodyParametersNeeded(['startDate', 'endDate', 'company', 'mission', 'type', 'email', 'phone'], 'string'),
+		RequestMiddleware.bodyParametersNeeded(['startDate', 'endDate', 'company', 'mission', 'type', 'email', 'phone', 'userId', 'supervisorId'], 'string'),
         ContractMiddleware.formatBodyParameters,
 		RequestMiddleware.bodyParametersNeeded(['userId', 'supervisorId'], 'integer'),
 		UserMiddleware.userExistAsBody('supervisorId'),
