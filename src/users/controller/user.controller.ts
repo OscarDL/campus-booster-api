@@ -107,6 +107,7 @@ export async function getUsersForTeacher(req: Req, res: Res, next: Next): Promis
                 },
                 [ 
                     "withClassrooms",
+                    "withGrades",
                     req.isAdmin ? "defaultScope" : "iamNotAdmin"
                 ]
             )).filter(user => {

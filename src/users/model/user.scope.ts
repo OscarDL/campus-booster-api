@@ -1,9 +1,12 @@
 import Contract from '../../contracts/model/contract.model';
 import { ScopesOptions } from "sequelize-typescript";
 import { UserProtectedFields } from "./user.interface";
+import { GradePublicFields } from '../../grades/model/grade.interface';
 import Campus from './../../campus/model/campus.model';
 import UserHasClassroom from './../../user_has_classrooms/model/user-hasclassroom.model';
 import Teacher from '../../teachers/model/teacher.model';
+import Grade from '../../grades/model/grade.model';
+import ClassroomHasCourse from '../../classroom_has_courses/model/classroomhascourse.model';
 export default (() => ({
     defaultScope: ({
         attributes: { 
@@ -63,6 +66,21 @@ export default (() => ({
             {
                 model: Teacher.unscoped(),
                 required: false,
+            },
+        ]
+    }) as ScopesOptions,
+    withGrades: ({
+        include: [
+            {
+                model: Grade.unscoped(),
+                required: false,
+                attributes: GradePublicFields,
+                include: [
+                    {
+                        model: ClassroomHasCourse.unscoped(),
+                        required: false,
+                    }
+                ]
             },
         ]
     }) as ScopesOptions
