@@ -49,7 +49,8 @@ export default (app: App): void => {
 		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         uploadMany,
 		RequestMiddleware.bodyParametersNeeded(['startDate', 'endDate', 'company', 'mission', 'type', 'email', 'phone'], 'string'),
-		RequestMiddleware.bodyParametersNeeded(['userId', 'supervisorId'], 'string'),
+        ContractMiddleware.formatBodyParameters,
+		RequestMiddleware.bodyParametersNeeded(['userId', 'supervisorId'], 'integer'),
 		UserMiddleware.userExistAsBody('supervisorId'),
 		UserMiddleware.userExistAsBody('userId'),
 		ContractController.create
@@ -61,6 +62,9 @@ export default (app: App): void => {
 		RequestMiddleware.paramParametersNeeded('contract_id', 'integer'),
         ContractMiddleware.contractExistAsParam("contract_id"),
         uploadMany,
+        ContractMiddleware.formatBodyParameters,
+        UserMiddleware.userExistAsBody('supervisorId'),
+		UserMiddleware.userExistAsBody('userId'),
         ContractController.update
     ]);
     // DELETE CONTRACT

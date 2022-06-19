@@ -60,3 +60,19 @@ export async function isMyContractOrIamAdmin(req: Req, res: Res, next: Next): Pr
         return next(err.isBoom ? err : boom.internal(err.name));
     } 
 }
+
+export async function formatBodyParameters(req: Req, res: Res, next: Next): Promise<Resp> {
+    try {
+        const { userId, supervisorId } = req.body;
+        if(userId) {
+            req.body.userId = parseInt(userId);
+        }
+        if(supervisorId) {
+            req.body.supervisorId = parseInt(supervisorId);
+        }
+        return next(); 
+    } catch (err: any) {
+        console.log(`${err}`.red.bold);
+        return next(err.isBoom ? err : boom.internal(err.name));
+    } 
+}
