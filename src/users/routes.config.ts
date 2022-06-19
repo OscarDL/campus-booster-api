@@ -31,7 +31,7 @@ export default (app: App): void => {
     app.get(routePrefix + `/teacher/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.onlySameUserOrAdmin,
-		    RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
         UserController.getUsersForTeacher
     ]);
@@ -39,7 +39,7 @@ export default (app: App): void => {
     app.get(routePrefix + `/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(Object.values(roles)),
-		    RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
         UserMiddleware.iamAdminOrItsaStudent,
         UserController.getById
@@ -61,7 +61,7 @@ export default (app: App): void => {
         UserMiddleware.requestedUserHasLowerRole,
         UserMiddleware.verifyMandatoryFields,
         UserMiddleware.emailIsNotTaken,
-		    UserController.create
+		UserController.create
     ]);
     // ADD USER TO CLASSROOMS
     app.post(routePrefix + `/classrooms/add/:user_id${regInt}`, [
@@ -89,7 +89,7 @@ export default (app: App): void => {
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         UserMiddleware.requestedUserHasLowerRole,
-		    RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
         singleUpload,
         RequestMiddleware.bodyParameterHoped('campusId', 'integer'),
@@ -103,7 +103,7 @@ export default (app: App): void => {
     app.patch(routePrefix + `/resetpassword/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
-		    RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
         RequestMiddleware.bodyParametersNeeded('personalEmail', 'email'),
         UserController.resetUserPassword
@@ -119,7 +119,7 @@ export default (app: App): void => {
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         UserMiddleware.requestedUserHasLowerRole,
-		    RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
         UserMiddleware.dontDeleteYourself,
         UserController.removeFromAzure
@@ -129,7 +129,7 @@ export default (app: App): void => {
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         UserMiddleware.requestedUserHasLowerRole,
-		    RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam("user_id"),
         UserMiddleware.dontDeleteYourself,
         UserController.remove

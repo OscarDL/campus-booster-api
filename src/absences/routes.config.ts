@@ -22,10 +22,10 @@ export default (app: App): void => {
     // GET ALL ABSENCES
     app.get(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES),
         RequestMiddleware.queryParameterHoped('offset', 'float'),
         RequestMiddleware.queryParameterHoped('limit', 'integer'),
-		    AbsenceController.getAll
+		AbsenceController.getAll
     ]);
     // GET ABSENCE BY ID
     app.get(`${routePrefix}/:absence_id${regInt}`, [
@@ -48,7 +48,7 @@ export default (app: App): void => {
     // CREATE A NEW ABSENCE
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES.concat(Student)),
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES.concat(Student)),
         uploadMany,
         // Upload necessary data in JSON format
         RequestMiddleware.bodyParametersNeeded('data', 'string'),

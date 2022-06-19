@@ -25,30 +25,30 @@ export default (app: App): void => {
     // GET GRADE BY ID
     app.get(`${routePrefix}/:grade_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
+		PermissionMiddleware.rolesAllowed(PermissionMiddleware.ADMIN_ROLES), 
         RequestMiddleware.queryParameterHoped('offset', 'float'),
         RequestMiddleware.queryParameterHoped('limit', 'integer'),
-		    RequestMiddleware.paramParametersNeeded('grade_id', 'integer'),
+		RequestMiddleware.paramParametersNeeded('grade_id', 'integer'),
         GradeMiddleware.gradeExistAsParam("grade_id"),
         GradeController.getById
     ]);
     // GET GRADE BY USER
     app.get(`${routePrefix}/user/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.onlySameUserOrAdmin,
+		PermissionMiddleware.onlySameUserOrAdmin,
         RequestMiddleware.queryParameterHoped('offset', 'float'),
         RequestMiddleware.queryParameterHoped('limit', 'integer'),
-		    RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
+		RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
         UserMiddleware.userExistAsParam('user_id'),
         GradeController.getByUser
     ]);
     // GET GRADE BY TEACHER
     app.get(`${routePrefix}/teacher/:teacher_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.rolesAllowed(Object.values(roles)),
+		PermissionMiddleware.rolesAllowed(Object.values(roles)),
         RequestMiddleware.queryParameterHoped('offset', 'float'),
         RequestMiddleware.queryParameterHoped('limit', 'integer'),
-		    RequestMiddleware.paramParametersNeeded('teacher_id', 'integer'),
+		RequestMiddleware.paramParametersNeeded('teacher_id', 'integer'),
         TeacherMiddleware.teacherExistAsParam('teacher_id'),
         TeacherMiddleware.teacherIsInClassroom,
         GradeController.getByTeacher
@@ -56,7 +56,7 @@ export default (app: App): void => {
     // GET GRADE BY TEACHER FROM USER
     app.get(`${routePrefix}/teacher/user/:user_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.onlySameUserOrAdmin,
+		PermissionMiddleware.onlySameUserOrAdmin,
         RequestMiddleware.queryParameterHoped('offset', 'float'),
         RequestMiddleware.queryParameterHoped('limit', 'integer'),
         RequestMiddleware.paramParametersNeeded('user_id', 'integer'),
@@ -70,7 +70,7 @@ export default (app: App): void => {
         RequestMiddleware.bodyParametersNeeded(['average'], 'float'),
         RequestMiddleware.bodyParameterHoped("comment", "string"),
         RequestMiddleware.bodyParametersNeeded(["userId", "teacherId", "classroomHasCourseId"], "integer"),
-		    UserMiddleware.userExistAsBody('userId'),
+		UserMiddleware.userExistAsBody('userId'),
         TeacherMiddleware.teacherExistAsBody('teacherId'),
         ClassroomHasCourseMiddleware.classroomhascourseExistAsBody('classroomHasCourseId'),
         UserMiddleware.userIsInClassroom,

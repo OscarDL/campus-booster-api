@@ -32,11 +32,11 @@ export default (app: App): void => {
     // CREATE A NEW TEACHER
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.rolesAllowed([roles.FullProfessor, roles.Assistant, roles.CampusManager, roles.CampusBoosterAdmin]),
+		PermissionMiddleware.rolesAllowed([roles.FullProfessor, roles.Assistant, roles.CampusManager, roles.CampusBoosterAdmin]),
         RequestMiddleware.bodyParametersNeeded(["userId", "classroomHasCourseId"], "integer"),
         UserMiddleware.userExistAsBody("userId"),
         ClassroomHasCourseMiddleware.classroomhascourseExistAsBody("classroomHasCourseId"),
-		    TeacherController.create
+		TeacherController.create
     ]);
     // UPDATE TEACHER
     app.patch(`${routePrefix}/:teacher_id${regInt}`, [
@@ -53,8 +53,8 @@ export default (app: App): void => {
     // DELETE TEACHER
     app.delete(`${routePrefix}/:teacher_id${regInt}`, [
         ValidationMiddleware.JWTNeeded,
-		    PermissionMiddleware.rolesAllowed([roles.FullProfessor, roles.Assistant, roles.CampusManager, roles.CampusBoosterAdmin]), 
-		    RequestMiddleware.paramParametersNeeded('teacher_id', 'integer'),
+		PermissionMiddleware.rolesAllowed([roles.FullProfessor, roles.Assistant, roles.CampusManager, roles.CampusBoosterAdmin]), 
+		RequestMiddleware.paramParametersNeeded('teacher_id', 'integer'),
         TeacherMiddleware.teacherExistAsParam("teacher_id"),
         TeacherController.remove
     ]);
