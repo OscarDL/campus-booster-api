@@ -42,7 +42,7 @@ const sequelize =  new Sequelize(
 export function login(): Promise<Sequelize> {
     return new Promise((resolve, reject) => {
         sequelize.sync({ 
-            alter: false,
+            alter: true,
             force: false,
             logging: false
         }).then(() => {
