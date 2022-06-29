@@ -5,11 +5,11 @@ import { ClassroomModel } from './../../classrooms/model/classroom.interface';
 export interface CampusAttributes {
   readonly id?: number;
 	name: string;
-	address: string;
-	postCode: string;
-	city: string;
-	open?: boolean;
-	virtual?: boolean;
+	address?: string;
+	postCode?: string;
+	city?: string;
+	open: boolean;
+	virtual: boolean;
 	readonly createdAt?: Date;
 	readonly updatedAt?: Date;
 	Users?: UserModel[];

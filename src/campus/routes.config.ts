@@ -31,7 +31,10 @@ export default (app: App): void => {
     app.post(routePrefix, [
         ValidationMiddleware.JWTNeeded,
         PermissionMiddleware.rolesAllowed([roles.CampusBoosterAdmin]),
-        RequestMiddleware.bodyParametersNeeded(['name','city','address'], 'string'),
+        RequestMiddleware.bodyParametersNeeded(['name'], 'string'),
+        RequestMiddleware.bodyParameterHoped('city', 'string'),
+        RequestMiddleware.bodyParameterHoped('address', 'string'),
+        RequestMiddleware.bodyParameterHoped('postCode', 'string'),
         CampusController.create
     ]);
     // UPDATE CAMPUS
